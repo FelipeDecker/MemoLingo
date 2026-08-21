@@ -1,0 +1,6 @@
+@MemoLingo.Api_HostAddress = http://localhost:5104
+
+GET {{MemoLingo.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

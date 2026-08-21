@@ -1,0 +1,115 @@
+.trilha-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+}
+
+.carregando {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Cabeçalho fixo da unidade atual: fica preso ao topo do conteúdo e é
+   substituído pela próxima unidade assim que ela entra em foco no scroll. */
+.unidade-fixa {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem auto 2.5rem auto;
+    max-width: 500px;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.unidade-fixa-texto {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Marcador invisível (sem altura) posicionado no início de cada unidade,
+   usado apenas como referência de scroll para trocar o cabeçalho fixo. */
+.unidade-marcador {
+    height: 0;
+    scroll-margin-top: 4.5rem;
+}
+
+.unidade-nome {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+
+.unidade-descricao {
+    font-size: 1.15rem;
+}
+
+.trilha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+}
+
+.bolinha-linha {
+    display: flex;
+    width: 100%;
+}
+
+.bolinha {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.15s ease-in-out;
+    flex-shrink: 0;
+}
+
+.bolinha:hover {
+    transform: translateY(-3px);
+}
+
+.bolinha-icone {
+    font-size: 1.6rem;
+    color: #fff;
+}
+
+.bolinha.bloqueada {
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+    cursor: not-allowed;
+}
+
+.bolinha.bloqueada .bolinha-icone {
+    color: #afafaf;
+    filter: grayscale(1);
+}
+
+.bolinha.disponivel {
+    animation: pulsar 1.6s ease-in-out infinite;
+}
+
+@keyframes pulsar {
+    0%, 100% {
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(88, 204, 2, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2), 0 0 0 10px rgba(88, 204, 2, 0);
+    }
+}
+
+@media (min-width: 641px) {
+    /* Abaixo da barra "top-row" do layout, que também fica fixa (3.5rem) nesse breakpoint. */
+    .unidade-fixa {
+        top: 3.5rem;
+    }
+}

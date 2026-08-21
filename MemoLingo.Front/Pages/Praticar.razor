@@ -1,0 +1,134 @@
+@page "/pratica"
+@inject IPalavraService PalavraService
+
+<PageTitle>Praticar</PageTitle>
+
+<div class="pratica-container">
+    <h1>Praticar</h1>
+    <p class="pratica-subtitulo">
+        Aqui você pratica exatamente as palavras que mais te derrubam — nosso algoritmo prioriza
+        sempre o que você mais erra, para você reforçar o que realmente precisa.
+    </p>
+
+    @if (palavras == null)
+    {
+        <p class="carregando"><em>Carregando suas palavras...</em></p>
+    }
+    else if (!sessaoAtiva && !sessaoConcluida)
+    {
+        <div class="lista-palavras">
+            @foreach (var palavra in palavras)
+            {
+                <div class="palavra-card">
+                    <div class="palavra-info">
+                        <strong class="palavra-texto">@palavra.Texto</strong>
+                        <span class="palavra-traducao">@palavra.Traducao</span>
+                    </div>
+                    <div class="palavra-estatisticas">
+                        <span class="badge-erro" title="Erros">✗ @palavra.QuantidadeErros</span>
+                        <span class="badge-acerto" title="Acertos">✓ @palavra.QuantidadeAcertos</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="btn-iniciar" @onclick="IniciarSessao" disabled="@(palavras.Count == 0)">
+            Praticar palavras com mais erros
+        </button>
+    }
+    else if (sessaoAtiva)
+    {
+        var palavraAtual = fila[indiceAtual];
+
+        <div class="sessao-progresso">Palavra @(indiceAtual + 1) de @fila.Count</div>
+
+        <div class="flashcard">
+            <span class="flashcard-texto">@palavraAtual.Texto</span>
+
+            @if (mostrarTraducao)
+            {
+                <span class="flashcard-traducao">@palavraAtual.Traducao</span>
+
+                <div class="flashcard-acoes">
+                    <button class="btn-errei" @onclick="() => ResponderAsync(false)">Errei</button>
+                    <button class="btn-acertei" @onclick="() => ResponderAsync(true)">Acertei</button>
+                </div>
+            }
+            else
+            {
+                <button class="btn-revelar" @onclick="() => mostrarTraducao = true">
+                    Mostrar tradução
+                </button>
+            }
+        </div>
+    }
+    else if (sessaoConcluida)
+    {
+        <div class="resumo-sessao">
+            <h2>Sessão concluída! 🎉</h2>
+            <p>Você acertou @acertosSessao de @fila.Count palavras.</p>
+            <button class="btn-iniciar" @onclick="Reiniciar">Voltar para a lista</button>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Palavra>? palavras;
+    private List<Palavra> fila = new();
+    private int indiceAtual;
+    private int acertosSessao;
+    private bool mostrarTraducao;
+    private bool sessaoAtiva;
+    private bool sessaoConcluida;
+
+    protected override async Task OnInitializedAsync()
+    {
+        palavras = await PalavraService.ObterPalavrasParaPraticaAsync();
+    }
+
+    private void IniciarSessao()
+    {
+        if (palavras == null || palavras.Count == 0)
+        {
+            return;
+        }
+
+        // Foca a sessão nas palavras com mais erros: pega até as 5 primeiras da lista,
+        // que já vem ordenada da maior para a menor quantidade de erros.
+        fila = palavras.Take(5).ToList();
+        indiceAtual = 0;
+        acertosSessao = 0;
+        mostrarTraducao = false;
+        sessaoConcluida = false;
+        sessaoAtiva = true;
+    }
+
+    private async Task ResponderAsync(bool acertou)
+    {
+        var palavraAtual = fila[indiceAtual];
+        await PalavraService.RegistrarResultadoAsync(palavraAtual.Id, acertou);
+
+        if (acertou)
+        {
+            acertosSessao++;
+        }
+
+        if (indiceAtual + 1 < fila.Count)
+        {
+            indiceAtual++;
+            mostrarTraducao = false;
+        }
+        else
+        {
+            sessaoAtiva = false;
+            sessaoConcluida = true;
+        }
+    }
+
+    private async Task Reiniciar()
+    {
+        sessaoConcluida = false;
+        // Recarrega a lista para refletir os novos números de erros/acertos.
+        palavras = await PalavraService.ObterPalavrasParaPraticaAsync();
+    }
+}

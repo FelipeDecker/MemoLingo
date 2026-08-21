@@ -1,0 +1,144 @@
+@page "/"
+@inject ILicaoService LicaoService
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<PageTitle>Aprender</PageTitle>
+
+@if (unidades == null)
+{
+    <p class="carregando"><em>Carregando trilha...</em></p>
+}
+else
+{
+    @* Cabeçalho fixo no topo da trilha: mostra sempre a unidade atualmente em foco na tela
+       e é substituído pela próxima unidade assim que o usuário rola até ela (efeito Duolingo). *@
+    <div class="unidade-fixa" style="background-color:@unidadeAtiva?.CorPrimaria">
+        <div class="unidade-fixa-texto">
+            <span class="unidade-nome">@unidadeAtiva?.Nome</span>
+            <strong class="unidade-descricao">@unidadeAtiva?.Descricao</strong>
+        </div>
+    </div>
+
+    <div class="trilha-container">
+        @foreach (var unidade in unidades)
+        {
+            @* Marcador invisível usado apenas para detectar, via scroll, qual unidade está em foco. *@
+            <div class="unidade-marcador" data-unidade-id="@unidade.Id"></div>
+
+            <div class="trilha">
+                @{
+                    var indiceGlobal = 0;
+                }
+                @foreach (var licao in unidade.Licoes.OrderBy(l => l.Ordem))
+                {
+                    var offset = ObterOffset(indiceGlobal);
+                    indiceGlobal++;
+
+                    <div class="bolinha-linha" style="justify-content:@(offset >= 0 ? "flex-start" : "flex-end")">
+                        <div class="bolinha @ObterClasseStatus(licao.Status)"
+                             style="background-color:@ObterCorBolinha(unidade, licao); margin-left:@(offset)px"
+                             title="@licao.Titulo">
+                            <span class="bolinha-icone">@ObterIcone(licao)</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Unidade>? unidades;
+    private Unidade? unidadeAtiva;
+    private DotNetObjectReference<Learn>? referenciaJs;
+
+    // Padrão de deslocamento horizontal (em px) que gera o efeito de "zigue-zague"
+    // da trilha, imitando o layout de trilhas do Duolingo.
+    private static readonly int[] PadraoOffset = { 0, 60, 90, 60, 0, -60, -90, -60 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Chamada ao serviço mock, que simula uma chamada real a uma API.
+        unidades = await LicaoService.ObterUnidadesAsync();
+        unidadeAtiva = unidades.FirstOrDefault();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && unidades is { Count: > 0 })
+        {
+            // Registra o observador de scroll em JS para saber qual unidade está visível
+            // logo abaixo do cabeçalho fixo, e assim atualizar o título exibido.
+            referenciaJs = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("trilhaScroll.iniciar", referenciaJs);
+        }
+    }
+
+    /// <summary>
+    /// Chamado via JS interop sempre que a unidade em foco na tela muda durante o scroll.
+    /// </summary>
+    [JSInvokable]
+    public void AtualizarUnidadeAtiva(int unidadeId)
+    {
+        var unidade = unidades?.FirstOrDefault(u => u.Id == unidadeId);
+        if (unidade != null && unidade != unidadeAtiva)
+        {
+            unidadeAtiva = unidade;
+            StateHasChanged();
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (referenciaJs != null)
+        {
+            try
+            {
+                await JS.InvokeVoidAsync("trilhaScroll.finalizar");
+            }
+            catch (JSDisconnectedException)
+            {
+                // A conexão já foi encerrada (ex.: navegação/fechamento da página); nada a fazer.
+            }
+
+            referenciaJs.Dispose();
+        }
+    }
+
+    private static int ObterOffset(int indice) => PadraoOffset[indice % PadraoOffset.Length];
+
+    private static string ObterClasseStatus(StatusLicao status) => status switch
+    {
+        StatusLicao.Concluida => "concluida",
+        StatusLicao.Disponivel => "disponivel",
+        _ => "bloqueada"
+    };
+
+    private static string ObterCorBolinha(Unidade unidade, Licao licao) => licao.Status switch
+    {
+        StatusLicao.Bloqueada => "#e5e5e5",
+        _ => unidade.CorPrimaria
+    };
+
+    private static string ObterIcone(Licao licao)
+    {
+        if (licao.Status == StatusLicao.Bloqueada)
+        {
+            return "🔒";
+        }
+
+        if (licao.Status == StatusLicao.Concluida)
+        {
+            return "✓";
+        }
+
+        return licao.Tipo switch
+        {
+            TipoLicao.Historia => "📖",
+            TipoLicao.Bau => "🎁",
+            TipoLicao.Exame => "🏆",
+            _ => "⭐"
+        };
+    }
+}
