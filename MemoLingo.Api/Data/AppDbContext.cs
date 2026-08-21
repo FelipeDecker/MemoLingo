@@ -13,7 +13,7 @@ namespace MemoLingo.Api.Data
 
         public DbSet<Idioma> Idiomas => Set<Idioma>();
 
-        public DbSet<UsuarioIdioma> UsuarioIdiomas => Set<UsuarioIdioma>();
+        public DbSet<ProgressoIdioma> ProgressosIdioma => Set<ProgressoIdioma>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,10 +43,10 @@ namespace MemoLingo.Api.Data
                 );
             });
 
-            modelBuilder.Entity<UsuarioIdioma>(entity =>
+            modelBuilder.Entity<ProgressoIdioma>(entity =>
             {
                 entity.HasOne(ui => ui.Usuario)
-                    .WithMany(u => u.UsuarioIdiomas)
+                    .WithMany(u => u.ProgressosIdioma)
                     .HasForeignKey(ui => ui.UsuarioId)
                     .OnDelete(DeleteBehavior.Cascade);
 

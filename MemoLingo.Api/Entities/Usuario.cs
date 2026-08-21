@@ -21,6 +21,6 @@ namespace MemoLingo.Api.Entities
 
         public Idioma IdiomaMaterno { get; set; }
 
-        public ICollection<UsuarioIdioma> UsuarioIdiomas { get; set; }
+        public ICollection<ProgressoIdioma> ProgressosIdioma { get; set; }
     }
 }

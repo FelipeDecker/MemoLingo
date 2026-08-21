@@ -4,7 +4,7 @@ Legenda: [ ] pendente · [x] concluído
 
 ## Fase 0 — Fundação do projeto
 - [x] Criar projeto Blazor WebAssembly (`MemoLingo.Front`)
-- [ ] Criar projeto de backend `MemoLingo.Api` (ASP.NET Core Web API, .NET 10)
+- [x] Criar projeto de backend `MemoLingo.Api` (ASP.NET Core Web API, .NET 10)
 - [ ] Criar projeto `MemoLingo.Domain` (entidades e regras de negócio puras)
 - [ ] Criar projeto `MemoLingo.Infrastructure` (EF Core, repositórios, serviços externos)
 - [ ] Criar projeto `MemoLingo.Shared` (DTOs/contratos compartilhados entre Front e Api)
@@ -13,12 +13,12 @@ Legenda: [ ] pendente · [x] concluído
 - [ ] Configurar CI básico (build + testes) via GitHub Actions
 
 ## Fase 1 — Modelagem de domínio
-- [ ] Modelar entidade `Idioma` (idioma de origem / idioma alvo)
+- [x] Modelar entidade `Idioma` (idioma de origem / idioma alvo)
 - [ ] Modelar entidade `Palavra` (texto, tradução, idioma, nível/CEFR, categoria gramatical)
 - [ ] Modelar entidade `Frase` (texto, tradução, idioma, lista de palavras associadas)
 - [ ] Modelar entidade `Licao` (conjunto de exercícios de um tópico)
 - [ ] Modelar entidade `Trilha`/`Curso` (sequência de lições, ex.: "Básico", "Viagem")
-- [ ] Modelar entidade `Usuario`
+- [x] Modelar entidade `Usuario`
 - [ ] Modelar entidade `ProgressoPalavra` (usuário x palavra: acertos, erros, última revisão, próxima revisão, nível de domínio)
 - [ ] Modelar entidade `TentativaExercicio` (log de cada resposta: certo/errado, tempo de resposta, timestamp)
 - [ ] Modelar entidade `SessaoDeEstudo` (agrupa exercícios respondidos em uma sessão)
@@ -26,8 +26,8 @@ Legenda: [ ] pendente · [x] concluído
 
 ## Fase 2 — Banco de dados
 - [ ] Escolher banco definitivo (SQLite para dev / PostgreSQL ou SQL Server para produção)
-- [ ] Criar `DbContext` com EF Core
-- [ ] Criar migrations iniciais
+- [x] Criar `DbContext` com EF Core
+- [x] Criar migrations iniciais
 - [ ] Popular seed de dados: idiomas, palavras e frases iniciais (dataset inicial de 1 idioma)
 - [ ] Criar índices para consultas de priorização (usuário + palavra + última revisão)
 
@@ -64,10 +64,10 @@ Legenda: [ ] pendente · [x] concluído
 
 ## Fase 6 — Frontend (Blazor WebAssembly)
 - [ ] Tela de login/registro
-- [ ] Tela inicial com trilha de lições (estilo mapa do Duolingo)
+- [x] Tela inicial com trilha de lições (estilo mapa do Duolingo)
 - [ ] Tela de exercício (componentizada por tipo de exercício)
 - [ ] Tela de resumo de sessão (acertos, erros, XP ganho)
-- [ ] Tela de "palavras em foco" (mostra ao usuário quais palavras estão sendo reforçadas e por quê)
+- [x] Tela de "palavras em foco" (mostra ao usuário quais palavras estão sendo reforçadas e por quê)
 - [ ] Tela de perfil/estatísticas (progresso geral, streak, histórico)
 - [ ] Componente de player de áudio (pronúncia das palavras/frases)
 - [ ] Estado global (Fluxor/estado próprio) para sessão de estudo em andamento
