@@ -1,5 +1,5 @@
 @page "/pratica"
-@inject IPalavraService PalavraService
+@inject IWordService WordService
 
 <PageTitle>Praticar</PageTitle>
 
@@ -10,125 +10,125 @@
         sempre o que você mais erra, para você reforçar o que realmente precisa.
     </p>
 
-    @if (palavras == null)
+    @if (words == null)
     {
         <p class="carregando"><em>Carregando suas palavras...</em></p>
     }
-    else if (!sessaoAtiva && !sessaoConcluida)
+    else if (!sessionActive && !sessionCompleted)
     {
         <div class="lista-palavras">
-            @foreach (var palavra in palavras)
+            @foreach (var word in words)
             {
                 <div class="palavra-card">
                     <div class="palavra-info">
-                        <strong class="palavra-texto">@palavra.Texto</strong>
-                        <span class="palavra-traducao">@palavra.Traducao</span>
+                        <strong class="palavra-texto">@word.Text</strong>
+                        <span class="palavra-traducao">@word.Translation</span>
                     </div>
                     <div class="palavra-estatisticas">
-                        <span class="badge-erro" title="Erros">✗ @palavra.QuantidadeErros</span>
-                        <span class="badge-acerto" title="Acertos">✓ @palavra.QuantidadeAcertos</span>
+                        <span class="badge-erro" title="Erros">✗ @word.WrongCount</span>
+                        <span class="badge-acerto" title="Acertos">✓ @word.CorrectCount</span>
                     </div>
                 </div>
             }
         </div>
 
-        <button class="btn-iniciar" @onclick="IniciarSessao" disabled="@(palavras.Count == 0)">
+        <button class="btn-iniciar" @onclick="StartSession" disabled="@(words.Count == 0)">
             Praticar palavras com mais erros
         </button>
     }
-    else if (sessaoAtiva)
+    else if (sessionActive)
     {
-        var palavraAtual = fila[indiceAtual];
+        var currentWord = queue[currentIndex];
 
-        <div class="sessao-progresso">Palavra @(indiceAtual + 1) de @fila.Count</div>
+        <div class="sessao-progresso">Palavra @(currentIndex + 1) de @queue.Count</div>
 
         <div class="flashcard">
-            <span class="flashcard-texto">@palavraAtual.Texto</span>
+            <span class="flashcard-texto">@currentWord.Text</span>
 
-            @if (mostrarTraducao)
+            @if (showTranslation)
             {
-                <span class="flashcard-traducao">@palavraAtual.Traducao</span>
+                <span class="flashcard-traducao">@currentWord.Translation</span>
 
                 <div class="flashcard-acoes">
-                    <button class="btn-errei" @onclick="() => ResponderAsync(false)">Errei</button>
-                    <button class="btn-acertei" @onclick="() => ResponderAsync(true)">Acertei</button>
+                    <button class="btn-errei" @onclick="() => AnswerAsync(false)">Errei</button>
+                    <button class="btn-acertei" @onclick="() => AnswerAsync(true)">Acertei</button>
                 </div>
             }
             else
             {
-                <button class="btn-revelar" @onclick="() => mostrarTraducao = true">
+                <button class="btn-revelar" @onclick="() => showTranslation = true">
                     Mostrar tradução
                 </button>
             }
         </div>
     }
-    else if (sessaoConcluida)
+    else if (sessionCompleted)
     {
         <div class="resumo-sessao">
             <h2>Sessão concluída! 🎉</h2>
-            <p>Você acertou @acertosSessao de @fila.Count palavras.</p>
-            <button class="btn-iniciar" @onclick="Reiniciar">Voltar para a lista</button>
+            <p>Você acertou @sessionCorrectCount de @queue.Count palavras.</p>
+            <button class="btn-iniciar" @onclick="RestartAsync">Voltar para a lista</button>
         </div>
     }
 </div>
 
 @code {
-    private List<Palavra>? palavras;
-    private List<Palavra> fila = new();
-    private int indiceAtual;
-    private int acertosSessao;
-    private bool mostrarTraducao;
-    private bool sessaoAtiva;
-    private bool sessaoConcluida;
+    private List<Word> words;
+    private List<Word> queue = new();
+    private int currentIndex;
+    private int sessionCorrectCount;
+    private bool showTranslation;
+    private bool sessionActive;
+    private bool sessionCompleted;
 
     protected override async Task OnInitializedAsync()
     {
-        palavras = await PalavraService.ObterPalavrasParaPraticaAsync();
+        words = await WordService.GetWordsForPracticeAsync();
     }
 
-    private void IniciarSessao()
+    private void StartSession()
     {
-        if (palavras == null || palavras.Count == 0)
+        if (words == null || words.Count == 0)
         {
             return;
         }
 
         // Foca a sessão nas palavras com mais erros: pega até as 5 primeiras da lista,
         // que já vem ordenada da maior para a menor quantidade de erros.
-        fila = palavras.Take(5).ToList();
-        indiceAtual = 0;
-        acertosSessao = 0;
-        mostrarTraducao = false;
-        sessaoConcluida = false;
-        sessaoAtiva = true;
+        queue = words.Take(5).ToList();
+        currentIndex = 0;
+        sessionCorrectCount = 0;
+        showTranslation = false;
+        sessionCompleted = false;
+        sessionActive = true;
     }
 
-    private async Task ResponderAsync(bool acertou)
+    private async Task AnswerAsync(bool correct)
     {
-        var palavraAtual = fila[indiceAtual];
-        await PalavraService.RegistrarResultadoAsync(palavraAtual.Id, acertou);
+        var currentWord = queue[currentIndex];
+        await WordService.RegisterResultAsync(currentWord.Id, correct);
 
-        if (acertou)
+        if (correct)
         {
-            acertosSessao++;
+            sessionCorrectCount++;
         }
 
-        if (indiceAtual + 1 < fila.Count)
+        if (currentIndex + 1 < queue.Count)
         {
-            indiceAtual++;
-            mostrarTraducao = false;
+            currentIndex++;
+            showTranslation = false;
         }
         else
         {
-            sessaoAtiva = false;
-            sessaoConcluida = true;
+            sessionActive = false;
+            sessionCompleted = true;
         }
     }
 
-    private async Task Reiniciar()
+    private async Task RestartAsync()
     {
-        sessaoConcluida = false;
+        sessionCompleted = false;
         // Recarrega a lista para refletir os novos números de erros/acertos.
-        palavras = await PalavraService.ObterPalavrasParaPraticaAsync();
+        words = await WordService.GetWordsForPracticeAsync();
     }
 }

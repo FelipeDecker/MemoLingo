@@ -1,4 +1,5 @@
 using MemoLingo.Api.Data;
+using MemoLingo.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace MemoLingo.Api.Repositories
@@ -17,33 +18,33 @@ namespace MemoLingo.Api.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public async Task<T?> ObterPorIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> ObterTodosAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _dbSet.AsNoTracking().ToListAsync();
         }
 
-        public async Task AdicionarAsync(T entidade)
+        public async Task AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entidade);
+            await _dbSet.AddAsync(entity);
         }
 
-        public void Atualizar(T entidade)
+        public void Update(T entity)
         {
-            _dbSet.Attach(entidade);
-            _context.Entry(entidade).State = EntityState.Modified;
+            _dbSet.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
         }
 
-        public void Remover(T entidade)
+        public void Remove(T entity)
         {
-            _dbSet.Remove(entidade);
+            _dbSet.Remove(entity);
         }
 
-        public async Task<bool> SalvarAlteracoesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;
         }

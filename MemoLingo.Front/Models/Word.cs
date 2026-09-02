@@ -5,34 +5,34 @@ namespace MemoLingo.Front.Models
     /// histórico de acertos e erros. É a base do modo de prática focado em reforçar
     /// justamente as palavras em que o usuário mais erra.
     /// </summary>
-    public class Palavra
+    public class Word
     {
         public int Id { get; set; }
 
         /// <summary>
         /// Palavra ou expressão no idioma que está sendo aprendido.
         /// </summary>
-        public string Texto { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
 
         /// <summary>
         /// Tradução da palavra, exibida quando o usuário revela a resposta.
         /// </summary>
-        public string Traducao { get; set; } = string.Empty;
+        public string Translation { get; set; } = string.Empty;
 
-        public int QuantidadeErros { get; set; }
+        public int WrongCount { get; set; }
 
-        public int QuantidadeAcertos { get; set; }
+        public int CorrectCount { get; set; }
 
         /// <summary>
         /// Taxa de acerto (0 a 1) usada apenas para exibição; palavras nunca
         /// respondidas são tratadas como taxa 0 (prioridade máxima de prática).
         /// </summary>
-        public double TaxaAcerto
+        public double AccuracyRate
         {
             get
             {
-                var total = QuantidadeAcertos + QuantidadeErros;
-                return total == 0 ? 0 : (double)QuantidadeAcertos / total;
+                var total = CorrectCount + WrongCount;
+                return total == 0 ? 0 : (double)CorrectCount / total;
             }
         }
     }

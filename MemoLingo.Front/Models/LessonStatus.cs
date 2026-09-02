@@ -3,10 +3,10 @@ namespace MemoLingo.Front.Models
     /// <summary>
     /// Define o status de progresso de uma lição para o usuário atual.
     /// </summary>
-    public enum StatusLicao
+    public enum LessonStatus
     {
-        Bloqueada,
-        Disponivel,
-        Concluida
+        Locked,
+        Available,
+        Completed
     }
 }

@@ -39,7 +39,7 @@ window.trilhaScroll = {
         }
 
         if (unidadeAtualId !== null) {
-            this._dotNetRef.invokeMethodAsync('AtualizarUnidadeAtiva', parseInt(unidadeAtualId, 10));
+            this._dotNetRef.invokeMethodAsync('UpdateActiveUnit', parseInt(unidadeAtualId, 10));
         }
     },
 

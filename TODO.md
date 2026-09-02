@@ -6,8 +6,6 @@ Legenda: [ ] pendente · [x] concluído
 - [x] Criar projeto Blazor WebAssembly (`MemoLingo.Front`)
 - [x] Criar projeto de backend `MemoLingo.Api` (ASP.NET Core Web API, .NET 10)
 - [ ] Criar projeto `MemoLingo.Domain` (entidades e regras de negócio puras)
-- [ ] Criar projeto `MemoLingo.Infrastructure` (EF Core, repositórios, serviços externos)
-- [ ] Criar projeto `MemoLingo.Shared` (DTOs/contratos compartilhados entre Front e Api)
 - [ ] Configurar solução (.slnx) com todos os projetos
 - [ ] Configurar Docker Compose (Api + banco de dados) para desenvolvimento local
 - [ ] Configurar CI básico (build + testes) via GitHub Actions

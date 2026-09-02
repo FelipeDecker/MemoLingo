@@ -1,6 +1,7 @@
 using MemoLingo.Api.Data;
 using MemoLingo.Api.Repositories;
-using MemoLingo.Api.Services;
+using MemoLingo.Domain.Repositories;
+using MemoLingo.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

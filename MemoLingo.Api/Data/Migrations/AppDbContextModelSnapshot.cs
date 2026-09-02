@@ -17,109 +17,109 @@ namespace MemoLingo.Api.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.11");
 
-            modelBuilder.Entity("MemoLingo.Api.Entities.Idioma", b =>
+            modelBuilder.Entity("MemoLingo.Domain.Entities.Language", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Codigo")
+                    b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Codigo")
+                    b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("Idiomas");
+                    b.ToTable("Languages");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Codigo = "en",
-                            Nome = "Inglês"
+                            Code = "en",
+                            Name = "Inglês"
                         },
                         new
                         {
                             Id = 2,
-                            Codigo = "pt",
-                            Nome = "Português"
+                            Code = "pt",
+                            Name = "Português"
                         },
                         new
                         {
                             Id = 3,
-                            Codigo = "es",
-                            Nome = "Espanhol"
+                            Code = "es",
+                            Name = "Espanhol"
                         },
                         new
                         {
                             Id = 4,
-                            Codigo = "it",
-                            Nome = "Italiano"
+                            Code = "it",
+                            Name = "Italiano"
                         });
                 });
 
-            modelBuilder.Entity("MemoLingo.Api.Entities.ProgressoIdioma", b =>
+            modelBuilder.Entity("MemoLingo.Domain.Entities.LanguageProgress", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CriadoEm")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IdiomaId")
+                    b.Property<int>("CurrentStreakDays")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsCursoAtivo")
+                    b.Property<bool>("IsActiveCourse")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Nivel")
+                    b.Property<int>("LanguageId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("OfensivaAtualDias")
+                    b.Property<int>("Level")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TotalLicoesConcluidas")
+                    b.Property<int>("TotalCompletedLessons")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TotalPalavrasAprendidas")
+                    b.Property<int>("TotalLearnedWords")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<int>("TotalXp")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("XpTotal")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdiomaId");
+                    b.HasIndex("LanguageId");
 
-                    b.HasIndex("UsuarioId", "IdiomaId")
+                    b.HasIndex("UserId", "LanguageId")
                         .IsUnique();
 
-                    b.ToTable("ProgressosIdioma");
+                    b.ToTable("LanguageProgresses");
                 });
 
-            modelBuilder.Entity("MemoLingo.Api.Entities.Usuario", b =>
+            modelBuilder.Entity("MemoLingo.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Ativo")
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CriadoEm")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -127,15 +127,15 @@ namespace MemoLingo.Api.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IdiomaMaternoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Nome")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SenhaHash")
+                    b.Property<int>("NativeLanguageId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -143,44 +143,44 @@ namespace MemoLingo.Api.Data.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("IdiomaMaternoId");
+                    b.HasIndex("NativeLanguageId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MemoLingo.Api.Entities.ProgressoIdioma", b =>
+            modelBuilder.Entity("MemoLingo.Domain.Entities.LanguageProgress", b =>
                 {
-                    b.HasOne("MemoLingo.Api.Entities.Idioma", "Idioma")
+                    b.HasOne("MemoLingo.Domain.Entities.Language", "Language")
                         .WithMany()
-                        .HasForeignKey("IdiomaId")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MemoLingo.Api.Entities.Usuario", "Usuario")
-                        .WithMany("ProgressosIdioma")
-                        .HasForeignKey("UsuarioId")
+                    b.HasOne("MemoLingo.Domain.Entities.User", "User")
+                        .WithMany("LanguageProgresses")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Idioma");
+                    b.Navigation("Language");
 
-                    b.Navigation("Usuario");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MemoLingo.Api.Entities.Usuario", b =>
+            modelBuilder.Entity("MemoLingo.Domain.Entities.User", b =>
                 {
-                    b.HasOne("MemoLingo.Api.Entities.Idioma", "IdiomaMaterno")
+                    b.HasOne("MemoLingo.Domain.Entities.Language", "NativeLanguage")
                         .WithMany()
-                        .HasForeignKey("IdiomaMaternoId")
+                        .HasForeignKey("NativeLanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("IdiomaMaterno");
+                    b.Navigation("NativeLanguage");
                 });
 
-            modelBuilder.Entity("MemoLingo.Api.Entities.Usuario", b =>
+            modelBuilder.Entity("MemoLingo.Domain.Entities.User", b =>
                 {
-                    b.Navigation("ProgressosIdioma");
+                    b.Navigation("LanguageProgresses");
                 });
 #pragma warning restore 612, 618
         }

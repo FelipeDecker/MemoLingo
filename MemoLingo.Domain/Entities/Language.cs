@@ -1,14 +1,14 @@
-namespace MemoLingo.Api.Entities
+namespace MemoLingo.Domain.Entities
 {
     /// <summary>
     /// Entidade que representa um idioma disponível no MemoLingo.
     /// </summary>
-    public class Idioma
+    public class Language
     {
         public int Id { get; set; }
 
-        public string Nome { get; set; }
+        public string Name { get; set; }
 
-        public string Codigo { get; set; }
+        public string Code { get; set; }
     }
 }

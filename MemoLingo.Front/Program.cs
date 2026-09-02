@@ -8,7 +8,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddScoped<ILicaoService, LicaoService>();
-builder.Services.AddScoped<IPalavraService, PalavraService>();
+builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<IWordService, WordService>();
 
 await builder.Build().RunAsync();
