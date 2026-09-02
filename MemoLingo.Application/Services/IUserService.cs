@@ -1,6 +1,6 @@
-using MemoLingo.Services.Models;
+using MemoLingo.Application.Models;
 
-namespace MemoLingo.Services
+namespace MemoLingo.Application.Services
 {
     public interface IUserService
     {

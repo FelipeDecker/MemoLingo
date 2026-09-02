@@ -1,5 +1,5 @@
-using MemoLingo.Services;
-using MemoLingo.Services.Models;
+using MemoLingo.Application.Models;
+using MemoLingo.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MemoLingo.Api.Controllers

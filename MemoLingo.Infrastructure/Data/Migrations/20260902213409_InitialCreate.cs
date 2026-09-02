@@ -1,11 +1,11 @@
-ï»¿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace MemoLingo.Api.Data.Migrations
+namespace MemoLingo.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -89,8 +89,8 @@ namespace MemoLingo.Api.Data.Migrations
                 columns: new[] { "Id", "Code", "Name" },
                 values: new object[,]
                 {
-                    { 1, "en", "InglÃªs" },
-                    { 2, "pt", "PortuguÃªs" },
+                    { 1, "en", "Inglês" },
+                    { 2, "pt", "Português" },
                     { 3, "es", "Espanhol" },
                     { 4, "it", "Italiano" }
                 });

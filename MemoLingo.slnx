@@ -1,6 +1,7 @@
-<Solution>
+﻿<Solution>
   <Project Path="MemoLingo.Api/MemoLingo.Api.csproj" />
+  <Project Path="MemoLingo.Application/MemoLingo.Application.csproj" />
   <Project Path="MemoLingo.Domain/MemoLingo.Domain.csproj" />
   <Project Path="MemoLingo.Front/MemoLingo.Front.csproj" />
-  <Project Path="MemoLingo.Services/MemoLingo.Services.csproj" />
+  <Project Path="MemoLingo.Infrastructure/MemoLingo.Infrastructure.csproj" />
 </Solution>

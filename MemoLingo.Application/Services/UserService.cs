@@ -1,8 +1,8 @@
+using MemoLingo.Application.Models;
 using MemoLingo.Domain.Entities;
 using MemoLingo.Domain.Repositories;
-using MemoLingo.Services.Models;
 
-namespace MemoLingo.Services
+namespace MemoLingo.Application.Services
 {
     public class UserService : IUserService
     {

@@ -1,7 +1,7 @@
 using MemoLingo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace MemoLingo.Api.Data
+namespace MemoLingo.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {

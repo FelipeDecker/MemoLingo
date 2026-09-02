@@ -1,4 +1,4 @@
-namespace MemoLingo.Services.Models
+namespace MemoLingo.Application.Models
 {
     public class UserModel
     {

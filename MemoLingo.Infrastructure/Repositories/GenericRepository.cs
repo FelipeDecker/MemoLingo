@@ -1,8 +1,8 @@
-using MemoLingo.Api.Data;
+using MemoLingo.Infrastructure.Data;
 using MemoLingo.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace MemoLingo.Api.Repositories
+namespace MemoLingo.Infrastructure.Repositories
 {
     /// <summary>
     /// Implementação genérica de acesso a dados usando EF Core.

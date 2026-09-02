@@ -11,12 +11,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.11" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MemoLingo.Application\MemoLingo.Application.csproj" />
     <ProjectReference Include="..\MemoLingo.Domain\MemoLingo.Domain.csproj" />
-    <ProjectReference Include="..\MemoLingo.Services\MemoLingo.Services.csproj" />
+    <ProjectReference Include="..\MemoLingo.Infrastructure\MemoLingo.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
