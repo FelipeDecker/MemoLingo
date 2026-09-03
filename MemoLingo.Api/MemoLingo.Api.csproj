@@ -11,6 +11,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="NSwag.AspNetCore" Version="14.7.1" />
+    <PackageReference Include="NSwag.MSBuild" Version="14.7.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -18,5 +23,9 @@
     <ProjectReference Include="..\MemoLingo.Domain\MemoLingo.Domain.csproj" />
     <ProjectReference Include="..\MemoLingo.Infrastructure\MemoLingo.Infrastructure.csproj" />
   </ItemGroup>
+
+  <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' and '$(DesignTimeBuild)' != 'true'">
+    <Exec WorkingDirectory="$(ProjectDir)" Command="$(NSwagExe_Net100) run nswag.json /variables:Configuration=$(Configuration)" />
+  </Target>
 
 </Project>
