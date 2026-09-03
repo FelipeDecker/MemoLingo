@@ -7,17 +7,15 @@ namespace MemoLingo.Domain.Entities
     public class WordPerformance
     {
         public int Id { get; set; }
-
         public int UserId { get; set; }
+        public int WordId { get; set; }
+        public int StrengthLevel { get; set; }
+        public int CorrectCount { get; set; }
+        public int WrongCount { get; set; }
+        public DateTime? LastReview { get; set; }
+        public DateTime NextReview { get; set; }
 
         public User User { get; set; }
-
-        public int WordId { get; set; }
-
-        public int StrengthLevel { get; set; }
-
-        public int WrongCount { get; set; }
-
-        public DateTime NextReview { get; set; }
+        public Word Word { get; set; }
     }
 }
