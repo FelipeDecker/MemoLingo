@@ -1,0 +1,8 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.git/
+**/.github/
+**/node_modules/
+**/*.user
+MemoLingo.Front/

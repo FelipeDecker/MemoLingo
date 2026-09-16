@@ -1,5 +1,5 @@
 @page "/pratica"
-@inject IWordService WordService
+@inject IPracticeService PracticeService
 
 <PageTitle>Praticar</PageTitle>
 
@@ -73,8 +73,8 @@
 </div>
 
 @code {
-    private List<Word> words;
-    private List<Word> queue = new();
+    private List<PracticeWordModel> words;
+    private List<PracticeWordModel> queue = new();
     private int currentIndex;
     private int sessionCorrectCount;
     private bool showTranslation;
@@ -83,7 +83,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        words = await WordService.GetWordsForPracticeAsync();
+        words = await PracticeService.GetWordsForPracticeAsync();
     }
 
     private void StartSession()
@@ -106,7 +106,7 @@
     private async Task AnswerAsync(bool correct)
     {
         var currentWord = queue[currentIndex];
-        await WordService.RegisterResultAsync(currentWord.Id, correct);
+        await PracticeService.RegisterResultAsync(currentWord.Id, correct);
 
         if (correct)
         {
@@ -129,6 +129,6 @@
     {
         sessionCompleted = false;
         // Recarrega a lista para refletir os novos números de erros/acertos.
-        words = await WordService.GetWordsForPracticeAsync();
+        words = await PracticeService.GetWordsForPracticeAsync();
     }
 }

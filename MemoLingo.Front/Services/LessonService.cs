@@ -1,101 +1,57 @@
+using MemoLingo.Api.Client.Contracts;
 using MemoLingo.Front.Models;
 
 namespace MemoLingo.Front.Services
 {
     public class LessonService : ILessonService
     {
-        public async Task<List<Unit>> GetUnitsAsync()
-        {
-            // Simula a latência de uma chamada real a uma API.
-            await Task.Delay(300);
+        // Paleta usada para diferenciar visualmente cada unidade da trilha.
+        private static readonly string[] UnitColors = { "#58cc02", "#1cb0f6", "#ce82ff", "#ff9600", "#ff4b4b" };
 
-            return GetMockUnits();
+        private readonly ICoursesClient _coursesClient;
+
+        public LessonService(ICoursesClient coursesClient)
+        {
+            _coursesClient = coursesClient;
         }
 
-        private static List<Unit> GetMockUnits()
+        public async Task<List<Unit>> GetUnitsAsync()
         {
-            var units = new List<Unit>
+            var courses = await _coursesClient.GetAsync(null);
+
+            return courses
+                .OrderBy(c => c.Position)
+                .Select(ToUnit)
+                .ToList();
+        }
+
+        private static Unit ToUnit(CourseModel course, int index)
+        {
+            var unit = new Unit
             {
-                new Unit
-                {
-                    Id = 1,
-                    Name = "Unidade 1",
-                    Description = "Frases básicas do dia a dia",
-                    PrimaryColor = "#58cc02"
-                },
-                new Unit
-                {
-                    Id = 2,
-                    Name = "Unidade 2",
-                    Description = "Gratidão: agradeça pela ajuda",
-                    PrimaryColor = "#1cb0f6"
-                },
-                new Unit
-                {
-                    Id = 3,
-                    Name = "Unidade 3",
-                    Description = "Comidas e bebidas",
-                    PrimaryColor = "#ce82ff"
-                }
+                Id = course.Id,
+                Name = course.Name,
+                Description = course.Description,
+                PrimaryColor = UnitColors[index % UnitColors.Length]
             };
 
-            // Definição de quantas lições cada unidade tem e como elas se dividem por tipo.
-            var lessonsByUnit = new Dictionary<int, List<(LessonType Type, LessonStatus Status)>>
+            var lessons = course.Lessons ?? new List<LessonModel>();
+
+            foreach (var lesson in lessons.OrderBy(l => l.Position))
             {
-                [1] = new()
+                unit.Lessons.Add(new Lesson
                 {
-                    (LessonType.Lesson, LessonStatus.Completed),
-                    (LessonType.Lesson, LessonStatus.Completed),
-                    (LessonType.Story, LessonStatus.Completed),
-                    (LessonType.Lesson, LessonStatus.Completed),
-                    (LessonType.Chest, LessonStatus.Completed),
-                    (LessonType.Exam, LessonStatus.Completed)
-                },
-                [2] = new()
-                {
-                    (LessonType.Lesson, LessonStatus.Completed),
-                    (LessonType.Story, LessonStatus.Completed),
-                    (LessonType.Lesson, LessonStatus.Completed),
-                    (LessonType.Chest, LessonStatus.Available),
-                    (LessonType.Lesson, LessonStatus.Available),
-                    (LessonType.Lesson, LessonStatus.Locked),
-                    (LessonType.Exam, LessonStatus.Locked)
-                },
-                [3] = new()
-                {
-                    (LessonType.Lesson, LessonStatus.Locked),
-                    (LessonType.Lesson, LessonStatus.Locked),
-                    (LessonType.Story, LessonStatus.Locked),
-                    (LessonType.Chest, LessonStatus.Locked),
-                    (LessonType.Exam, LessonStatus.Locked)
-                }
-            };
-
-            var lessonId = 1;
-
-            // Foreach que "publica" cada lição mockada dentro da unidade correspondente,
-            // preenchendo o UnitId e a ordem de exibição na trilha.
-            foreach (var unit in units)
-            {
-                var order = 1;
-
-                foreach (var (type, status) in lessonsByUnit[unit.Id])
-                {
-                    unit.Lessons.Add(new Lesson
-                    {
-                        Id = lessonId++,
-                        UnitId = unit.Id,
-                        Title = $"{unit.Name} - Lição {order}",
-                        Type = type,
-                        Status = status,
-                        Order = order
-                    });
-
-                    order++;
-                }
+                    Id = lesson.Id,
+                    UnitId = course.Id,
+                    Title = lesson.Title,
+                    Topic = lesson.Topic,
+                    Type = lesson.IsLast ? LessonType.Exam : LessonType.Lesson,
+                    Status = lesson.Status,
+                    Order = lesson.Position
+                });
             }
 
-            return units;
+            return unit;
         }
     }
 }

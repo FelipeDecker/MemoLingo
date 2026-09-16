@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Aluno Demo",
+    "email": "demo@memolingo.com",
+    "nativeLanguageCode": "pt",
+    "learningLanguageCode": "en",
+    "level": 3,
+    "totalXp": 450,
+    "currentStreakDays": 5,
+    "active": true
+  }
+]

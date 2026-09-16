@@ -1,0 +1,14 @@
+[
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "thank you", "correctCount": 2, "wrongCount": 7, "strengthLevel": 0 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "welcome", "correctCount": 1, "wrongCount": 5, "strengthLevel": 0 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "please", "correctCount": 3, "wrongCount": 4, "strengthLevel": 1 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "sorry", "correctCount": 5, "wrongCount": 3, "strengthLevel": 2 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "brother", "correctCount": 2, "wrongCount": 2, "strengthLevel": 1 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "goodbye", "correctCount": 4, "wrongCount": 2, "strengthLevel": 2 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "good night", "correctCount": 1, "wrongCount": 2, "strengthLevel": 1 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "woman", "correctCount": 4, "wrongCount": 1, "strengthLevel": 3 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "friend", "correctCount": 6, "wrongCount": 1, "strengthLevel": 3 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "sister", "correctCount": 8, "wrongCount": 1, "strengthLevel": 4 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "house", "correctCount": 9, "wrongCount": 0, "strengthLevel": 5 },
+  { "userEmail": "demo@memolingo.com", "languageCode": "en", "wordText": "school", "correctCount": 7, "wrongCount": 0, "strengthLevel": 5 }
+]

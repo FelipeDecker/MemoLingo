@@ -1,0 +1,48 @@
+[
+  { "languageCode": "en", "text": "Hello, how are you?", "translation": "Olá, como você está?", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "Good morning, my friend.", "translation": "Bom dia, meu amigo.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "Good night, see you tomorrow.", "translation": "Boa noite, até amanhã.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "Thank you very much!", "translation": "Muito obrigado!", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "Sorry, I do not understand.", "translation": "Desculpe, eu não entendo.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "Welcome to my house.", "translation": "Bem-vindo à minha casa.", "cefrLevel": "A1" },
+
+  { "languageCode": "en", "text": "He is my brother.", "translation": "Ele é meu irmão.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "She has three sisters.", "translation": "Ela tem três irmãs.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "My mother and my father live here.", "translation": "Minha mãe e meu pai moram aqui.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "The boy writes his name.", "translation": "O menino escreve o nome dele.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "The girl reads a book at school.", "translation": "A menina lê um livro na escola.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "The woman speaks four languages.", "translation": "A mulher fala quatro idiomas.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "That man is my friend.", "translation": "Aquele homem é meu amigo.", "cefrLevel": "A1" },
+
+  { "languageCode": "en", "text": "I drink water every day.", "translation": "Eu bebo água todos os dias.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "She eats bread with cheese.", "translation": "Ela come pão com queijo.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "My father drinks coffee in the morning.", "translation": "Meu pai bebe café de manhã.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "I want a glass of milk.", "translation": "Eu quero um copo de leite.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "Do you want juice or water?", "translation": "Você quer suco ou água?", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "The child eats rice and meat.", "translation": "A criança come arroz e carne.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "I eat an egg and an apple.", "translation": "Eu como um ovo e uma maçã.", "cefrLevel": "A1" },
+
+  { "languageCode": "en", "text": "We have two dogs.", "translation": "Nós temos dois cachorros.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "The cat is black and white.", "translation": "O gato é preto e branco.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "The bird is blue.", "translation": "O pássaro é azul.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "The horse eats green grass.", "translation": "O cavalo come grama verde.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "They have five fish.", "translation": "Eles têm cinco peixes.", "cefrLevel": "A1" },
+
+  { "languageCode": "en", "text": "The girl has a red apple.", "translation": "A menina tem uma maçã vermelha.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "I have one yellow book.", "translation": "Eu tenho um livro amarelo.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "We live in a white house.", "translation": "Nós moramos em uma casa branca.", "cefrLevel": "A1" },
+
+  { "languageCode": "en", "text": "They speak English at home.", "translation": "Eles falam inglês em casa.", "cefrLevel": "A1" },
+  { "languageCode": "en", "text": "I go to school every day.", "translation": "Eu vou para a escola todos os dias.", "cefrLevel": "A1" },
+
+  { "languageCode": "en", "text": "Where is the airport?", "translation": "Onde fica o aeroporto?", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "I need a ticket to London.", "translation": "Eu preciso de uma passagem para Londres.", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "My flight arrives at five.", "translation": "Meu voo chega às cinco.", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "My luggage is in the hotel.", "translation": "Minha bagagem está no hotel.", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "Can I have the key of my room?", "translation": "Pode me dar a chave do meu quarto?", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "The train leaves from this street.", "translation": "O trem sai desta rua.", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "Can you show me the map?", "translation": "Você pode me mostrar o mapa?", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "I do not have money today.", "translation": "Eu não tenho dinheiro hoje.", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "We want to eat in a restaurant.", "translation": "Nós queremos comer em um restaurante.", "cefrLevel": "A2" },
+  { "languageCode": "en", "text": "I like to travel with my friend.", "translation": "Eu gosto de viajar com meu amigo.", "cefrLevel": "A2" }
+]

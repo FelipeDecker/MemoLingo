@@ -1,3 +1,5 @@
+using MemoLingo.Api.Client.Contracts;
+
 namespace MemoLingo.Front.Models
 {
     /// <summary>
@@ -12,11 +14,13 @@ namespace MemoLingo.Front.Models
         /// </summary>
         public int UnitId { get; set; }
 
-        public string Title { get; set; } = string.Empty;
+        public string Title { get; set; }
+
+        public string Topic { get; set; }
 
         public LessonType Type { get; set; }
 
-        public LessonStatus Status { get; set; }
+        public ProgressStatus Status { get; set; }
 
         /// <summary>
         /// Ordem de exibição da lição dentro da unidade (define a posição na trilha em zigue-zague).

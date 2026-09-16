@@ -59,7 +59,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // Chamada ao serviço mock, que simula uma chamada real a uma API.
+        // Busca a trilha diretamente da API.
         units = await LessonService.GetUnitsAsync();
         activeUnit = units.FirstOrDefault();
     }
@@ -108,37 +108,31 @@ else
 
     private static int GetOffset(int index) => OffsetPattern[index % OffsetPattern.Length];
 
-    private static string GetStatusClass(LessonStatus status) => status switch
+    private static string GetStatusClass(ProgressStatus status) => status switch
     {
-        LessonStatus.Completed => "concluida",
-        LessonStatus.Available => "disponivel",
+        ProgressStatus.Completed => "concluida",
+        ProgressStatus.Available or ProgressStatus.InProgress => "disponivel",
         _ => "bloqueada"
     };
 
     private static string GetLessonColor(Unit unit, Lesson lesson) => lesson.Status switch
     {
-        LessonStatus.Locked => "#e5e5e5",
+        ProgressStatus.Locked or ProgressStatus.Abandoned => "#e5e5e5",
         _ => unit.PrimaryColor
     };
 
     private static string GetIcon(Lesson lesson)
     {
-        if (lesson.Status == LessonStatus.Locked)
+        if (lesson.Status is ProgressStatus.Locked or ProgressStatus.Abandoned)
         {
             return "🔒";
         }
 
-        if (lesson.Status == LessonStatus.Completed)
+        if (lesson.Status == ProgressStatus.Completed)
         {
             return "✓";
         }
 
-        return lesson.Type switch
-        {
-            LessonType.Story => "📖",
-            LessonType.Chest => "🎁",
-            LessonType.Exam => "🏆",
-            _ => "⭐"
-        };
+        return lesson.Type == LessonType.Exam ? "🏆" : "⭐";
     }
 }

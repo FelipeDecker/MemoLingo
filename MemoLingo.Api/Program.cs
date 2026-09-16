@@ -1,6 +1,7 @@
 using MemoLingo.Application.Services;
 using MemoLingo.Infrastructure;
 using MemoLingo.Infrastructure.Data;
+using MemoLingo.Infrastructure.Data.Seeding;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,8 @@ builder.Services.AddOpenApiDocument(document =>
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IPracticeService, PracticeService>();
 
 var app = builder.Build();
 
@@ -32,6 +35,12 @@ if (!app.Environment.IsEnvironment("NSwagGenerator"))
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
+
+    if (app.Configuration.GetValue("Seed:Enabled", true))
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+        await seeder.SeedAsync();
+    }
 }
 
 if (app.Environment.IsDevelopment())

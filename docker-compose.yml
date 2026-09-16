@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: memolingo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: memolingo
+      POSTGRES_USER: memolingo
+      POSTGRES_PASSWORD: memolingo
+    ports:
+      - "5432:5432"
+    volumes:
+      - memolingo-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U memolingo -d memolingo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: MemoLingo.Api/Dockerfile
+    container_name: memolingo-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=memolingo;Username=memolingo;Password=memolingo"
+      Seed__Enabled: "true"
+    ports:
+      - "8080:8080"
+
+volumes:
+  memolingo-postgres-data:

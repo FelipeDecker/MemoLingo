@@ -1,0 +1,165 @@
+[
+  { "sentenceText": "Hello, how are you?", "wordText": "hello", "position": 1 },
+  { "sentenceText": "Hello, how are you?", "wordText": "you", "position": 2 },
+
+  { "sentenceText": "Good morning, my friend.", "wordText": "good morning", "position": 1 },
+  { "sentenceText": "Good morning, my friend.", "wordText": "friend", "position": 2 },
+
+  { "sentenceText": "Good night, see you tomorrow.", "wordText": "good night", "position": 1 },
+  { "sentenceText": "Good night, see you tomorrow.", "wordText": "you", "position": 2 },
+
+  { "sentenceText": "Thank you very much!", "wordText": "thank you", "position": 1 },
+
+  { "sentenceText": "Sorry, I do not understand.", "wordText": "sorry", "position": 1 },
+  { "sentenceText": "Sorry, I do not understand.", "wordText": "I", "position": 2 },
+
+  { "sentenceText": "Welcome to my house.", "wordText": "welcome", "position": 1 },
+  { "sentenceText": "Welcome to my house.", "wordText": "house", "position": 2 },
+
+  { "sentenceText": "He is my brother.", "wordText": "he", "position": 1 },
+  { "sentenceText": "He is my brother.", "wordText": "to be", "position": 2 },
+  { "sentenceText": "He is my brother.", "wordText": "brother", "position": 3 },
+
+  { "sentenceText": "She has three sisters.", "wordText": "she", "position": 1 },
+  { "sentenceText": "She has three sisters.", "wordText": "to have", "position": 2 },
+  { "sentenceText": "She has three sisters.", "wordText": "three", "position": 3 },
+  { "sentenceText": "She has three sisters.", "wordText": "sister", "position": 4 },
+
+  { "sentenceText": "My mother and my father live here.", "wordText": "mother", "position": 1 },
+  { "sentenceText": "My mother and my father live here.", "wordText": "father", "position": 2 },
+  { "sentenceText": "My mother and my father live here.", "wordText": "to live", "position": 3 },
+
+  { "sentenceText": "The boy writes his name.", "wordText": "boy", "position": 1 },
+  { "sentenceText": "The boy writes his name.", "wordText": "to write", "position": 2 },
+  { "sentenceText": "The boy writes his name.", "wordText": "name", "position": 3 },
+
+  { "sentenceText": "The girl reads a book at school.", "wordText": "girl", "position": 1 },
+  { "sentenceText": "The girl reads a book at school.", "wordText": "to read", "position": 2 },
+  { "sentenceText": "The girl reads a book at school.", "wordText": "book", "position": 3 },
+  { "sentenceText": "The girl reads a book at school.", "wordText": "school", "position": 4 },
+
+  { "sentenceText": "The woman speaks four languages.", "wordText": "woman", "position": 1 },
+  { "sentenceText": "The woman speaks four languages.", "wordText": "to speak", "position": 2 },
+  { "sentenceText": "The woman speaks four languages.", "wordText": "four", "position": 3 },
+
+  { "sentenceText": "That man is my friend.", "wordText": "man", "position": 1 },
+  { "sentenceText": "That man is my friend.", "wordText": "to be", "position": 2 },
+  { "sentenceText": "That man is my friend.", "wordText": "friend", "position": 3 },
+
+  { "sentenceText": "I drink water every day.", "wordText": "I", "position": 1 },
+  { "sentenceText": "I drink water every day.", "wordText": "to drink", "position": 2 },
+  { "sentenceText": "I drink water every day.", "wordText": "water", "position": 3 },
+
+  { "sentenceText": "She eats bread with cheese.", "wordText": "she", "position": 1 },
+  { "sentenceText": "She eats bread with cheese.", "wordText": "to eat", "position": 2 },
+  { "sentenceText": "She eats bread with cheese.", "wordText": "bread", "position": 3 },
+  { "sentenceText": "She eats bread with cheese.", "wordText": "cheese", "position": 4 },
+
+  { "sentenceText": "My father drinks coffee in the morning.", "wordText": "father", "position": 1 },
+  { "sentenceText": "My father drinks coffee in the morning.", "wordText": "to drink", "position": 2 },
+  { "sentenceText": "My father drinks coffee in the morning.", "wordText": "coffee", "position": 3 },
+
+  { "sentenceText": "I want a glass of milk.", "wordText": "I", "position": 1 },
+  { "sentenceText": "I want a glass of milk.", "wordText": "to want", "position": 2 },
+  { "sentenceText": "I want a glass of milk.", "wordText": "milk", "position": 3 },
+
+  { "sentenceText": "Do you want juice or water?", "wordText": "you", "position": 1 },
+  { "sentenceText": "Do you want juice or water?", "wordText": "to want", "position": 2 },
+  { "sentenceText": "Do you want juice or water?", "wordText": "juice", "position": 3 },
+  { "sentenceText": "Do you want juice or water?", "wordText": "water", "position": 4 },
+
+  { "sentenceText": "The child eats rice and meat.", "wordText": "child", "position": 1 },
+  { "sentenceText": "The child eats rice and meat.", "wordText": "to eat", "position": 2 },
+  { "sentenceText": "The child eats rice and meat.", "wordText": "rice", "position": 3 },
+  { "sentenceText": "The child eats rice and meat.", "wordText": "meat", "position": 4 },
+
+  { "sentenceText": "I eat an egg and an apple.", "wordText": "I", "position": 1 },
+  { "sentenceText": "I eat an egg and an apple.", "wordText": "to eat", "position": 2 },
+  { "sentenceText": "I eat an egg and an apple.", "wordText": "egg", "position": 3 },
+  { "sentenceText": "I eat an egg and an apple.", "wordText": "apple", "position": 4 },
+
+  { "sentenceText": "We have two dogs.", "wordText": "we", "position": 1 },
+  { "sentenceText": "We have two dogs.", "wordText": "to have", "position": 2 },
+  { "sentenceText": "We have two dogs.", "wordText": "two", "position": 3 },
+  { "sentenceText": "We have two dogs.", "wordText": "dog", "position": 4 },
+
+  { "sentenceText": "The cat is black and white.", "wordText": "cat", "position": 1 },
+  { "sentenceText": "The cat is black and white.", "wordText": "to be", "position": 2 },
+  { "sentenceText": "The cat is black and white.", "wordText": "black", "position": 3 },
+  { "sentenceText": "The cat is black and white.", "wordText": "white", "position": 4 },
+
+  { "sentenceText": "The bird is blue.", "wordText": "bird", "position": 1 },
+  { "sentenceText": "The bird is blue.", "wordText": "to be", "position": 2 },
+  { "sentenceText": "The bird is blue.", "wordText": "blue", "position": 3 },
+
+  { "sentenceText": "The horse eats green grass.", "wordText": "horse", "position": 1 },
+  { "sentenceText": "The horse eats green grass.", "wordText": "to eat", "position": 2 },
+  { "sentenceText": "The horse eats green grass.", "wordText": "green", "position": 3 },
+
+  { "sentenceText": "They have five fish.", "wordText": "they", "position": 1 },
+  { "sentenceText": "They have five fish.", "wordText": "to have", "position": 2 },
+  { "sentenceText": "They have five fish.", "wordText": "five", "position": 3 },
+  { "sentenceText": "They have five fish.", "wordText": "fish", "position": 4 },
+
+  { "sentenceText": "The girl has a red apple.", "wordText": "girl", "position": 1 },
+  { "sentenceText": "The girl has a red apple.", "wordText": "to have", "position": 2 },
+  { "sentenceText": "The girl has a red apple.", "wordText": "red", "position": 3 },
+  { "sentenceText": "The girl has a red apple.", "wordText": "apple", "position": 4 },
+
+  { "sentenceText": "I have one yellow book.", "wordText": "I", "position": 1 },
+  { "sentenceText": "I have one yellow book.", "wordText": "to have", "position": 2 },
+  { "sentenceText": "I have one yellow book.", "wordText": "one", "position": 3 },
+  { "sentenceText": "I have one yellow book.", "wordText": "yellow", "position": 4 },
+  { "sentenceText": "I have one yellow book.", "wordText": "book", "position": 5 },
+
+  { "sentenceText": "We live in a white house.", "wordText": "we", "position": 1 },
+  { "sentenceText": "We live in a white house.", "wordText": "to live", "position": 2 },
+  { "sentenceText": "We live in a white house.", "wordText": "white", "position": 3 },
+  { "sentenceText": "We live in a white house.", "wordText": "house", "position": 4 },
+
+  { "sentenceText": "They speak English at home.", "wordText": "they", "position": 1 },
+  { "sentenceText": "They speak English at home.", "wordText": "to speak", "position": 2 },
+
+  { "sentenceText": "I go to school every day.", "wordText": "I", "position": 1 },
+  { "sentenceText": "I go to school every day.", "wordText": "to go", "position": 2 },
+  { "sentenceText": "I go to school every day.", "wordText": "school", "position": 3 },
+
+  { "sentenceText": "Where is the airport?", "wordText": "to be", "position": 1 },
+  { "sentenceText": "Where is the airport?", "wordText": "airport", "position": 2 },
+
+  { "sentenceText": "I need a ticket to London.", "wordText": "I", "position": 1 },
+  { "sentenceText": "I need a ticket to London.", "wordText": "to need", "position": 2 },
+  { "sentenceText": "I need a ticket to London.", "wordText": "ticket", "position": 3 },
+
+  { "sentenceText": "My flight arrives at five.", "wordText": "flight", "position": 1 },
+  { "sentenceText": "My flight arrives at five.", "wordText": "to arrive", "position": 2 },
+  { "sentenceText": "My flight arrives at five.", "wordText": "five", "position": 3 },
+
+  { "sentenceText": "My luggage is in the hotel.", "wordText": "luggage", "position": 1 },
+  { "sentenceText": "My luggage is in the hotel.", "wordText": "to be", "position": 2 },
+  { "sentenceText": "My luggage is in the hotel.", "wordText": "hotel", "position": 3 },
+
+  { "sentenceText": "Can I have the key of my room?", "wordText": "I", "position": 1 },
+  { "sentenceText": "Can I have the key of my room?", "wordText": "to have", "position": 2 },
+  { "sentenceText": "Can I have the key of my room?", "wordText": "key", "position": 3 },
+  { "sentenceText": "Can I have the key of my room?", "wordText": "room", "position": 4 },
+
+  { "sentenceText": "The train leaves from this street.", "wordText": "train", "position": 1 },
+  { "sentenceText": "The train leaves from this street.", "wordText": "street", "position": 2 },
+
+  { "sentenceText": "Can you show me the map?", "wordText": "you", "position": 1 },
+  { "sentenceText": "Can you show me the map?", "wordText": "map", "position": 2 },
+
+  { "sentenceText": "I do not have money today.", "wordText": "I", "position": 1 },
+  { "sentenceText": "I do not have money today.", "wordText": "to have", "position": 2 },
+  { "sentenceText": "I do not have money today.", "wordText": "money", "position": 3 },
+
+  { "sentenceText": "We want to eat in a restaurant.", "wordText": "we", "position": 1 },
+  { "sentenceText": "We want to eat in a restaurant.", "wordText": "to want", "position": 2 },
+  { "sentenceText": "We want to eat in a restaurant.", "wordText": "to eat", "position": 3 },
+  { "sentenceText": "We want to eat in a restaurant.", "wordText": "restaurant", "position": 4 },
+
+  { "sentenceText": "I like to travel with my friend.", "wordText": "I", "position": 1 },
+  { "sentenceText": "I like to travel with my friend.", "wordText": "to travel", "position": 2 },
+  { "sentenceText": "I like to travel with my friend.", "wordText": "friend", "position": 3 }
+]

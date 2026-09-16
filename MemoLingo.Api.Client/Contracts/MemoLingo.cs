@@ -25,6 +25,37 @@ namespace MemoLingo.Api.Client.Contracts
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial interface ICoursesClient
+    {
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CourseModel>> GetAsync(int? userId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CourseModel>> GetAsync(int? userId, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial interface IPracticeClient
+    {
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetWordsAsync(int? userId, int? take);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetWordsAsync(int? userId, int? take, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<PracticeWordModel> RegisterResultAsync(PracticeResultModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<PracticeWordModel> RegisterResultAsync(PracticeResultModel model, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IUsersClient
     {
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
@@ -65,6 +96,194 @@ namespace MemoLingo.Api.Client.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class CourseModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("languageId")]
+        public int LanguageId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("position")]
+        public int Position { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("lessons")]
+        public System.Collections.Generic.ICollection<LessonModel> Lessons { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum CefrLevel
+    {
+
+        A1 = 1,
+
+        A2 = 2,
+
+        B1 = 3,
+
+        B2 = 4,
+
+        C1 = 5,
+
+        C2 = 6,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LessonModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("courseId")]
+        public int CourseId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("title")]
+        public string Title { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("topic")]
+        public string Topic { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("position")]
+        public int Position { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseCount")]
+        public int ExerciseCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("xpReward")]
+        public int XpReward { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public ProgressStatus Status { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isLast")]
+        public bool IsLast { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum ProgressStatus
+    {
+
+        Locked = 1,
+
+        Available = 2,
+
+        InProgress = 3,
+
+        Completed = 4,
+
+        Abandoned = 5,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ErrorResponseModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
+        public string Errors { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PracticeWordModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("languageId")]
+        public int LanguageId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("text")]
+        public string Text { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("translation")]
+        public string Translation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("partOfSpeech")]
+        public PartOfSpeech PartOfSpeech { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctCount")]
+        public int CorrectCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("wrongCount")]
+        public int WrongCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("strengthLevel")]
+        public int StrengthLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("lastReview")]
+        public System.DateTimeOffset? LastReview { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("nextReview")]
+        public System.DateTimeOffset? NextReview { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum PartOfSpeech
+    {
+
+        Noun = 1,
+
+        Verb = 2,
+
+        Adjective = 3,
+
+        Adverb = 4,
+
+        Pronoun = 5,
+
+        Preposition = 6,
+
+        Conjunction = 7,
+
+        Interjection = 8,
+
+        Article = 9,
+
+        Numeral = 10,
+
+        Expression = 11,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PracticeResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public int UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("wordId")]
+        public int WordId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correct")]
+        public bool Correct { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class UserModel
     {
 
@@ -85,15 +304,6 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("nativeLanguageId")]
         public int NativeLanguageId { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ErrorResponseModel
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("errors")]
-        public string Errors { get; set; }
 
     }
 

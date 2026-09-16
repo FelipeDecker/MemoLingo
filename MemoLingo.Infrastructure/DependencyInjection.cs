@@ -1,5 +1,6 @@
 using MemoLingo.Domain.Repositories;
 using MemoLingo.Infrastructure.Data;
+using MemoLingo.Infrastructure.Data.Seeding;
 using MemoLingo.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,9 +16,17 @@ namespace MemoLingo.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IWordRepository, WordRepository>();
+            services.AddScoped<IWordPerformanceRepository, WordPerformanceRepository>();
+            services.AddScoped<IStudySessionRepository, StudySessionRepository>();
+
+            services.AddScoped<DatabaseSeeder>();
 
             return services;
         }

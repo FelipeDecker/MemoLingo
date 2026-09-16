@@ -1,0 +1,715 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using MemoLingo.Domain.Entities;
+using MemoLingo.Domain.Enums;
+using MemoLingo.Infrastructure.Data.Seeding.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
+namespace MemoLingo.Infrastructure.Data.Seeding
+{
+    public class DatabaseSeeder
+    {
+        private const string DefaultSeedPath = "Seed";
+
+        private static readonly JsonSerializerOptions SerializerOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            ReadCommentHandling = JsonCommentHandling.Skip,
+            AllowTrailingCommas = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
+
+        private readonly AppDbContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<DatabaseSeeder> _logger;
+
+        public DatabaseSeeder(AppDbContext context, IConfiguration configuration, ILogger<DatabaseSeeder> logger)
+        {
+            _context = context;
+            _configuration = configuration;
+            _logger = logger;
+        }
+
+        public async Task SeedAsync(CancellationToken cancellationToken = default)
+        {
+            var seedPath = ResolveSeedPath();
+
+            if (!Directory.Exists(seedPath))
+            {
+                _logger.LogWarning("Diretório de seed não encontrado em {SeedPath}. Nenhum dado foi carregado.", seedPath);
+                return;
+            }
+
+            _logger.LogInformation("Carregando dados de seed a partir de {SeedPath}.", seedPath);
+
+            var languages = await SeedLanguagesAsync(seedPath, cancellationToken);
+            var words = await SeedWordsAsync(seedPath, languages, cancellationToken);
+            var sentences = await SeedSentencesAsync(seedPath, languages, cancellationToken);
+            await SeedSentenceWordsAsync(seedPath, words, sentences, cancellationToken);
+            var courses = await SeedCoursesAsync(seedPath, languages, cancellationToken);
+            var lessons = await SeedLessonsAsync(seedPath, languages, courses, cancellationToken);
+            await SeedLessonWordsAsync(seedPath, languages, lessons, words, cancellationToken);
+            var users = await SeedUsersAsync(seedPath, languages, cancellationToken);
+            await SeedWordPerformancesAsync(seedPath, languages, users, words, cancellationToken);
+            await SeedLessonProgressAsync(seedPath, languages, users, courses, lessons, cancellationToken);
+
+            _logger.LogInformation("Seed concluído.");
+        }
+
+        private string ResolveSeedPath()
+        {
+            var configuredPath = _configuration["Seed:Path"];
+            var path = string.IsNullOrWhiteSpace(configuredPath) ? DefaultSeedPath : configuredPath;
+
+            return Path.IsPathRooted(path) ? path : Path.Combine(AppContext.BaseDirectory, path);
+        }
+
+        private async Task<List<T>> ReadAsync<T>(string seedPath, string fileName, CancellationToken cancellationToken)
+        {
+            var filePath = Path.Combine(seedPath, fileName);
+
+            if (!File.Exists(filePath))
+            {
+                _logger.LogWarning("Arquivo de seed {FileName} não encontrado.", fileName);
+                return new List<T>();
+            }
+
+            await using var stream = File.OpenRead(filePath);
+            var items = await JsonSerializer.DeserializeAsync<List<T>>(stream, SerializerOptions, cancellationToken);
+
+            return items ?? new List<T>();
+        }
+
+        private async Task<Dictionary<string, int>> SeedLanguagesAsync(string seedPath, CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<LanguageSeed>(seedPath, "languages.json", cancellationToken);
+
+            var existing = await _context.Languages
+                .ToDictionaryAsync(l => l.Code.ToLowerInvariant(), l => l.Id, cancellationToken);
+
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (existing.ContainsKey(seed.Code.ToLowerInvariant()))
+                {
+                    continue;
+                }
+
+                _context.Languages.Add(new Language { Code = seed.Code, Name = seed.Name });
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} idioma(s) inserido(s).", created);
+            }
+
+            return await _context.Languages
+                .ToDictionaryAsync(l => l.Code.ToLowerInvariant(), l => l.Id, cancellationToken);
+        }
+
+        private async Task<Dictionary<(int LanguageId, string Text), int>> SeedWordsAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<WordSeed>(seedPath, "words.json", cancellationToken);
+
+            var existing = await LoadWordsAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para a palavra {Word}.", seed.LanguageCode, seed.Text);
+                    continue;
+                }
+
+                if (existing.ContainsKey((languageId, seed.Text.ToLowerInvariant())))
+                {
+                    continue;
+                }
+
+                _context.Words.Add(new Word
+                {
+                    LanguageId = languageId,
+                    Text = seed.Text,
+                    Translation = seed.Translation,
+                    CefrLevel = seed.CefrLevel,
+                    PartOfSpeech = seed.PartOfSpeech
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} palavra(s) inserida(s).", created);
+            }
+
+            return await LoadWordsAsync(cancellationToken);
+        }
+
+        private async Task<Dictionary<(int LanguageId, string Text), int>> LoadWordsAsync(CancellationToken cancellationToken)
+        {
+            var words = await _context.Words
+                .Select(w => new { w.Id, w.LanguageId, w.Text })
+                .ToListAsync(cancellationToken);
+
+            return words.ToDictionary(w => (w.LanguageId, w.Text.ToLowerInvariant()), w => w.Id);
+        }
+
+        private async Task<Dictionary<string, (int Id, int LanguageId)>> SeedSentencesAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<SentenceSeed>(seedPath, "sentences.json", cancellationToken);
+
+            var existing = await LoadSentencesAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para a frase {Sentence}.", seed.LanguageCode, seed.Text);
+                    continue;
+                }
+
+                if (existing.ContainsKey(seed.Text.ToLowerInvariant()))
+                {
+                    continue;
+                }
+
+                _context.Sentences.Add(new Sentence
+                {
+                    LanguageId = languageId,
+                    Text = seed.Text,
+                    Translation = seed.Translation,
+                    CefrLevel = seed.CefrLevel
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} frase(s) inserida(s).", created);
+            }
+
+            return await LoadSentencesAsync(cancellationToken);
+        }
+
+        private async Task<Dictionary<string, (int Id, int LanguageId)>> LoadSentencesAsync(CancellationToken cancellationToken)
+        {
+            var sentences = await _context.Sentences
+                .Select(s => new { s.Id, s.LanguageId, s.Text })
+                .ToListAsync(cancellationToken);
+
+            return sentences
+                .GroupBy(s => s.Text.ToLowerInvariant())
+                .ToDictionary(g => g.Key, g => (g.First().Id, g.First().LanguageId));
+        }
+
+        private async Task SeedSentenceWordsAsync(
+            string seedPath,
+            Dictionary<(int LanguageId, string Text), int> words,
+            Dictionary<string, (int Id, int LanguageId)> sentences,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<SentenceWordSeed>(seedPath, "sentence-words.json", cancellationToken);
+
+            var existing = (await _context.SentenceWords
+                .Select(sw => new { sw.SentenceId, sw.WordId })
+                .ToListAsync(cancellationToken))
+                .Select(sw => (sw.SentenceId, sw.WordId))
+                .ToHashSet();
+
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!sentences.TryGetValue(seed.SentenceText.ToLowerInvariant(), out var sentence))
+                {
+                    _logger.LogWarning("Frase não encontrada para o vínculo: {Sentence}.", seed.SentenceText);
+                    continue;
+                }
+
+                if (!words.TryGetValue((sentence.LanguageId, seed.WordText.ToLowerInvariant()), out var wordId))
+                {
+                    _logger.LogWarning("Palavra {Word} não encontrada para a frase {Sentence}.", seed.WordText, seed.SentenceText);
+                    continue;
+                }
+
+                if (!existing.Add((sentence.Id, wordId)))
+                {
+                    continue;
+                }
+
+                _context.SentenceWords.Add(new SentenceWord
+                {
+                    SentenceId = sentence.Id,
+                    WordId = wordId,
+                    Position = seed.Position
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} vínculo(s) frase/palavra inserido(s).", created);
+            }
+        }
+
+        private async Task<Dictionary<(int LanguageId, string Name), int>> SeedCoursesAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<CourseSeed>(seedPath, "courses.json", cancellationToken);
+
+            var existing = await LoadCoursesAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o curso {Course}.", seed.LanguageCode, seed.Name);
+                    continue;
+                }
+
+                if (existing.ContainsKey((languageId, seed.Name.ToLowerInvariant())))
+                {
+                    continue;
+                }
+
+                _context.Courses.Add(new Course
+                {
+                    LanguageId = languageId,
+                    Name = seed.Name,
+                    Description = seed.Description,
+                    Position = seed.Position,
+                    CefrLevel = seed.CefrLevel,
+                    Active = seed.Active
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} curso(s) inserido(s).", created);
+            }
+
+            return await LoadCoursesAsync(cancellationToken);
+        }
+
+        private async Task<Dictionary<(int LanguageId, string Name), int>> LoadCoursesAsync(CancellationToken cancellationToken)
+        {
+            var courses = await _context.Courses
+                .Select(c => new { c.Id, c.LanguageId, c.Name })
+                .ToListAsync(cancellationToken);
+
+            return courses.ToDictionary(c => (c.LanguageId, c.Name.ToLowerInvariant()), c => c.Id);
+        }
+
+        private async Task<Dictionary<(int CourseId, string Title), int>> SeedLessonsAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<LessonSeed>(seedPath, "lessons.json", cancellationToken);
+
+            var existing = await LoadLessonsAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!TryResolveCourse(languages, courses, seed.LanguageCode, seed.CourseName, out var courseId))
+                {
+                    _logger.LogWarning("Curso {Course} não encontrado para a lição {Lesson}.", seed.CourseName, seed.Title);
+                    continue;
+                }
+
+                if (existing.ContainsKey((courseId, seed.Title.ToLowerInvariant())))
+                {
+                    continue;
+                }
+
+                _context.Lessons.Add(new Lesson
+                {
+                    CourseId = courseId,
+                    Title = seed.Title,
+                    Topic = seed.Topic,
+                    Position = seed.Position,
+                    ExerciseCount = seed.ExerciseCount,
+                    XpReward = seed.XpReward,
+                    CefrLevel = seed.CefrLevel,
+                    Active = seed.Active
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} lição(ões) inserida(s).", created);
+            }
+
+            return await LoadLessonsAsync(cancellationToken);
+        }
+
+        private async Task<Dictionary<(int CourseId, string Title), int>> LoadLessonsAsync(CancellationToken cancellationToken)
+        {
+            var lessons = await _context.Lessons
+                .Select(l => new { l.Id, l.CourseId, l.Title })
+                .ToListAsync(cancellationToken);
+
+            return lessons.ToDictionary(l => (l.CourseId, l.Title.ToLowerInvariant()), l => l.Id);
+        }
+
+        private async Task SeedLessonWordsAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<(int CourseId, string Title), int> lessons,
+            Dictionary<(int LanguageId, string Text), int> words,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<LessonWordSeed>(seedPath, "lesson-words.json", cancellationToken);
+
+            var courses = await LoadCoursesAsync(cancellationToken);
+
+            var existing = (await _context.LessonWords
+                .Select(lw => new { lw.LessonId, lw.WordId })
+                .ToListAsync(cancellationToken))
+                .Select(lw => (lw.LessonId, lw.WordId))
+                .ToHashSet();
+
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o vínculo lição/palavra.", seed.LanguageCode);
+                    continue;
+                }
+
+                if (!TryResolveCourse(languages, courses, seed.LanguageCode, seed.CourseName, out var courseId))
+                {
+                    _logger.LogWarning("Curso {Course} não encontrado para o vínculo lição/palavra.", seed.CourseName);
+                    continue;
+                }
+
+                if (!lessons.TryGetValue((courseId, seed.LessonTitle.ToLowerInvariant()), out var lessonId))
+                {
+                    _logger.LogWarning("Lição {Lesson} não encontrada para o vínculo lição/palavra.", seed.LessonTitle);
+                    continue;
+                }
+
+                if (!words.TryGetValue((languageId, seed.WordText.ToLowerInvariant()), out var wordId))
+                {
+                    _logger.LogWarning("Palavra {Word} não encontrada para a lição {Lesson}.", seed.WordText, seed.LessonTitle);
+                    continue;
+                }
+
+                if (!existing.Add((lessonId, wordId)))
+                {
+                    continue;
+                }
+
+                _context.LessonWords.Add(new LessonWord
+                {
+                    LessonId = lessonId,
+                    WordId = wordId,
+                    Position = seed.Position
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} vínculo(s) lição/palavra inserido(s).", created);
+            }
+        }
+
+        private async Task<Dictionary<string, int>> SeedUsersAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<UserSeed>(seedPath, "users.json", cancellationToken);
+
+            var existing = await LoadUsersAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (existing.ContainsKey(seed.Email.ToLowerInvariant()))
+                {
+                    continue;
+                }
+
+                if (!languages.TryGetValue(seed.NativeLanguageCode.ToLowerInvariant(), out var nativeLanguageId))
+                {
+                    _logger.LogWarning("Idioma nativo {LanguageCode} não encontrado para o usuário {Email}.", seed.NativeLanguageCode, seed.Email);
+                    continue;
+                }
+
+                _context.Users.Add(new User
+                {
+                    Name = seed.Name,
+                    Email = seed.Email,
+                    NativeLanguageId = nativeLanguageId,
+                    CreatedAt = DateTime.UtcNow,
+                    Active = seed.Active
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} usuário(s) inserido(s).", created);
+            }
+
+            var users = await LoadUsersAsync(cancellationToken);
+
+            await SeedLanguageProgressesAsync(seeds, languages, users, cancellationToken);
+
+            return users;
+        }
+
+        private async Task<Dictionary<string, int>> LoadUsersAsync(CancellationToken cancellationToken)
+        {
+            var users = await _context.Users
+                .Select(u => new { u.Id, u.Email })
+                .ToListAsync(cancellationToken);
+
+            return users.ToDictionary(u => u.Email.ToLowerInvariant(), u => u.Id);
+        }
+
+        private async Task SeedLanguageProgressesAsync(
+            List<UserSeed> seeds,
+            Dictionary<string, int> languages,
+            Dictionary<string, int> users,
+            CancellationToken cancellationToken)
+        {
+            var existing = (await _context.LanguageProgresses
+                .Select(lp => new { lp.UserId, lp.LanguageId })
+                .ToListAsync(cancellationToken))
+                .Select(lp => (lp.UserId, lp.LanguageId))
+                .ToHashSet();
+
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (string.IsNullOrWhiteSpace(seed.LearningLanguageCode))
+                {
+                    continue;
+                }
+
+                if (!users.TryGetValue(seed.Email.ToLowerInvariant(), out var userId))
+                {
+                    continue;
+                }
+
+                if (!languages.TryGetValue(seed.LearningLanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o progresso do usuário {Email}.", seed.LearningLanguageCode, seed.Email);
+                    continue;
+                }
+
+                if (!existing.Add((userId, languageId)))
+                {
+                    continue;
+                }
+
+                _context.LanguageProgresses.Add(new LanguageProgress
+                {
+                    UserId = userId,
+                    LanguageId = languageId,
+                    Level = seed.Level,
+                    TotalXp = seed.TotalXp,
+                    CurrentStreakDays = seed.CurrentStreakDays,
+                    IsActiveCourse = true,
+                    CreatedAt = DateTime.UtcNow
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} progresso(s) de idioma inserido(s).", created);
+            }
+        }
+
+        private async Task SeedWordPerformancesAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<string, int> users,
+            Dictionary<(int LanguageId, string Text), int> words,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<WordPerformanceSeed>(seedPath, "word-performances.json", cancellationToken);
+
+            var existing = (await _context.WordPerformances
+                .Select(wp => new { wp.UserId, wp.WordId })
+                .ToListAsync(cancellationToken))
+                .Select(wp => (wp.UserId, wp.WordId))
+                .ToHashSet();
+
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!users.TryGetValue(seed.UserEmail.ToLowerInvariant(), out var userId))
+                {
+                    _logger.LogWarning("Usuário {Email} não encontrado para o desempenho da palavra {Word}.", seed.UserEmail, seed.WordText);
+                    continue;
+                }
+
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o desempenho da palavra {Word}.", seed.LanguageCode, seed.WordText);
+                    continue;
+                }
+
+                if (!words.TryGetValue((languageId, seed.WordText.ToLowerInvariant()), out var wordId))
+                {
+                    _logger.LogWarning("Palavra {Word} não encontrada para o desempenho do usuário {Email}.", seed.WordText, seed.UserEmail);
+                    continue;
+                }
+
+                if (!existing.Add((userId, wordId)))
+                {
+                    continue;
+                }
+
+                var lastReview = DateTime.UtcNow.AddDays(-1);
+
+                _context.WordPerformances.Add(new WordPerformance
+                {
+                    UserId = userId,
+                    WordId = wordId,
+                    CorrectCount = seed.CorrectCount,
+                    WrongCount = seed.WrongCount,
+                    StrengthLevel = seed.StrengthLevel,
+                    LastReview = lastReview,
+                    NextReview = lastReview.AddDays(1)
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} desempenho(s) de palavra inserido(s).", created);
+            }
+        }
+
+        private async Task SeedLessonProgressAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<string, int> users,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            Dictionary<(int CourseId, string Title), int> lessons,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<LessonProgressSeed>(seedPath, "lesson-progress.json", cancellationToken);
+
+            var existing = (await _context.StudySessions
+                .Where(ss => ss.LessonId.HasValue)
+                .Select(ss => new { ss.UserId, LessonId = ss.LessonId.Value })
+                .ToListAsync(cancellationToken))
+                .Select(ss => (ss.UserId, ss.LessonId))
+                .ToHashSet();
+
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!users.TryGetValue(seed.UserEmail.ToLowerInvariant(), out var userId))
+                {
+                    _logger.LogWarning("Usuário {Email} não encontrado para o progresso da lição {Lesson}.", seed.UserEmail, seed.LessonTitle);
+                    continue;
+                }
+
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o progresso da lição {Lesson}.", seed.LanguageCode, seed.LessonTitle);
+                    continue;
+                }
+
+                if (!TryResolveCourse(languages, courses, seed.LanguageCode, seed.CourseName, out var courseId)
+                    || !lessons.TryGetValue((courseId, seed.LessonTitle.ToLowerInvariant()), out var lessonId))
+                {
+                    _logger.LogWarning("Lição {Lesson} não encontrada para o progresso do usuário {Email}.", seed.LessonTitle, seed.UserEmail);
+                    continue;
+                }
+
+                if (!existing.Add((userId, lessonId)))
+                {
+                    continue;
+                }
+
+                var startedAt = DateTime.UtcNow.AddDays(-1);
+
+                _context.StudySessions.Add(new StudySession
+                {
+                    UserId = userId,
+                    LanguageId = languageId,
+                    LessonId = lessonId,
+                    Status = seed.Status,
+                    StartedAt = startedAt,
+                    FinishedAt = seed.Status == ProgressStatus.Completed ? startedAt.AddMinutes(10) : null,
+                    CorrectCount = seed.CorrectCount,
+                    WrongCount = seed.WrongCount,
+                    XpEarned = seed.XpEarned
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} progresso(s) de lição inserido(s).", created);
+            }
+        }
+
+        private static bool TryResolveCourse(
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            string languageCode,
+            string courseName,
+            out int courseId)
+        {
+            courseId = 0;
+
+            return languages.TryGetValue(languageCode.ToLowerInvariant(), out var languageId)
+                && courses.TryGetValue((languageId, courseName.ToLowerInvariant()), out courseId);
+        }
+    }
+}

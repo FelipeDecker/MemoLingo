@@ -24,6 +24,10 @@
     <ProjectReference Include="..\MemoLingo.Infrastructure\MemoLingo.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\Documents\Seed\*.json" Link="Seed\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' and '$(DesignTimeBuild)' != 'true'">
     <Exec WorkingDirectory="$(ProjectDir)" Command="$(NSwagExe_Net100) run nswag.json /variables:Configuration=$(Configuration)" />
   </Target>

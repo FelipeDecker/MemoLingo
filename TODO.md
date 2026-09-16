@@ -2,37 +2,20 @@
 
 Legenda: [ ] pendente · [x] concluído
 
+> Tudo o que já foi concluído está documentado em
+> [`Documents/entregas-concluidas.md`](./Documents/entregas-concluidas.md).
+> As fases de **modelagem de domínio** e **banco de dados** foram finalizadas e
+> removidas daqui; as fases seguintes foram renumeradas.
+
 ## Fase 0 — Fundação do projeto
 - [x] Criar projeto Blazor WebAssembly (`MemoLingo.Front`)
 - [x] Criar projeto de backend `MemoLingo.Api` (ASP.NET Core Web API, .NET 10)
 - [x] Criar projeto `MemoLingo.Domain` (entidades e regras de negócio puras)
 - [x] Configurar solução (.slnx) com todos os projetos
-- [ ] Configurar Docker Compose (Api + banco de dados) para desenvolvimento local
+- [x] Configurar Docker Compose (Api + banco de dados) para desenvolvimento local
 - [ ] Configurar CI básico (build + testes) via GitHub Actions
 
-## Fase 1 — Modelagem de domínio
-- [x] Modelar entidade `Idioma` (idioma de origem / idioma alvo)
-- [x] Modelar entidade `Palavra` (texto, tradução, idioma)
-- [x] Complementar entidade `Palavra` com nível/CEFR e categoria gramatical
-- [x] Modelar entidade `Frase` (texto, tradução, idioma, lista de palavras associadas)
-- [x] Modelar entidade `Licao` (conjunto de exercícios de um tópico)
-- [x] Modelar entidade `Trilha`/`Curso` (sequência de lições, ex.: "Básico", "Viagem")
-- [x] Modelar entidade `Usuario`
-- [x] Modelar entidade `ProgressoUsuarioIdioma` (`LanguageProgress`: nível, XP, streak, curso ativo, totais)
-- [x] Modelar entidade `ProgressoPalavra` (usuário x palavra: erros, próxima revisão, nível de domínio)
-- [x] Complementar entidade `ProgressoPalavra` com acertos e última revisão
-- [x] Modelar entidade `TentativaExercicio` (log de cada resposta: certo/errado, tempo de resposta, timestamp)
-- [x] Modelar entidade `SessaoDeEstudo` (agrupa exercícios respondidos em uma sessão)
-- [x] Definir enums: tipo de exercício (múltipla escolha, tradução livre, completar frase, ouvir e escrever, falar), status de progresso
-
-## Fase 2 — Banco de dados
-- [ ] Escolher banco definitivo (SQLite para dev / PostgreSQL ou SQL Server para produção)
-- [x] Criar `DbContext` com EF Core
-- [x] Criar migrations iniciais
-- [ ] Popular seed de dados: idiomas, palavras e frases iniciais (dataset inicial de 1 idioma)
-- [ ] Criar índices para consultas de priorização (usuário + palavra + última revisão)
-
-## Fase 3 — Algoritmo de priorização de erros (o coração do app)
+## Fase 1 — Algoritmo de priorização de erros (o coração do app)
 - [ ] Definir métrica de "dificuldade" por palavra (ex.: taxa de erro ponderada por recência — decaimento exponencial)
 - [ ] Implementar repetição espaçada (SRS) tipo SM-2/Leitner adaptado, combinando:
   - Intervalo de revisão padrão (baseado em acertos consecutivos)
@@ -43,7 +26,7 @@ Legenda: [ ] pendente · [x] concluído
 - [ ] Criar testes unitários do algoritmo de priorização com cenários controlados
 - [ ] Adicionar telemetria/logs para validar se o algoritmo está de fato reforçando palavras problemáticas
 
-## Fase 4 — Motor de exercícios
+## Fase 2 — Motor de exercícios
 - [ ] Implementar tipo de exercício: múltipla escolha (tradução da palavra)
 - [ ] Implementar tipo de exercício: completar a frase (lacuna com a palavra prioritária)
 - [ ] Implementar tipo de exercício: traduzir frase completa (digitação livre)
@@ -53,7 +36,7 @@ Legenda: [ ] pendente · [x] concluído
 - [ ] Implementar feedback imediato (explicação do erro, tradução correta)
 - [ ] Registrar cada tentativa em `TentativaExercicio` e atualizar `ProgressoPalavra`
 
-## Fase 5 — API (backend)
+## Fase 3 — API (backend)
 - [ ] Endpoint de autenticação (registro/login, JWT)
 - [ ] Endpoint: obter próxima lição/sessão personalizada para o usuário
 - [ ] Endpoint: submeter resposta de exercício
@@ -63,7 +46,7 @@ Legenda: [ ] pendente · [x] concluído
 - [ ] Documentação da API (OpenAPI/Swagger)
 - [ ] Testes de integração da API
 
-## Fase 6 — Frontend (Blazor WebAssembly)
+## Fase 4 — Frontend (Blazor WebAssembly)
 - [ ] Tela de login/registro
 - [x] Tela inicial com trilha de lições (estilo mapa do Duolingo)
 - [ ] Tela de exercício (componentizada por tipo de exercício)
@@ -76,7 +59,7 @@ Legenda: [ ] pendente · [x] concluído
 - [ ] Suporte offline básico (PWA + cache de lição atual)
 - [ ] Responsividade mobile-first
 
-## Fase 7 — Gamificação (motivação estilo Duolingo)
+## Fase 5 — Gamificação (motivação estilo Duolingo)
 - [ ] Sistema de XP por exercício/lição concluída
 - [ ] Sistema de streak (dias consecutivos estudando)
 - [ ] Sistema de "vidas"/corações (erros limitados por sessão, opcional)
@@ -85,14 +68,14 @@ Legenda: [ ] pendente · [x] concluído
 - [ ] Notificações de lembrete (push notification / e-mail) para revisar palavras pendentes
 - [ ] Metas diárias configuráveis pelo usuário
 
-## Fase 8 — Conteúdo e conteúdo gerado
+## Fase 6 — Conteúdo e conteúdo gerado
 - [ ] Curadoria de dataset inicial de vocabulário por nível (A1, A2, B1...)
 - [ ] Banco de frases de exemplo por palavra/nível
 - [ ] (Opcional) Integração com IA para gerar frases contextuais sob demanda contendo as palavras prioritárias
 - [ ] (Opcional) Integração com serviço de TTS para pronúncia
 - [ ] Pipeline de revisão/qualidade de conteúdo (evitar frases sem sentido)
 
-## Fase 9 — Qualidade, performance e observabilidade
+## Fase 7 — Qualidade, performance e observabilidade
 - [ ] Testes unitários (domínio + algoritmo de priorização)
 - [ ] Testes de integração (API)
 - [ ] Testes end-to-end (fluxo completo de lição no frontend)
@@ -100,7 +83,7 @@ Legenda: [ ] pendente · [x] concluído
 - [ ] Monitoramento de erros (ex.: Sentry/App Insights)
 - [ ] Cache de consultas pesadas (ex.: Redis para sessão/priorização)
 
-## Fase 10 — Deploy e operação
+## Fase 8 — Deploy e operação
 - [ ] Pipeline de CI/CD (build, testes, deploy automático)
 - [ ] Deploy do backend (Azure App Service/Container Apps)
 - [ ] Deploy do frontend (Azure Static Web Apps)
@@ -108,7 +91,28 @@ Legenda: [ ] pendente · [x] concluído
 - [ ] Backups e estratégia de migração de banco de dados
 - [ ] Domínio próprio e HTTPS
 
-## Fase 11 — Pós-lançamento / evolução
+## Fase 9 — Backoffice de conteúdo
+- [ ] Autorização por papéis (usuário comum x administrador)
+- [ ] CRUD de idiomas, palavras e frases pela API
+- [ ] CRUD de trilhas e lições (com reordenação por `Position`)
+- [ ] Importar/exportar conteúdo nos mesmos JSONs de `Documents/Seed`
+- [ ] Tela administrativa no front para gerenciar o conteúdo
+
+## Fase 10 — Internacionalização e acessibilidade
+- [ ] Localizar a interface (pt-BR/en) com arquivos de recurso
+- [ ] Permitir escolher o idioma nativo do usuário e refletir nas traduções
+- [ ] Navegação por teclado em todos os tipos de exercício
+- [ ] Contraste, `aria-labels` e leitor de tela nos componentes
+- [ ] Modo escuro
+
+## Fase 11 — Privacidade, segurança e conformidade
+- [ ] Hash de senha com algoritmo forte (ASP.NET Core Identity/BCrypt) e refresh token
+- [ ] Rate limiting e proteção contra brute force no login
+- [ ] Gestão de segredos (User Secrets em dev, Key Vault em produção)
+- [ ] Exclusão de conta e exportação dos dados do usuário (LGPD)
+- [ ] Política de privacidade e termos de uso
+
+## Fase 12 — Pós-lançamento / evolução
 - [ ] Suporte a múltiplos idiomas de aprendizado simultâneos
 - [ ] Exercícios de fala (reconhecimento de voz)
 - [ ] Modo "revisão rápida" focado 100% nas piores palavras

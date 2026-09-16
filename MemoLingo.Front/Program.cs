@@ -16,7 +16,9 @@ if (!Uri.TryCreate(api, UriKind.Absolute, out var apiUri))
 
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = apiUri });
 builder.Services.AddScoped<IUsersClient>(sp => new UsersClient(api, sp.GetRequiredService<HttpClient>()));
+builder.Services.AddScoped<ICoursesClient>(sp => new CoursesClient(api, sp.GetRequiredService<HttpClient>()));
+builder.Services.AddScoped<IPracticeClient>(sp => new PracticeClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<ILessonService, LessonService>();
-builder.Services.AddScoped<IWordService, WordService>();
+builder.Services.AddScoped<IPracticeService, PracticeService>();
 
 await builder.Build().RunAsync();
