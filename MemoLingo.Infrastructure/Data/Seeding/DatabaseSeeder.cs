@@ -49,11 +49,14 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             var sentences = await SeedSentencesAsync(seedPath, languages, cancellationToken);
             await SeedSentenceWordsAsync(seedPath, words, sentences, cancellationToken);
             var courses = await SeedCoursesAsync(seedPath, languages, cancellationToken);
-            var lessons = await SeedLessonsAsync(seedPath, languages, courses, cancellationToken);
-            await SeedLessonWordsAsync(seedPath, languages, lessons, words, cancellationToken);
+            var sections = await SeedSectionsAsync(seedPath, languages, courses, cancellationToken);
+            var units = await SeedUnitsAsync(seedPath, languages, courses, sections, cancellationToken);
+            var nodes = await SeedPathNodesAsync(seedPath, languages, courses, units, cancellationToken);
+            var lessons = await SeedLessonsAsync(seedPath, languages, courses, units, nodes, cancellationToken);
+            await SeedLessonWordsAsync(seedPath, languages, courses, units, nodes, lessons, words, cancellationToken);
             var users = await SeedUsersAsync(seedPath, languages, cancellationToken);
             await SeedWordPerformancesAsync(seedPath, languages, users, words, cancellationToken);
-            await SeedLessonProgressAsync(seedPath, languages, users, courses, lessons, cancellationToken);
+            await SeedLessonProgressAsync(seedPath, languages, users, courses, units, nodes, lessons, cancellationToken);
 
             _logger.LogInformation("Seed concluído.");
         }
@@ -325,10 +328,184 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             return courses.ToDictionary(c => (c.LanguageId, c.Name.ToLowerInvariant()), c => c.Id);
         }
 
-        private async Task<Dictionary<(int CourseId, string Title), int>> SeedLessonsAsync(
+        private async Task<Dictionary<(int CourseId, string Title), int>> SeedSectionsAsync(
             string seedPath,
             Dictionary<string, int> languages,
             Dictionary<(int LanguageId, string Name), int> courses,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<SectionSeed>(seedPath, "sections.json", cancellationToken);
+
+            var existing = await LoadSectionsAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!TryResolveCourse(languages, courses, seed.LanguageCode, seed.CourseName, out var courseId))
+                {
+                    _logger.LogWarning("Curso {Course} não encontrado para a seção {Section}.", seed.CourseName, seed.Title);
+                    continue;
+                }
+
+                if (existing.ContainsKey((courseId, seed.Title.ToLowerInvariant())))
+                {
+                    continue;
+                }
+
+                _context.Sections.Add(new Section
+                {
+                    CourseId = courseId,
+                    Title = seed.Title,
+                    Description = seed.Description,
+                    Position = seed.Position,
+                    CefrLevel = seed.CefrLevel,
+                    Active = seed.Active
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} seção(ões) inserida(s).", created);
+            }
+
+            return await LoadSectionsAsync(cancellationToken);
+        }
+
+        private async Task<Dictionary<(int CourseId, string Title), int>> LoadSectionsAsync(CancellationToken cancellationToken)
+        {
+            var sections = await _context.Sections
+                .Select(s => new { s.Id, s.CourseId, s.Title })
+                .ToListAsync(cancellationToken);
+
+            return sections.ToDictionary(s => (s.CourseId, s.Title.ToLowerInvariant()), s => s.Id);
+        }
+
+        private async Task<Dictionary<(int CourseId, string Title), int>> SeedUnitsAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            Dictionary<(int CourseId, string Title), int> sections,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<UnitSeed>(seedPath, "units.json", cancellationToken);
+
+            var existing = await LoadUnitsAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!TryResolveCourse(languages, courses, seed.LanguageCode, seed.CourseName, out var courseId))
+                {
+                    _logger.LogWarning("Curso {Course} não encontrado para a unidade {Unit}.", seed.CourseName, seed.Title);
+                    continue;
+                }
+
+                if (!sections.TryGetValue((courseId, seed.SectionTitle.ToLowerInvariant()), out var sectionId))
+                {
+                    _logger.LogWarning("Seção {Section} não encontrada para a unidade {Unit}.", seed.SectionTitle, seed.Title);
+                    continue;
+                }
+
+                if (existing.ContainsKey((courseId, seed.Title.ToLowerInvariant())))
+                {
+                    continue;
+                }
+
+                _context.Units.Add(new Unit
+                {
+                    SectionId = sectionId,
+                    Title = seed.Title,
+                    Topic = seed.Topic,
+                    GuidebookMarkdown = seed.GuidebookMarkdown,
+                    Position = seed.Position,
+                    Active = seed.Active
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} unidade(s) inserida(s).", created);
+            }
+
+            return await LoadUnitsAsync(cancellationToken);
+        }
+
+        private async Task<Dictionary<(int CourseId, string Title), int>> LoadUnitsAsync(CancellationToken cancellationToken)
+        {
+            var units = await _context.Units
+                .Select(u => new { u.Id, u.Section.CourseId, u.Title })
+                .ToListAsync(cancellationToken);
+
+            return units.ToDictionary(u => (u.CourseId, u.Title.ToLowerInvariant()), u => u.Id);
+        }
+
+        private async Task<Dictionary<(int UnitId, int Position), int>> SeedPathNodesAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            Dictionary<(int CourseId, string Title), int> units,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<PathNodeSeed>(seedPath, "path-nodes.json", cancellationToken);
+
+            var existing = await LoadPathNodesAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!TryResolveUnit(languages, courses, units, seed.LanguageCode, seed.CourseName, seed.UnitTitle, out var unitId))
+                {
+                    _logger.LogWarning("Unidade {Unit} não encontrada para o nó de posição {Position}.", seed.UnitTitle, seed.Position);
+                    continue;
+                }
+
+                if (existing.ContainsKey((unitId, seed.Position)))
+                {
+                    continue;
+                }
+
+                _context.PathNodes.Add(new PathNode
+                {
+                    UnitId = unitId,
+                    NodeType = seed.NodeType,
+                    Position = seed.Position,
+                    TotalLessons = seed.TotalLessons,
+                    Active = seed.Active
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} nó(s) de trilha inserido(s).", created);
+            }
+
+            return await LoadPathNodesAsync(cancellationToken);
+        }
+
+        private async Task<Dictionary<(int UnitId, int Position), int>> LoadPathNodesAsync(CancellationToken cancellationToken)
+        {
+            var nodes = await _context.PathNodes
+                .Select(pn => new { pn.Id, pn.UnitId, pn.Position })
+                .ToListAsync(cancellationToken);
+
+            return nodes.ToDictionary(pn => (pn.UnitId, pn.Position), pn => pn.Id);
+        }
+
+        private async Task<Dictionary<(int PathNodeId, int Position), int>> SeedLessonsAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            Dictionary<(int CourseId, string Title), int> units,
+            Dictionary<(int UnitId, int Position), int> nodes,
             CancellationToken cancellationToken)
         {
             var seeds = await ReadAsync<LessonSeed>(seedPath, "lessons.json", cancellationToken);
@@ -338,26 +515,22 @@ namespace MemoLingo.Infrastructure.Data.Seeding
 
             foreach (var seed in seeds)
             {
-                if (!TryResolveCourse(languages, courses, seed.LanguageCode, seed.CourseName, out var courseId))
+                if (!TryResolveNode(languages, courses, units, nodes, seed.LanguageCode, seed.CourseName, seed.UnitTitle, seed.NodePosition, out var pathNodeId))
                 {
-                    _logger.LogWarning("Curso {Course} não encontrado para a lição {Lesson}.", seed.CourseName, seed.Title);
+                    _logger.LogWarning("Nó {Node} da unidade {Unit} não encontrado para a lição.", seed.NodePosition, seed.UnitTitle);
                     continue;
                 }
 
-                if (existing.ContainsKey((courseId, seed.Title.ToLowerInvariant())))
+                if (existing.ContainsKey((pathNodeId, seed.Position)))
                 {
                     continue;
                 }
 
                 _context.Lessons.Add(new Lesson
                 {
-                    CourseId = courseId,
-                    Title = seed.Title,
-                    Topic = seed.Topic,
+                    PathNodeId = pathNodeId,
                     Position = seed.Position,
-                    ExerciseCount = seed.ExerciseCount,
                     XpReward = seed.XpReward,
-                    CefrLevel = seed.CefrLevel,
                     Active = seed.Active
                 });
 
@@ -373,25 +546,26 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             return await LoadLessonsAsync(cancellationToken);
         }
 
-        private async Task<Dictionary<(int CourseId, string Title), int>> LoadLessonsAsync(CancellationToken cancellationToken)
+        private async Task<Dictionary<(int PathNodeId, int Position), int>> LoadLessonsAsync(CancellationToken cancellationToken)
         {
             var lessons = await _context.Lessons
-                .Select(l => new { l.Id, l.CourseId, l.Title })
+                .Select(l => new { l.Id, l.PathNodeId, l.Position })
                 .ToListAsync(cancellationToken);
 
-            return lessons.ToDictionary(l => (l.CourseId, l.Title.ToLowerInvariant()), l => l.Id);
+            return lessons.ToDictionary(l => (l.PathNodeId, l.Position), l => l.Id);
         }
 
         private async Task SeedLessonWordsAsync(
             string seedPath,
             Dictionary<string, int> languages,
-            Dictionary<(int CourseId, string Title), int> lessons,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            Dictionary<(int CourseId, string Title), int> units,
+            Dictionary<(int UnitId, int Position), int> nodes,
+            Dictionary<(int PathNodeId, int Position), int> lessons,
             Dictionary<(int LanguageId, string Text), int> words,
             CancellationToken cancellationToken)
         {
             var seeds = await ReadAsync<LessonWordSeed>(seedPath, "lesson-words.json", cancellationToken);
-
-            var courses = await LoadCoursesAsync(cancellationToken);
 
             var existing = (await _context.LessonWords
                 .Select(lw => new { lw.LessonId, lw.WordId })
@@ -409,21 +583,26 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                     continue;
                 }
 
-                if (!TryResolveCourse(languages, courses, seed.LanguageCode, seed.CourseName, out var courseId))
+                if (!TryResolveLesson(
+                        languages,
+                        courses,
+                        units,
+                        nodes,
+                        lessons,
+                        seed.LanguageCode,
+                        seed.CourseName,
+                        seed.UnitTitle,
+                        seed.NodePosition,
+                        seed.LessonPosition,
+                        out var lessonId))
                 {
-                    _logger.LogWarning("Curso {Course} não encontrado para o vínculo lição/palavra.", seed.CourseName);
-                    continue;
-                }
-
-                if (!lessons.TryGetValue((courseId, seed.LessonTitle.ToLowerInvariant()), out var lessonId))
-                {
-                    _logger.LogWarning("Lição {Lesson} não encontrada para o vínculo lição/palavra.", seed.LessonTitle);
+                    _logger.LogWarning("Lição da unidade {Unit} não encontrada para o vínculo lição/palavra.", seed.UnitTitle);
                     continue;
                 }
 
                 if (!words.TryGetValue((languageId, seed.WordText.ToLowerInvariant()), out var wordId))
                 {
-                    _logger.LogWarning("Palavra {Word} não encontrada para a lição {Lesson}.", seed.WordText, seed.LessonTitle);
+                    _logger.LogWarning("Palavra {Word} não encontrada para a unidade {Unit}.", seed.WordText, seed.UnitTitle);
                     continue;
                 }
 
@@ -634,7 +813,9 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             Dictionary<string, int> languages,
             Dictionary<string, int> users,
             Dictionary<(int LanguageId, string Name), int> courses,
-            Dictionary<(int CourseId, string Title), int> lessons,
+            Dictionary<(int CourseId, string Title), int> units,
+            Dictionary<(int UnitId, int Position), int> nodes,
+            Dictionary<(int PathNodeId, int Position), int> lessons,
             CancellationToken cancellationToken)
         {
             var seeds = await ReadAsync<LessonProgressSeed>(seedPath, "lesson-progress.json", cancellationToken);
@@ -646,26 +827,32 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                 .Select(ss => (ss.UserId, ss.LessonId))
                 .ToHashSet();
 
+            var nodeProgresses = (await _context.UserNodeProgresses
+                .Select(unp => new { unp.UserId, unp.PathNodeId })
+                .ToListAsync(cancellationToken))
+                .Select(unp => (unp.UserId, unp.PathNodeId))
+                .ToHashSet();
+
             var created = 0;
 
             foreach (var seed in seeds)
             {
                 if (!users.TryGetValue(seed.UserEmail.ToLowerInvariant(), out var userId))
                 {
-                    _logger.LogWarning("Usuário {Email} não encontrado para o progresso da lição {Lesson}.", seed.UserEmail, seed.LessonTitle);
+                    _logger.LogWarning("Usuário {Email} não encontrado para o progresso da unidade {Unit}.", seed.UserEmail, seed.UnitTitle);
                     continue;
                 }
 
                 if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
                 {
-                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o progresso da lição {Lesson}.", seed.LanguageCode, seed.LessonTitle);
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o progresso da unidade {Unit}.", seed.LanguageCode, seed.UnitTitle);
                     continue;
                 }
 
-                if (!TryResolveCourse(languages, courses, seed.LanguageCode, seed.CourseName, out var courseId)
-                    || !lessons.TryGetValue((courseId, seed.LessonTitle.ToLowerInvariant()), out var lessonId))
+                if (!TryResolveNode(languages, courses, units, nodes, seed.LanguageCode, seed.CourseName, seed.UnitTitle, seed.NodePosition, out var pathNodeId)
+                    || !lessons.TryGetValue((pathNodeId, seed.LessonPosition), out var lessonId))
                 {
-                    _logger.LogWarning("Lição {Lesson} não encontrada para o progresso do usuário {Email}.", seed.LessonTitle, seed.UserEmail);
+                    _logger.LogWarning("Lição da unidade {Unit} não encontrada para o progresso do usuário {Email}.", seed.UnitTitle, seed.UserEmail);
                     continue;
                 }
 
@@ -675,6 +862,7 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                 }
 
                 var startedAt = DateTime.UtcNow.AddDays(-1);
+                var isCompleted = seed.Status == ProgressStatus.Completed;
 
                 _context.StudySessions.Add(new StudySession
                 {
@@ -683,11 +871,29 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                     LessonId = lessonId,
                     Status = seed.Status,
                     StartedAt = startedAt,
-                    FinishedAt = seed.Status == ProgressStatus.Completed ? startedAt.AddMinutes(10) : null,
+                    FinishedAt = isCompleted ? startedAt.AddMinutes(10) : null,
                     CorrectCount = seed.CorrectCount,
                     WrongCount = seed.WrongCount,
                     XpEarned = seed.XpEarned
                 });
+
+                if (nodeProgresses.Add((userId, pathNodeId)))
+                {
+                    var totalLessons = await _context.PathNodes
+                        .Where(pn => pn.Id == pathNodeId)
+                        .Select(pn => pn.TotalLessons)
+                        .FirstOrDefaultAsync(cancellationToken);
+
+                    _context.UserNodeProgresses.Add(new UserNodeProgress
+                    {
+                        UserId = userId,
+                        PathNodeId = pathNodeId,
+                        CompletedLessonsCount = isCompleted ? 1 : 0,
+                        IsCompleted = isCompleted && totalLessons <= 1,
+                        CompletedAt = isCompleted && totalLessons <= 1 ? startedAt.AddMinutes(10) : null,
+                        LastPracticedAt = startedAt
+                    });
+                }
 
                 created++;
             }
@@ -710,6 +916,57 @@ namespace MemoLingo.Infrastructure.Data.Seeding
 
             return languages.TryGetValue(languageCode.ToLowerInvariant(), out var languageId)
                 && courses.TryGetValue((languageId, courseName.ToLowerInvariant()), out courseId);
+        }
+
+        private static bool TryResolveUnit(
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            Dictionary<(int CourseId, string Title), int> units,
+            string languageCode,
+            string courseName,
+            string unitTitle,
+            out int unitId)
+        {
+            unitId = 0;
+
+            return TryResolveCourse(languages, courses, languageCode, courseName, out var courseId)
+                && units.TryGetValue((courseId, unitTitle.ToLowerInvariant()), out unitId);
+        }
+
+        private static bool TryResolveNode(
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            Dictionary<(int CourseId, string Title), int> units,
+            Dictionary<(int UnitId, int Position), int> nodes,
+            string languageCode,
+            string courseName,
+            string unitTitle,
+            int nodePosition,
+            out int pathNodeId)
+        {
+            pathNodeId = 0;
+
+            return TryResolveUnit(languages, courses, units, languageCode, courseName, unitTitle, out var unitId)
+                && nodes.TryGetValue((unitId, nodePosition), out pathNodeId);
+        }
+
+        private static bool TryResolveLesson(
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> courses,
+            Dictionary<(int CourseId, string Title), int> units,
+            Dictionary<(int UnitId, int Position), int> nodes,
+            Dictionary<(int PathNodeId, int Position), int> lessons,
+            string languageCode,
+            string courseName,
+            string unitTitle,
+            int nodePosition,
+            int lessonPosition,
+            out int lessonId)
+        {
+            lessonId = 0;
+
+            return TryResolveNode(languages, courses, units, nodes, languageCode, courseName, unitTitle, nodePosition, out var pathNodeId)
+                && lessons.TryGetValue((pathNodeId, lessonPosition), out lessonId);
         }
     }
 }

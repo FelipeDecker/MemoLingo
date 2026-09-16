@@ -10,6 +10,7 @@ namespace MemoLingo.Domain.Entities
     {
         public int Id { get; set; }
         public int StudySessionId { get; set; }
+        public int? ChallengeId { get; set; }
         public int? WordId { get; set; }
         public int? SentenceId { get; set; }
         public ExerciseType ExerciseType { get; set; }
@@ -20,6 +21,7 @@ namespace MemoLingo.Domain.Entities
         public DateTime AnsweredAt { get; set; }
 
         public StudySession StudySession { get; set; }
+        public Challenge Challenge { get; set; }
         public Word Word { get; set; }
         public Sentence Sentence { get; set; }
     }

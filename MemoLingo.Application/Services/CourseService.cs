@@ -28,7 +28,7 @@ namespace MemoLingo.Application.Services
                 : await _userRepository.GetDefaultAsync();
 
             var languageId = ResolveLanguageId(user);
-            var courses = await _courseRepository.GetActiveWithLessonsAsync(languageId);
+            var courses = await _courseRepository.GetActiveTrackAsync(languageId);
 
             var completed = new HashSet<int>();
             var inProgress = new HashSet<int>();
@@ -44,8 +44,6 @@ namespace MemoLingo.Application.Services
 
             foreach (var course in courses.OrderBy(c => c.Position))
             {
-                var lessons = (course.Lessons ?? new List<Lesson>()).OrderBy(l => l.Position).ToList();
-
                 var model = new CourseModel
                 {
                     Id = course.Id,
@@ -56,23 +54,28 @@ namespace MemoLingo.Application.Services
                     CefrLevel = course.CefrLevel
                 };
 
-                for (var index = 0; index < lessons.Count; index++)
+                var flattened = Flatten(course).ToList();
+
+                for (var index = 0; index < flattened.Count; index++)
                 {
-                    var lesson = lessons[index];
-                    var status = ResolveStatus(lesson.Id, completed, inProgress, ref nextLessonAssigned);
+                    var item = flattened[index];
+                    var status = ResolveStatus(item.Lesson.Id, completed, inProgress, ref nextLessonAssigned);
 
                     model.Lessons.Add(new LessonModel
                     {
-                        Id = lesson.Id,
-                        CourseId = lesson.CourseId,
-                        Title = lesson.Title,
-                        Topic = lesson.Topic,
-                        Position = lesson.Position,
-                        ExerciseCount = lesson.ExerciseCount,
-                        XpReward = lesson.XpReward,
-                        CefrLevel = lesson.CefrLevel,
+                        Id = item.Lesson.Id,
+                        CourseId = course.Id,
+                        SectionId = item.Section.Id,
+                        UnitId = item.Unit.Id,
+                        PathNodeId = item.Node.Id,
+                        NodeType = item.Node.NodeType,
+                        Title = item.Unit.Title,
+                        Topic = item.Unit.Topic,
+                        Position = index + 1,
+                        XpReward = item.Lesson.XpReward,
+                        CefrLevel = item.Section.CefrLevel,
                         Status = status,
-                        IsLast = index == lessons.Count - 1
+                        IsLast = index == flattened.Count - 1
                     });
                 }
 
@@ -80,6 +83,23 @@ namespace MemoLingo.Application.Services
             }
 
             return models;
+        }
+
+        private static IEnumerable<(Section Section, Unit Unit, PathNode Node, Lesson Lesson)> Flatten(Course course)
+        {
+            foreach (var section in (course.Sections ?? new List<Section>()).OrderBy(s => s.Position))
+            {
+                foreach (var unit in (section.Units ?? new List<Unit>()).OrderBy(u => u.Position))
+                {
+                    foreach (var node in (unit.PathNodes ?? new List<PathNode>()).OrderBy(pn => pn.Position))
+                    {
+                        foreach (var lesson in (node.Lessons ?? new List<Lesson>()).OrderBy(l => l.Position))
+                        {
+                            yield return (section, unit, node, lesson);
+                        }
+                    }
+                }
+            }
         }
 
         private static ProgressStatus ResolveStatus(

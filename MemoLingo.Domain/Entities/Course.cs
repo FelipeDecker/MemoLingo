@@ -4,7 +4,7 @@ namespace MemoLingo.Domain.Entities
 {
     /// <summary>
     /// Entidade que representa uma trilha/curso de um idioma, composta por uma
-    /// sequência ordenada de lições (ex.: "Básico", "Viagem").
+    /// sequência ordenada de seções (ex.: "Básico", "Viagem").
     /// </summary>
     public class Course
     {
@@ -17,6 +17,6 @@ namespace MemoLingo.Domain.Entities
         public bool Active { get; set; }
 
         public Language Language { get; set; }
-        public ICollection<Lesson> Lessons { get; set; }
+        public ICollection<Section> Sections { get; set; }
     }
 }

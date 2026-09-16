@@ -22,5 +22,7 @@ namespace MemoLingo.Domain.Entities
         public Language NativeLanguage { get; set; }
 
         public ICollection<LanguageProgress> LanguageProgresses { get; set; }
+
+        public ICollection<UserNodeProgress> NodeProgresses { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace MemoLingo.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Course>> GetActiveWithLessonsAsync(int? languageId)
+        public async Task<IEnumerable<Course>> GetActiveTrackAsync(int? languageId)
         {
             var query = _context.Courses
                 .AsNoTracking()
@@ -36,9 +36,50 @@ namespace MemoLingo.Infrastructure.Repositories
                     Position = c.Position,
                     CefrLevel = c.CefrLevel,
                     Active = c.Active,
-                    Lessons = c.Lessons
-                        .Where(l => l.Active)
-                        .OrderBy(l => l.Position)
+                    Sections = c.Sections
+                        .Where(s => s.Active)
+                        .OrderBy(s => s.Position)
+                        .Select(s => new Section
+                        {
+                            Id = s.Id,
+                            CourseId = s.CourseId,
+                            Title = s.Title,
+                            Description = s.Description,
+                            Position = s.Position,
+                            CefrLevel = s.CefrLevel,
+                            Active = s.Active,
+                            Units = s.Units
+                                .Where(u => u.Active)
+                                .OrderBy(u => u.Position)
+                                .Select(u => new Unit
+                                {
+                                    Id = u.Id,
+                                    SectionId = u.SectionId,
+                                    Title = u.Title,
+                                    Topic = u.Topic,
+                                    GuidebookMarkdown = u.GuidebookMarkdown,
+                                    Position = u.Position,
+                                    Active = u.Active,
+                                    PathNodes = u.PathNodes
+                                        .Where(pn => pn.Active)
+                                        .OrderBy(pn => pn.Position)
+                                        .Select(pn => new PathNode
+                                        {
+                                            Id = pn.Id,
+                                            UnitId = pn.UnitId,
+                                            NodeType = pn.NodeType,
+                                            Position = pn.Position,
+                                            TotalLessons = pn.TotalLessons,
+                                            Active = pn.Active,
+                                            Lessons = pn.Lessons
+                                                .Where(l => l.Active)
+                                                .OrderBy(l => l.Position)
+                                                .ToList()
+                                        })
+                                        .ToList()
+                                })
+                                .ToList()
+                        })
                         .ToList()
                 })
                 .ToListAsync();

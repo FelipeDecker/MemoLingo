@@ -1,13 +1,15 @@
+using MemoLingo.Domain.Enums;
+
 namespace MemoLingo.Infrastructure.Data.Seeding.Models
 {
-    public class LessonSeed
+    public class PathNodeSeed
     {
         public string LanguageCode { get; set; }
         public string CourseName { get; set; }
         public string UnitTitle { get; set; }
-        public int NodePosition { get; set; }
+        public NodeType NodeType { get; set; }
         public int Position { get; set; }
-        public int XpReward { get; set; }
+        public int TotalLessons { get; set; }
         public bool Active { get; set; }
     }
 }

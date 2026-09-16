@@ -1,14 +1,14 @@
 [
-  { "languageCode": "en", "courseName": "Inglês Básico", "title": "Saudações", "topic": "Cumprimentos e expressões básicas", "position": 1, "exerciseCount": 10, "xpReward": 20, "cefrLevel": "A1", "active": true },
-  { "languageCode": "en", "courseName": "Inglês Básico", "title": "Pronomes", "topic": "Pronomes pessoais", "position": 2, "exerciseCount": 10, "xpReward": 20, "cefrLevel": "A1", "active": true },
-  { "languageCode": "en", "courseName": "Inglês Básico", "title": "Pessoas e Família", "topic": "Membros da família e pessoas", "position": 3, "exerciseCount": 12, "xpReward": 25, "cefrLevel": "A1", "active": true },
-  { "languageCode": "en", "courseName": "Inglês Básico", "title": "Comidas e Bebidas", "topic": "Alimentos e bebidas do dia a dia", "position": 4, "exerciseCount": 12, "xpReward": 25, "cefrLevel": "A1", "active": true },
-  { "languageCode": "en", "courseName": "Inglês Básico", "title": "Animais", "topic": "Animais comuns", "position": 5, "exerciseCount": 10, "xpReward": 20, "cefrLevel": "A1", "active": true },
-  { "languageCode": "en", "courseName": "Inglês Básico", "title": "Cores", "topic": "Cores básicas", "position": 6, "exerciseCount": 10, "xpReward": 20, "cefrLevel": "A1", "active": true },
-  { "languageCode": "en", "courseName": "Inglês Básico", "title": "Números", "topic": "Números de um a cinco", "position": 7, "exerciseCount": 10, "xpReward": 20, "cefrLevel": "A1", "active": true },
-  { "languageCode": "en", "courseName": "Inglês Básico", "title": "Verbos Essenciais", "topic": "Verbos mais usados no dia a dia", "position": 8, "exerciseCount": 15, "xpReward": 30, "cefrLevel": "A1", "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Saudações", "nodePosition": 1, "position": 1, "xpReward": 20, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Pronomes", "nodePosition": 1, "position": 1, "xpReward": 20, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Pessoas e Família", "nodePosition": 1, "position": 1, "xpReward": 25, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Comidas e Bebidas", "nodePosition": 1, "position": 1, "xpReward": 25, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Animais", "nodePosition": 1, "position": 1, "xpReward": 20, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Cores", "nodePosition": 1, "position": 1, "xpReward": 20, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Números", "nodePosition": 1, "position": 1, "xpReward": 20, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Verbos Essenciais", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true },
 
-  { "languageCode": "en", "courseName": "Inglês para Viagem", "title": "No Aeroporto", "topic": "Embarque, voos e bagagem", "position": 1, "exerciseCount": 12, "xpReward": 30, "cefrLevel": "A2", "active": true },
-  { "languageCode": "en", "courseName": "Inglês para Viagem", "title": "No Hotel", "topic": "Check-in, quarto e chave", "position": 2, "exerciseCount": 12, "xpReward": 30, "cefrLevel": "A2", "active": true },
-  { "languageCode": "en", "courseName": "Inglês para Viagem", "title": "Pela Cidade", "topic": "Transporte, direções e dinheiro", "position": 3, "exerciseCount": 12, "xpReward": 30, "cefrLevel": "A2", "active": true }
+  { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "No Aeroporto", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true },
+  { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "No Hotel", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true },
+  { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true }
 ]

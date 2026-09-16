@@ -23,9 +23,19 @@ namespace MemoLingo.Infrastructure.Data
 
         public DbSet<Course> Courses => Set<Course>();
 
+        public DbSet<Section> Sections => Set<Section>();
+
+        public DbSet<Unit> Units => Set<Unit>();
+
+        public DbSet<PathNode> PathNodes => Set<PathNode>();
+
         public DbSet<Lesson> Lessons => Set<Lesson>();
 
+        public DbSet<Challenge> Challenges => Set<Challenge>();
+
         public DbSet<LessonWord> LessonWords => Set<LessonWord>();
+
+        public DbSet<UserNodeProgress> UserNodeProgresses => Set<UserNodeProgress>();
 
         public DbSet<StudySession> StudySessions => Set<StudySession>();
 
@@ -124,17 +134,88 @@ namespace MemoLingo.Infrastructure.Data
                 entity.HasIndex(c => new { c.LanguageId, c.Position });
             });
 
-            modelBuilder.Entity<Lesson>(entity =>
+            modelBuilder.Entity<Section>(entity =>
             {
-                entity.Property(l => l.Title).IsRequired().HasMaxLength(150);
-                entity.Property(l => l.Topic).HasMaxLength(150);
+                entity.Property(s => s.Title).IsRequired().HasMaxLength(150);
+                entity.Property(s => s.Description).HasMaxLength(500);
 
-                entity.HasOne(l => l.Course)
-                    .WithMany(c => c.Lessons)
-                    .HasForeignKey(l => l.CourseId)
+                entity.HasOne(s => s.Course)
+                    .WithMany(c => c.Sections)
+                    .HasForeignKey(s => s.CourseId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasIndex(l => new { l.CourseId, l.Position });
+                entity.HasIndex(s => new { s.CourseId, s.Position });
+            });
+
+            modelBuilder.Entity<Unit>(entity =>
+            {
+                entity.Property(u => u.Title).IsRequired().HasMaxLength(150);
+                entity.Property(u => u.Topic).HasMaxLength(150);
+
+                entity.HasOne(u => u.Section)
+                    .WithMany(s => s.Units)
+                    .HasForeignKey(u => u.SectionId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(u => new { u.SectionId, u.Position });
+            });
+
+            modelBuilder.Entity<PathNode>(entity =>
+            {
+                entity.HasOne(pn => pn.Unit)
+                    .WithMany(u => u.PathNodes)
+                    .HasForeignKey(pn => pn.UnitId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(pn => new { pn.UnitId, pn.Position }).IsUnique();
+            });
+
+            modelBuilder.Entity<Lesson>(entity =>
+            {
+                entity.HasOne(l => l.PathNode)
+                    .WithMany(pn => pn.Lessons)
+                    .HasForeignKey(l => l.PathNodeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(l => new { l.PathNodeId, l.Position }).IsUnique();
+            });
+
+            modelBuilder.Entity<Challenge>(entity =>
+            {
+                entity.Property(c => c.Prompt).HasMaxLength(500);
+                entity.Property(c => c.ExpectedAnswer).HasMaxLength(500);
+
+                entity.HasOne(c => c.Lesson)
+                    .WithMany(l => l.Challenges)
+                    .HasForeignKey(c => c.LessonId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(c => c.Word)
+                    .WithMany()
+                    .HasForeignKey(c => c.WordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(c => c.Sentence)
+                    .WithMany()
+                    .HasForeignKey(c => c.SentenceId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(c => new { c.LessonId, c.Position });
+            });
+
+            modelBuilder.Entity<UserNodeProgress>(entity =>
+            {
+                entity.HasOne(unp => unp.User)
+                    .WithMany(u => u.NodeProgresses)
+                    .HasForeignKey(unp => unp.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(unp => unp.PathNode)
+                    .WithMany(pn => pn.UserNodeProgresses)
+                    .HasForeignKey(unp => unp.PathNodeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(unp => new { unp.UserId, unp.PathNodeId }).IsUnique();
             });
 
             modelBuilder.Entity<LessonWord>(entity =>
@@ -181,6 +262,11 @@ namespace MemoLingo.Infrastructure.Data
                     .WithMany(ss => ss.ExerciseAttempts)
                     .HasForeignKey(ea => ea.StudySessionId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(ea => ea.Challenge)
+                    .WithMany(c => c.ExerciseAttempts)
+                    .HasForeignKey(ea => ea.ChallengeId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(ea => ea.Word)
                     .WithMany()

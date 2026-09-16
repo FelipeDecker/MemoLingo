@@ -8,13 +8,19 @@ namespace MemoLingo.Application.Models
 
         public int CourseId { get; set; }
 
+        public int SectionId { get; set; }
+
+        public int UnitId { get; set; }
+
+        public int PathNodeId { get; set; }
+
+        public NodeType NodeType { get; set; }
+
         public string Title { get; set; }
 
         public string Topic { get; set; }
 
         public int Position { get; set; }
-
-        public int ExerciseCount { get; set; }
 
         public int XpReward { get; set; }
 

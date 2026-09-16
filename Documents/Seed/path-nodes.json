@@ -1,0 +1,14 @@
+[
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Saudações", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Pronomes", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Pessoas e Família", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Comidas e Bebidas", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Animais", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Cores", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Números", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Verbos Essenciais", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+
+  { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "No Aeroporto", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "No Hotel", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true }
+]
