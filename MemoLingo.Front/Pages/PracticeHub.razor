@@ -52,7 +52,8 @@
 @code {
     private void StartFocusedPractice()
     {
-        Navigation.NavigateTo("/pratica/focada");
+        // Sem tela intermediária: o usuário cai direto na atividade interativa.
+        Navigation.NavigateTo("/pratica/atividade");
     }
 
     private void OpenDictionary()

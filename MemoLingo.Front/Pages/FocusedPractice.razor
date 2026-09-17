@@ -1,4 +1,4 @@
-@page "/pratica/focada"
+@page "/pratica/atividade"
 @inject IPracticeService PracticeService
 @inject NavigationManager Navigation
 
@@ -7,41 +7,27 @@
 <div class="pratica-container">
     <button class="btn-voltar" @onclick="GoBackToHub">← Praticar</button>
 
-    <h1>Prática Focada</h1>
-    <p class="pratica-subtitulo">
-        Aqui você pratica exatamente as palavras que mais te derrubam — nosso algoritmo prioriza
-        sempre o que você mais erra, para você reforçar o que realmente precisa.
-    </p>
-
-    @if (words == null)
+    @if (loading)
     {
-        <p class="carregando"><em>Carregando suas palavras...</em></p>
+        <p class="carregando"><em>Preparando sua prática...</em></p>
     }
-    else if (!sessionActive && !sessionCompleted)
+    else if (queue.Count == 0)
     {
-        <div class="pratica-acoes">
-            <button class="btn-iniciar" @onclick="StartSession" disabled="@(words.Count == 0)">
-                Praticar palavras com mais erros
-            </button>
-        </div>
-
-        <div class="lista-palavras">
-            @foreach (var word in words)
-            {
-                <div class="palavra-card">
-                    <div class="palavra-info">
-                        <strong class="palavra-texto">@word.Text</strong>
-                        <span class="palavra-traducao">@word.Translation</span>
-                    </div>
-                    <div class="palavra-estatisticas">
-                        <span class="badge-erro" title="Erros">✗ @word.WrongCount</span>
-                        <span class="badge-acerto" title="Acertos">✓ @word.CorrectCount</span>
-                    </div>
-                </div>
-            }
+        <div class="resumo-sessao">
+            <h2>Nada para praticar ainda</h2>
+            <p>Conclua algumas lições para desbloquear palavras na Prática Focada.</p>
+            <button class="btn-iniciar" @onclick="GoBackToHub">Voltar para praticar</button>
         </div>
     }
-    else if (sessionActive)
+    else if (sessionCompleted)
+    {
+        <div class="resumo-sessao">
+            <h2>Sessão concluída! 🎉</h2>
+            <p>Você acertou @sessionCorrectCount de @queue.Count palavras.</p>
+            <button class="btn-iniciar" @onclick="RestartAsync">Praticar novamente</button>
+        </div>
+    }
+    else
     {
         var currentWord = queue[currentIndex];
 
@@ -67,47 +53,33 @@
             }
         </div>
     }
-    else if (sessionCompleted)
-    {
-        <div class="resumo-sessao">
-            <h2>Sessão concluída! 🎉</h2>
-            <p>Você acertou @sessionCorrectCount de @queue.Count palavras.</p>
-            <button class="btn-iniciar" @onclick="RestartAsync">Voltar para a lista</button>
-        </div>
-    }
 </div>
 
 @code {
-    private const int SessionSize = 5;
-
-    private List<PracticeWordModel> words;
     private List<PracticeWordModel> queue = new();
     private int currentIndex;
     private int sessionCorrectCount;
     private bool showTranslation;
-    private bool sessionActive;
     private bool sessionCompleted;
+    private bool loading = true;
 
     protected override async Task OnInitializedAsync()
     {
-        words = await PracticeService.GetWordsForPracticeAsync();
+        await StartSessionAsync();
     }
 
-    private void StartSession()
+    private async Task StartSessionAsync()
     {
-        if (words == null || words.Count == 0)
-        {
-            return;
-        }
+        loading = true;
 
-        // Foca a sessão nas palavras com mais erros: pega as primeiras da lista,
-        // que já vem ordenada da maior para a menor quantidade de erros.
-        queue = words.Take(SessionSize).ToList();
+        // A API aplica o algoritmo 6-2-2 sobre as palavras já aprendidas e embaralha o resultado.
+        queue = await PracticeService.GetFocusedPracticeWordsAsync();
+
         currentIndex = 0;
         sessionCorrectCount = 0;
         showTranslation = false;
         sessionCompleted = false;
-        sessionActive = true;
+        loading = false;
     }
 
     private async Task AnswerAsync(bool correct)
@@ -127,16 +99,13 @@
         }
         else
         {
-            sessionActive = false;
             sessionCompleted = true;
         }
     }
 
     private async Task RestartAsync()
     {
-        sessionCompleted = false;
-        // Recarrega a lista para refletir os novos números de erros/acertos.
-        words = await PracticeService.GetWordsForPracticeAsync();
+        await StartSessionAsync();
     }
 
     private void GoBackToHub()

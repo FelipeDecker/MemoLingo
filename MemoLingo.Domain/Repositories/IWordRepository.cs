@@ -8,6 +8,7 @@ namespace MemoLingo.Domain.Repositories
     public interface IWordRepository
     {
         Task<IEnumerable<Word>> GetByLanguageAsync(int languageId);
+        Task<IEnumerable<Word>> GetLearnedByUserAsync(int userId, int languageId);
         Task<Word> GetByIdAsync(int id);
     }
 }

@@ -47,6 +47,13 @@ namespace MemoLingo.Api.Client.Contracts
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetWordsAsync(int? userId, int? take, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetFocusedWordsAsync(int userId, int? take);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetFocusedWordsAsync(int userId, int? take, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<PracticeWordModel> RegisterResultAsync(PracticeResultModel model);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>

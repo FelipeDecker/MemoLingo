@@ -25,6 +25,15 @@ namespace MemoLingo.Api.Controllers
             return Ok(words);
         }
 
+        [HttpGet("words/focused")]
+        [ProducesResponseType(typeof(IEnumerable<PracticeWordModel>), 200)]
+        [ProducesResponseType(typeof(ErrorResponseModel), 500)]
+        public async Task<IActionResult> GetFocusedWords([FromQuery] int userId, [FromQuery] int take = 10)
+        {
+            var words = await _practiceService.GetFocusedPracticeWordsAsync(userId, take);
+            return Ok(words);
+        }
+
         [HttpPost("results")]
         [ProducesResponseType(typeof(PracticeWordModel), 200)]
         [ProducesResponseType(typeof(ErrorResponseModel), 400)]

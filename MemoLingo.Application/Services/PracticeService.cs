@@ -13,6 +13,13 @@ namespace MemoLingo.Application.Services
         // Janela de tentativas usada para calcular o percentual de aprendizado.
         private const int RecentAttemptsSampleSize = 100;
 
+        // Tamanho padrão da sessão de Prática Focada (6 difíceis + 2 esquecidas + 2 dominadas).
+        private const int FocusedPracticeSize = 10;
+
+        // Frações fixas dos grupos B (esquecidas) e C (dominadas) dentro da sessão.
+        private const int ForgottenBucketDivisor = 5;
+        private const int MasteredBucketDivisor = 5;
+
         private static readonly int[] ReviewIntervalDays = { 1, 2, 4, 7, 15, 30 };
 
         private readonly IWordRepository _wordRepository;
@@ -79,6 +86,96 @@ namespace MemoLingo.Application.Services
             }
 
             return models.ToList();
+        }
+
+        public async Task<IEnumerable<PracticeWordModel>> GetFocusedPracticeWordsAsync(int userId, int take = FocusedPracticeSize)
+        {
+            if (take <= 0)
+            {
+                return new List<PracticeWordModel>();
+            }
+
+            var user = await ResolveUserAsync(userId > 0 ? userId : null);
+            if (user is null)
+            {
+                return new List<PracticeWordModel>();
+            }
+
+            var languageId = ResolveLanguageId(user);
+            if (languageId is null)
+            {
+                return new List<PracticeWordModel>();
+            }
+
+            // O pool contém apenas palavras já aprendidas: praticadas alguma vez
+            // ou vistas em lições de nós da trilha já concluídos.
+            var learnedWords = await _wordRepository.GetLearnedByUserAsync(user.Id, languageId.Value);
+
+            var performances = (await _performanceRepository.GetByUserAsync(user.Id))
+                .ToDictionary(wp => wp.WordId);
+
+            var recentStats = BuildRecentStats(
+                await _attemptRepository.GetRecentByLanguageAsync(user.Id, languageId.Value, RecentAttemptsSampleSize));
+
+            var pool = learnedWords
+                .Select(word =>
+                {
+                    performances.TryGetValue(word.Id, out var performance);
+                    recentStats.TryGetValue(word.Id, out var stats);
+                    return ToModel(word, performance, stats);
+                })
+                .ToList();
+
+            if (pool.Count == 0)
+            {
+                return new List<PracticeWordModel>();
+            }
+
+            var forgottenSize = take / ForgottenBucketDivisor;
+            var masteredSize = take / MasteredBucketDivisor;
+            var hardestSize = take - forgottenSize - masteredSize;
+
+            // Fila mestre de dificuldade: menor percentual de acerto primeiro.
+            // Serve tanto para o Grupo A quanto para o fallback das vagas restantes.
+            var hardestQueue = pool
+                .OrderBy(w => w.LearningPercentage)
+                .ThenByDescending(w => w.RecentWrongCount)
+                .ThenByDescending(w => w.WrongCount)
+                .ThenBy(w => w.Text)
+                .ToList();
+
+            var selected = new List<PracticeWordModel>(take);
+            var selectedIds = new HashSet<int>();
+
+            // GRUPO A: as palavras com o menor percentual de acerto.
+            AddRange(selected, selectedIds, hardestQueue.Take(hardestSize));
+
+            // GRUPO B: as esquecidas há mais tempo (nunca revisadas entram primeiro).
+            AddRange(selected, selectedIds, pool
+                .Where(w => !selectedIds.Contains(w.Id))
+                .OrderBy(w => w.LastReview ?? DateTime.MinValue)
+                .ThenBy(w => w.Text)
+                .Take(forgottenSize));
+
+            // GRUPO C: palavras dominadas (sem erros na janela recente).
+            AddRange(selected, selectedIds, pool
+                .Where(w => !selectedIds.Contains(w.Id))
+                .Where(w => w.RecentAttemptCount > 0 && w.RecentWrongCount == 0)
+                .OrderByDescending(w => w.LearningPercentage)
+                .ThenByDescending(w => w.StrengthLevel)
+                .ThenBy(w => w.Text)
+                .Take(masteredSize));
+
+            // Fallback: se faltou palavra nos grupos B ou C, completa as vagas
+            // com as próximas palavras mais difíceis.
+            if (selected.Count < take)
+            {
+                AddRange(selected, selectedIds, hardestQueue
+                    .Where(w => !selectedIds.Contains(w.Id))
+                    .Take(take - selected.Count));
+            }
+
+            return Shuffle(selected);
         }
 
         public async Task<PracticeWordModel> RegisterResultAsync(PracticeResultModel result)
@@ -210,6 +307,32 @@ namespace MemoLingo.Application.Services
             return samples
                 .GroupBy(sample => sample.WordId)
                 .ToDictionary(group => group.Key, group => RecentWordStats.FromSamples(group));
+        }
+
+        private static void AddRange(List<PracticeWordModel> selected, HashSet<int> selectedIds, IEnumerable<PracticeWordModel> candidates)
+        {
+            foreach (var candidate in candidates)
+            {
+                if (selectedIds.Add(candidate.Id))
+                {
+                    selected.Add(candidate);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Embaralha a lista final para que o usuário não consiga prever a ordem
+        /// de dificuldade durante o exercício.
+        /// </summary>
+        private static List<PracticeWordModel> Shuffle(List<PracticeWordModel> words)
+        {
+            for (var i = words.Count - 1; i > 0; i--)
+            {
+                var j = Random.Shared.Next(i + 1);
+                (words[i], words[j]) = (words[j], words[i]);
+            }
+
+            return words;
         }
 
         private async Task<User> ResolveUserAsync(int? userId)

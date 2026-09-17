@@ -4,8 +4,8 @@ namespace MemoLingo.Front.Services
 {
     public class PracticeService : IPracticeService
     {
-        // Quantidade de palavras trazidas da API para a lista de prática.
-        private const int PracticeWordsLimit = 20;
+        // A Prática Focada sempre roda com 10 palavras (6 difíceis + 2 esquecidas + 2 dominadas).
+        private const int FocusedPracticeLimit = 10;
 
         // O dicionário mostra a coleção completa do usuário, sem recorte.
         private static readonly int? DictionaryWordsLimit = null;
@@ -17,10 +17,10 @@ namespace MemoLingo.Front.Services
             _practiceClient = practiceClient;
         }
 
-        public async Task<List<PracticeWordModel>> GetWordsForPracticeAsync()
+        public async Task<List<PracticeWordModel>> GetFocusedPracticeWordsAsync()
         {
-            // A API já devolve as palavras priorizando aquelas em que o usuário mais erra.
-            var words = await _practiceClient.GetWordsAsync(null, PracticeWordsLimit);
+            // A API monta a sessão com o algoritmo 6-2-2 e já devolve a lista embaralhada.
+            var words = await _practiceClient.GetFocusedWordsAsync(0, FocusedPracticeLimit);
 
             return words.ToList();
         }
