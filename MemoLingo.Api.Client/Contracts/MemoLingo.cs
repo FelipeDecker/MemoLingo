@@ -53,6 +53,13 @@ namespace MemoLingo.Api.Client.Contracts
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<PracticeWordModel> RegisterResultAsync(PracticeResultModel model, System.Threading.CancellationToken cancellationToken);
 
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<PracticeWordModel> RegisterWrongAttemptAsync(PracticeWrongAttemptModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<PracticeWordModel> RegisterWrongAttemptAsync(PracticeWrongAttemptModel model, System.Threading.CancellationToken cancellationToken);
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -150,6 +157,18 @@ namespace MemoLingo.Api.Client.Contracts
         [System.Text.Json.Serialization.JsonPropertyName("courseId")]
         public int CourseId { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("sectionId")]
+        public int SectionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("unitId")]
+        public int UnitId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("pathNodeId")]
+        public int PathNodeId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("nodeType")]
+        public NodeType NodeType { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("title")]
         public string Title { get; set; }
 
@@ -158,9 +177,6 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("position")]
         public int Position { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("exerciseCount")]
-        public int ExerciseCount { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("xpReward")]
         public int XpReward { get; set; }
@@ -173,6 +189,20 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("isLast")]
         public bool IsLast { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum NodeType
+    {
+
+        Skill = 1,
+
+        Story = 2,
+
+        Practice = 3,
+
+        Chest = 4,
 
     }
 
@@ -232,6 +262,18 @@ namespace MemoLingo.Api.Client.Contracts
         [System.Text.Json.Serialization.JsonPropertyName("strengthLevel")]
         public int StrengthLevel { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("recentAttemptCount")]
+        public int RecentAttemptCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("recentCorrectCount")]
+        public int RecentCorrectCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("recentWrongCount")]
+        public int RecentWrongCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("learningPercentage")]
+        public int LearningPercentage { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("lastReview")]
         public System.DateTimeOffset? LastReview { get; set; }
 
@@ -280,6 +322,18 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("correct")]
         public bool Correct { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PracticeWrongAttemptModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public int UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("wordId")]
+        public int WordId { get; set; }
 
     }
 

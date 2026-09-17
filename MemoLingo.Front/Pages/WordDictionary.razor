@@ -1,0 +1,187 @@
+@page "/dicionario"
+@inject IPracticeService PracticeService
+@inject NavigationManager Navigation
+
+<PageTitle>Dicionário de Palavras</PageTitle>
+
+<div class="dicionario-container">
+    <button class="btn-voltar" @onclick="GoBackToHub">← Praticar</button>
+
+    <h1 class="dicionario-titulo">Dicionário de Palavras</h1>
+    <p class="dicionario-subtitulo">
+        O percentual de aprendizado considera apenas as suas últimas @RecentAttemptsWindow tentativas de cada palavra.
+    </p>
+
+    <div class="dicionario-acoes">
+        <div class="campo-busca">
+            <span class="campo-busca-icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10.5 3a7.5 7.5 0 1 1-4.7 13.35l-3.1 3.1a1 1 0 0 1-1.4-1.42l3.1-3.1A7.5 7.5 0 0 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z" />
+                </svg>
+            </span>
+            <input type="text"
+                   class="campo-busca-input"
+                   placeholder="Pesquisar palavra ou tradução"
+                   aria-label="Pesquisar palavra"
+                   value="@searchTerm"
+                   @oninput="OnSearchChanged" />
+        </div>
+
+        <button class="btn-revisar" @onclick="StartReview" disabled="@(FilteredWords.Count == 0)">
+            Iniciar Revisão
+        </button>
+    </div>
+
+    @if (words == null)
+    {
+        <p class="carregando"><em>Carregando suas palavras...</em></p>
+    }
+    else if (FilteredWords.Count == 0)
+    {
+        <p class="lista-vazia">Nenhuma palavra encontrada para "@searchTerm".</p>
+    }
+    else
+    {
+        <div class="lista-palavras">
+            @foreach (var word in FilteredWords)
+            {
+                <div class="palavra-card" @key="word.Id">
+                    <div class="palavra-info">
+                        <strong class="palavra-texto">@word.Text</strong>
+                        <span class="palavra-traducao">@word.Translation</span>
+                    </div>
+
+                    <div class="palavra-estatisticas">
+                        <span class="badge-acerto" title="Acertos no histórico">
+                            <svg class="badge-icone" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M9.6 16.2 5.4 12l-1.4 1.4 5.6 5.6L20.4 7.8 19 6.4l-9.4 9.8Z" />
+                            </svg>
+                            @word.CorrectCount
+                        </span>
+                        <span class="badge-erro" title="Erros no histórico">
+                            <svg class="badge-icone" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4L10.6 10.6l6.3-6.3 1.4 1.4Z" />
+                            </svg>
+                            @word.WrongCount
+                        </span>
+                    </div>
+
+                    <div class="palavra-aprendizado">
+                        <div class="aprendizado-topo">
+                            <span class="aprendizado-percentual">@word.LearningPercentage%</span>
+                            <span class="aprendizado-detalhe">@GetRecentSummary(word)</span>
+                        </div>
+                        <div class="aprendizado-barra" role="progressbar"
+                             aria-valuenow="@word.LearningPercentage" aria-valuemin="0" aria-valuemax="100">
+                            <div class="aprendizado-barra-preenchida @GetProgressCssClass(word.LearningPercentage)"
+                                 style="width: @(word.LearningPercentage)%"></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-reduzir"
+                            title="Registrar um erro nesta palavra"
+                            aria-label="@($"Registrar um erro em {word.Text}")"
+                            disabled="@updating"
+                            @onclick="() => RegisterWrongAttemptAsync(word)">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M12 3a1 1 0 0 1 1 1v11.6l4.3-4.3a1 1 0 1 1 1.4 1.4l-6 6a1 1 0 0 1-1.4 0l-6-6a1 1 0 1 1 1.4-1.4l4.3 4.3V4a1 1 0 0 1 1-1Z" />
+                        </svg>
+                    </button>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    // Espelha a janela usada pelo back-end para calcular o percentual de aprendizado.
+    private const int RecentAttemptsWindow = 100;
+
+
+    private List<PracticeWordModel> words;
+    private string searchTerm = string.Empty;
+    private bool updating;
+
+    private List<PracticeWordModel> FilteredWords =>
+        words == null
+            ? new List<PracticeWordModel>()
+            : string.IsNullOrWhiteSpace(searchTerm)
+                ? words
+                : words
+                    .Where(w => Matches(w, searchTerm.Trim()))
+                    .ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        words = await PracticeService.GetDictionaryAsync();
+    }
+
+    private void OnSearchChanged(ChangeEventArgs args)
+    {
+        searchTerm = args.Value?.ToString() ?? string.Empty;
+    }
+
+    private void StartReview()
+    {
+        Navigation.NavigateTo("/pratica/focada");
+    }
+
+    private void GoBackToHub()
+    {
+        Navigation.NavigateTo("/pratica");
+    }
+
+    /// <summary>
+    /// Cada clique registra uma nova tentativa errada da palavra. O back-end grava
+    /// o histórico e devolve as estatísticas já recalculadas.
+    /// </summary>
+    private async Task RegisterWrongAttemptAsync(PracticeWordModel word)
+    {
+        if (updating)
+        {
+            return;
+        }
+
+        updating = true;
+
+        try
+        {
+            var updated = await PracticeService.RegisterWrongAttemptAsync(word.Id);
+
+            word.LearningPercentage = updated.LearningPercentage;
+            word.CorrectCount = updated.CorrectCount;
+            word.WrongCount = updated.WrongCount;
+            word.StrengthLevel = updated.StrengthLevel;
+            word.RecentAttemptCount = updated.RecentAttemptCount;
+            word.RecentCorrectCount = updated.RecentCorrectCount;
+            word.RecentWrongCount = updated.RecentWrongCount;
+        }
+        finally
+        {
+            updating = false;
+        }
+    }
+
+    private static bool Matches(PracticeWordModel word, string term)
+    {
+        return (word.Text?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false)
+            || (word.Translation?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false);
+    }
+
+    private static string GetRecentSummary(PracticeWordModel word)
+    {
+        return word.RecentAttemptCount == 0
+            ? "sem tentativas recentes"
+            : $"{word.RecentCorrectCount} de {word.RecentAttemptCount} tentativas recentes";
+    }
+
+    private static string GetProgressCssClass(int percentage)
+    {
+        if (percentage >= 80)
+        {
+            return "aprendizado-alto";
+        }
+
+        return percentage >= 40 ? "aprendizado-medio" : "aprendizado-baixo";
+    }
+}

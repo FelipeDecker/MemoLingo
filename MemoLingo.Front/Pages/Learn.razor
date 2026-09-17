@@ -1,46 +1,64 @@
 @page "/"
+@page "/section/{SectionId:int}"
+@using System.Globalization
 @inject ILessonService LessonService
 @inject IJSRuntime JS
 @implements IAsyncDisposable
 
 <PageTitle>Aprender</PageTitle>
 
-@if (units == null)
+@if (activeUnit == null)
 {
-    <p class="carregando"><em>Carregando trilha...</em></p>
+    <p class="loading"><em>Carregando trilha...</em></p>
 }
 else
 {
-    @* Cabeçalho fixo no topo da trilha: mostra sempre a unidade atualmente em foco na tela
+    @* Banner fixo no topo da trilha: mostra sempre a unidade atualmente em foco na tela
        e é substituído pela próxima unidade assim que o usuário rola até ela (efeito Duolingo). *@
-    <div class="unidade-fixa" style="background-color:@activeUnit.PrimaryColor">
-        <div class="unidade-fixa-texto">
-            <span class="unidade-nome">@activeUnit.Name</span>
-            <strong class="unidade-descricao">@activeUnit.Description</strong>
+    <div class="unit-banner" style="background-color:@activeUnit.PrimaryColor; box-shadow:0 4px 0 @Darken(activeUnit.PrimaryColor)">
+        <div class="unit-banner-info">
+            <a class="unit-banner-back" href="/sections">
+                <span class="unit-banner-back-icon" aria-hidden="true">←</span>
+                <span class="unit-banner-subtitle">Seção @SectionNumber, Unidade @GetUnitNumber(activeUnit)</span>
+            </a>
+            <h2 class="unit-banner-title">@activeUnit.Name</h2>
+            @if (!string.IsNullOrWhiteSpace(activeUnit.Description))
+            {
+                <p class="unit-banner-description">@activeUnit.Description</p>
+            }
         </div>
+
+        <button type="button" class="unit-banner-guide">
+            <span class="unit-banner-guide-icon" aria-hidden="true">📘</span>
+            <span>GUIA</span>
+        </button>
     </div>
 
-    <div class="trilha-container">
+    <div class="path-container">
         @foreach (var unit in units)
         {
             @* Marcador invisível usado apenas para detectar, via scroll, qual unidade está em foco. *@
             <div class="unidade-marcador" data-unidade-id="@unit.Id"></div>
 
-            <div class="trilha">
+            <div class="path">
                 @{
-                    var globalIndex = 0;
+                    var i = 0;
                 }
                 @foreach (var lesson in unit.Lessons.OrderBy(l => l.Order))
                 {
-                    var offset = GetOffset(globalIndex);
-                    globalIndex++;
+                    @* Onda senoidal: gera o deslocamento horizontal que desenha a trilha sinuosa. *@
+                    double translateX = Math.Sin(i * Frequency) * Amplitude;
+                    i++;
 
-                    <div class="bolinha-linha" style="justify-content:@(offset >= 0 ? "flex-start" : "flex-end")">
-                        <div class="bolinha @GetStatusClass(lesson.Status)"
-                             style="background-color:@GetLessonColor(unit, lesson); margin-left:@(offset)px"
-                             title="@lesson.Title">
-                            <span class="bolinha-icone">@GetIcon(lesson)</span>
-                        </div>
+                    var nodeColor = GetLessonColor(unit, lesson);
+
+                    <div class="path-row">
+                        <button type="button"
+                                class="path-node @GetStatusClass(lesson.Status)"
+                                style="transform: translateX(@Px(translateX)); background-color:@nodeColor; box-shadow:0 5px 0 @Darken(nodeColor)"
+                                title="@lesson.Title">
+                            <span class="path-node-icon">@GetIcon(lesson)</span>
+                        </button>
                     </div>
                 }
             </div>
@@ -51,16 +69,29 @@ else
 @code {
     private List<Unit> units;
     private Unit activeUnit;
+    private Section section;
     private DotNetObjectReference<Learn> jsReference;
 
-    // Padrão de deslocamento horizontal (em px) que gera o efeito de "zigue-zague"
-    // da trilha, imitando o layout de trilhas do Duolingo.
-    private static readonly int[] OffsetPattern = { 0, 60, 90, 60, 0, -60, -90, -60 };
+    // Amplitude (px) e frequência da onda senoidal que desenha a trilha sinuosa (zig-zag).
+    private const double Amplitude = 70d;
+    private const double Frequency = 0.8d;
 
-    protected override async Task OnInitializedAsync()
+    /// <summary>
+    /// Seção exibida na trilha. Quando ausente, a seção atual do usuário é carregada.
+    /// </summary>
+    [Parameter]
+    public int? SectionId { get; set; }
+
+    private int SectionNumber => section?.Number ?? 1;
+
+    protected override async Task OnParametersSetAsync()
     {
-        // Busca a trilha diretamente da API.
-        units = await LessonService.GetUnitsAsync();
+        // Busca a trilha da seção selecionada diretamente da API.
+        section = SectionId.HasValue
+            ? await LessonService.GetSectionAsync(SectionId.Value)
+            : await LessonService.GetCurrentSectionAsync();
+
+        units = section?.Units ?? new List<Unit>();
         activeUnit = units.FirstOrDefault();
     }
 
@@ -106,13 +137,37 @@ else
         }
     }
 
-    private static int GetOffset(int index) => OffsetPattern[index % OffsetPattern.Length];
+    private int GetUnitNumber(Unit unit) => units == null ? 1 : units.IndexOf(unit) + 1;
+
+    /// <summary>
+    /// Formata o deslocamento horizontal em pixels usando cultura invariante,
+    /// evitando que a vírgula decimal quebre o CSS inline.
+    /// </summary>
+    private static string Px(double value) =>
+        value.ToString("0.##", CultureInfo.InvariantCulture) + "px";
+
+    /// <summary>
+    /// Escurece uma cor hexadecimal para gerar a sombra inferior que dá o efeito 3D nos nós.
+    /// </summary>
+    private static string Darken(string hexColor, double factor = 0.75d)
+    {
+        if (string.IsNullOrWhiteSpace(hexColor) || !hexColor.StartsWith("#") || hexColor.Length != 7)
+        {
+            return "rgba(0, 0, 0, 0.2)";
+        }
+
+        var r = (int)(Convert.ToInt32(hexColor.Substring(1, 2), 16) * factor);
+        var g = (int)(Convert.ToInt32(hexColor.Substring(3, 2), 16) * factor);
+        var b = (int)(Convert.ToInt32(hexColor.Substring(5, 2), 16) * factor);
+
+        return $"#{r:X2}{g:X2}{b:X2}";
+    }
 
     private static string GetStatusClass(ProgressStatus status) => status switch
     {
-        ProgressStatus.Completed => "concluida",
-        ProgressStatus.Available or ProgressStatus.InProgress => "disponivel",
-        _ => "bloqueada"
+        ProgressStatus.Completed => "completed",
+        ProgressStatus.Available or ProgressStatus.InProgress => "available",
+        _ => "locked"
     };
 
     private static string GetLessonColor(Unit unit, Lesson lesson) => lesson.Status switch

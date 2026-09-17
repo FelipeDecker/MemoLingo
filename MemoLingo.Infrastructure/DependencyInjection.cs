@@ -25,6 +25,7 @@ namespace MemoLingo.Infrastructure
             services.AddScoped<IWordRepository, WordRepository>();
             services.AddScoped<IWordPerformanceRepository, WordPerformanceRepository>();
             services.AddScoped<IStudySessionRepository, StudySessionRepository>();
+            services.AddScoped<IExerciseAttemptRepository, ExerciseAttemptRepository>();
 
             services.AddScoped<DatabaseSeeder>();
 

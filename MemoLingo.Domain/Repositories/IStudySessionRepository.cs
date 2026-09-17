@@ -1,3 +1,5 @@
+using MemoLingo.Domain.Entities;
+
 namespace MemoLingo.Domain.Repositories
 {
     /// <summary>
@@ -7,5 +9,6 @@ namespace MemoLingo.Domain.Repositories
     {
         Task<IEnumerable<int>> GetCompletedLessonIdsAsync(int userId);
         Task<IEnumerable<int>> GetInProgressLessonIdsAsync(int userId);
+        Task<StudySession> GetOrCreatePracticeSessionAsync(int userId, int languageId);
     }
 }

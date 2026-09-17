@@ -1,10 +1,13 @@
-@page "/pratica"
+@page "/pratica/focada"
 @inject IPracticeService PracticeService
+@inject NavigationManager Navigation
 
-<PageTitle>Praticar</PageTitle>
+<PageTitle>Prática Focada</PageTitle>
 
 <div class="pratica-container">
-    <h1>Praticar</h1>
+    <button class="btn-voltar" @onclick="GoBackToHub">← Praticar</button>
+
+    <h1>Prática Focada</h1>
     <p class="pratica-subtitulo">
         Aqui você pratica exatamente as palavras que mais te derrubam — nosso algoritmo prioriza
         sempre o que você mais erra, para você reforçar o que realmente precisa.
@@ -16,6 +19,12 @@
     }
     else if (!sessionActive && !sessionCompleted)
     {
+        <div class="pratica-acoes">
+            <button class="btn-iniciar" @onclick="StartSession" disabled="@(words.Count == 0)">
+                Praticar palavras com mais erros
+            </button>
+        </div>
+
         <div class="lista-palavras">
             @foreach (var word in words)
             {
@@ -31,10 +40,6 @@
                 </div>
             }
         </div>
-
-        <button class="btn-iniciar" @onclick="StartSession" disabled="@(words.Count == 0)">
-            Praticar palavras com mais erros
-        </button>
     }
     else if (sessionActive)
     {
@@ -73,6 +78,8 @@
 </div>
 
 @code {
+    private const int SessionSize = 5;
+
     private List<PracticeWordModel> words;
     private List<PracticeWordModel> queue = new();
     private int currentIndex;
@@ -93,9 +100,9 @@
             return;
         }
 
-        // Foca a sessão nas palavras com mais erros: pega até as 5 primeiras da lista,
+        // Foca a sessão nas palavras com mais erros: pega as primeiras da lista,
         // que já vem ordenada da maior para a menor quantidade de erros.
-        queue = words.Take(5).ToList();
+        queue = words.Take(SessionSize).ToList();
         currentIndex = 0;
         sessionCorrectCount = 0;
         showTranslation = false;
@@ -130,5 +137,10 @@
         sessionCompleted = false;
         // Recarrega a lista para refletir os novos números de erros/acertos.
         words = await PracticeService.GetWordsForPracticeAsync();
+    }
+
+    private void GoBackToHub()
+    {
+        Navigation.NavigateTo("/pratica");
     }
 }

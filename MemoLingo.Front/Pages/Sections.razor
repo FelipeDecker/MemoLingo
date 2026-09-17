@@ -1,0 +1,96 @@
+@page "/sections"
+@inject ILessonService LessonService
+@inject NavigationManager Navigation
+
+<PageTitle>Seções</PageTitle>
+
+<div class="sections-container">
+    <a class="sections-back" href="/">
+        <span class="sections-back-icon" aria-hidden="true">←</span>
+        <span>VOLTAR</span>
+    </a>
+
+    @if (sections == null)
+    {
+        <p class="loading"><em>Carregando seções...</em></p>
+    }
+    else
+    {
+        @foreach (var section in sections)
+        {
+            var isCurrent = section.Status == ProgressStatus.InProgress;
+
+            <div class="section-card @(isCurrent ? "current" : "done")">
+                <div class="section-card-info">
+                    @if (isCurrent)
+                    {
+                        <span class="section-card-level current">@section.CefrLevel</span>
+                    }
+                    else
+                    {
+                        <span class="section-card-level">@section.CefrLevel • VER DETALHES</span>
+                    }
+
+                    <h2 class="section-card-title">@section.Title</h2>
+
+                    @if (!string.IsNullOrWhiteSpace(section.Description))
+                    {
+                        <p class="section-card-description">@section.Description</p>
+                    }
+
+                    @if (section.Status == ProgressStatus.Completed)
+                    {
+                        <span class="section-card-completed">
+                            <span class="section-card-check" aria-hidden="true">✓</span>
+                            <span>CONCLUÍDO!</span>
+                        </span>
+                    }
+                    else if (isCurrent)
+                    {
+                        <div class="section-progress" role="progressbar" aria-valuenow="@section.ProgressPercent" aria-valuemin="0" aria-valuemax="100">
+                            <div class="section-progress-bar" style="width:@(section.ProgressPercent)%"></div>
+                        </div>
+                        <span class="section-progress-label">@section.ProgressPercent% concluído</span>
+                    }
+                    else
+                    {
+                        <span class="section-card-locked">
+                            <span aria-hidden="true">🔒</span>
+                            <span>BLOQUEADO</span>
+                        </span>
+                    }
+                </div>
+
+                @if (!isCurrent)
+                {
+                    <button type="button"
+                            class="section-card-review"
+                            disabled="@(section.Status == ProgressStatus.Locked)"
+                            @onclick="() => OpenSection(section)">
+                        REVISAR
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="section-card-continue" @onclick="() => OpenSection(section)">
+                        CONTINUAR
+                    </button>
+                }
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private List<Section> sections;
+
+    protected override async Task OnInitializedAsync()
+    {
+        sections = await LessonService.GetSectionsAsync();
+    }
+
+    private void OpenSection(Section section)
+    {
+        Navigation.NavigateTo($"/section/{section.Id}");
+    }
+}

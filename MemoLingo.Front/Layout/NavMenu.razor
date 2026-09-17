@@ -1,27 +1,34 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">MemoLingo</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+﻿<div class="marca-topo">
+    <a class="marca" href="">memolingo</a>
+    <button title="Navigation menu" class="menu-toggler" @onclick="ToggleNavMenu">
+        <span class="menu-toggler-icone"></span>
+    </button>
 </div>
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="nav flex-column">
-        <div class="nav-item px-3">
+        <div class="nav-item">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Aprender
+                <svg class="nav-icone" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+                </svg>
+                <span class="nav-texto">Aprender</span>
             </NavLink>
         </div>
-        <div class="nav-item px-3">
+        <div class="nav-item">
             <NavLink class="nav-link" href="pratica">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Praticar
+                <svg class="nav-icone" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1Z" />
+                </svg>
+                <span class="nav-texto">Praticar</span>
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link btn btn-primary" href="perfil">
-                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Perfil
+        <div class="nav-item">
+            <NavLink class="nav-link" href="perfil">
+                <svg class="nav-icone" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2 1H6a4 4 0 0 0-4 4 2 2 0 0 0 2 2h8a2 2 0 0 0 2-2 4 4 0 0 0-4-4Z" />
+                </svg>
+                <span class="nav-texto">Perfil</span>
             </NavLink>
         </div>
     </nav>

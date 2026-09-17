@@ -1,0 +1,218 @@
+.sections-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.loading {
+    text-align: center;
+    margin-top: 2rem;
+    color: #777;
+}
+
+/* Botão simples de voltar, em cinza, no topo da página. */
+.sections-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: fit-content;
+    color: #afafaf;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    padding: 0.5rem 0.25rem;
+    margin: 0.5rem 0 0.5rem 0;
+    transition: color 0.15s ease-in-out;
+}
+
+.sections-back:hover {
+    color: #777;
+}
+
+.sections-back-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+/* Card base de uma seção. */
+.section-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+}
+
+/* Seção concluída ou bloqueada: fundo branco com borda cinza clara. */
+.section-card.done {
+    background-color: #fff;
+    border: 2px solid #e5e5e5;
+}
+
+/* Seção atual: fundo azul claro, sem borda e com o botão principal embaixo. */
+.section-card.current {
+    background-color: #ddf4ff;
+    border: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+}
+
+.section-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.section-card-level {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #84d8ff;
+}
+
+.section-card-level.current {
+    color: #1899d6;
+}
+
+.section-card-title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #3c3c3c;
+}
+
+.section-card-description {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #777;
+}
+
+.section-card-completed {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #58cc02;
+    margin-top: 0.25rem;
+}
+
+.section-card-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #58cc02;
+    color: #fff;
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+.section-card-locked {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #afafaf;
+    margin-top: 0.25rem;
+}
+
+/* Barra de progresso da seção atual. */
+.section-progress {
+    margin-top: 0.5rem;
+    width: 100%;
+    height: 16px;
+    border-radius: 999px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.section-progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background-color: #58cc02;
+    transition: width 0.3s ease-in-out;
+}
+
+.section-progress-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #1899d6;
+}
+
+/* Botão contornado "REVISAR" das seções já concluídas. */
+.section-card-review {
+    flex-shrink: 0;
+    background-color: #fff;
+    color: #1cb0f6;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.section-card-review:hover:not(:disabled) {
+    background-color: #f7f7f7;
+}
+
+.section-card-review:disabled {
+    color: #afafaf;
+    cursor: not-allowed;
+}
+
+/* Botão principal "CONTINUAR" da seção atual. */
+.section-card-continue {
+    width: 100%;
+    background-color: #1cb0f6;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 4px 0 #1899d6;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    padding: 0.9rem 1.5rem;
+    cursor: pointer;
+    transition: filter 0.15s ease-in-out;
+}
+
+.section-card-continue:hover {
+    filter: brightness(1.05);
+}
+
+.section-card-continue:active {
+    box-shadow: none;
+    transform: translateY(4px);
+}
+
+@media (max-width: 640.98px) {
+    .section-card.done {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .section-card-review {
+        width: 100%;
+    }
+}

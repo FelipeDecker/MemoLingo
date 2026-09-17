@@ -42,5 +42,23 @@ namespace MemoLingo.Api.Controllers
                 return BadRequest(new ErrorResponseModel { Errors = ex.Message });
             }
         }
+
+        [HttpPost("attempts/wrong")]
+        [ProducesResponseType(typeof(PracticeWordModel), 200)]
+        [ProducesResponseType(typeof(ErrorResponseModel), 400)]
+        public async Task<IActionResult> RegisterWrongAttempt([FromBody] PracticeWrongAttemptModel model)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ErrorResponseModel { Errors = "Modelo inválido" });
+
+            try
+            {
+                var word = await _practiceService.RegisterWrongAttemptAsync(model);
+                return Ok(word);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponseModel { Errors = ex.Message });
+            }
+        }
     }
 }

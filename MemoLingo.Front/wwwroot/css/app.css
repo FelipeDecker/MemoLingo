@@ -1,5 +1,7 @@
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Nunito', 'Quicksand', 'Trebuchet MS', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #fff;
+    color: #4b4b4b;
 }
 
 h1:focus {

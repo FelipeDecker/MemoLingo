@@ -55,7 +55,6 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             var lessons = await SeedLessonsAsync(seedPath, languages, courses, units, nodes, cancellationToken);
             await SeedLessonWordsAsync(seedPath, languages, courses, units, nodes, lessons, words, cancellationToken);
             var users = await SeedUsersAsync(seedPath, languages, cancellationToken);
-            await SeedWordPerformancesAsync(seedPath, languages, users, words, cancellationToken);
             await SeedLessonProgressAsync(seedPath, languages, users, courses, units, nodes, lessons, cancellationToken);
 
             _logger.LogInformation("Seed concluído.");
@@ -740,71 +739,6 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             {
                 await _context.SaveChangesAsync(cancellationToken);
                 _logger.LogInformation("{Count} progresso(s) de idioma inserido(s).", created);
-            }
-        }
-
-        private async Task SeedWordPerformancesAsync(
-            string seedPath,
-            Dictionary<string, int> languages,
-            Dictionary<string, int> users,
-            Dictionary<(int LanguageId, string Text), int> words,
-            CancellationToken cancellationToken)
-        {
-            var seeds = await ReadAsync<WordPerformanceSeed>(seedPath, "word-performances.json", cancellationToken);
-
-            var existing = (await _context.WordPerformances
-                .Select(wp => new { wp.UserId, wp.WordId })
-                .ToListAsync(cancellationToken))
-                .Select(wp => (wp.UserId, wp.WordId))
-                .ToHashSet();
-
-            var created = 0;
-
-            foreach (var seed in seeds)
-            {
-                if (!users.TryGetValue(seed.UserEmail.ToLowerInvariant(), out var userId))
-                {
-                    _logger.LogWarning("Usuário {Email} não encontrado para o desempenho da palavra {Word}.", seed.UserEmail, seed.WordText);
-                    continue;
-                }
-
-                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
-                {
-                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o desempenho da palavra {Word}.", seed.LanguageCode, seed.WordText);
-                    continue;
-                }
-
-                if (!words.TryGetValue((languageId, seed.WordText.ToLowerInvariant()), out var wordId))
-                {
-                    _logger.LogWarning("Palavra {Word} não encontrada para o desempenho do usuário {Email}.", seed.WordText, seed.UserEmail);
-                    continue;
-                }
-
-                if (!existing.Add((userId, wordId)))
-                {
-                    continue;
-                }
-
-                var lastReview = DateTime.UtcNow.AddDays(-1);
-
-                _context.WordPerformances.Add(new WordPerformance
-                {
-                    UserId = userId,
-                    WordId = wordId,
-                    CorrectCount = seed.CorrectCount,
-                    WrongCount = seed.WrongCount,
-                    StrengthLevel = seed.StrengthLevel,
-                    LastReview = lastReview,
-                    NextReview = lastReview.AddDays(1)
-                });
-
-                created++;
-            }
-
-            if (created > 0)
-            {
-                await _context.SaveChangesAsync(cancellationToken);
-                _logger.LogInformation("{Count} desempenho(s) de palavra inserido(s).", created);
             }
         }
 

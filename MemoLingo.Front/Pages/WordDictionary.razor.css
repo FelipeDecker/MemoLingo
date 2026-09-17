@@ -1,0 +1,279 @@
+.dicionario-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+}
+
+.btn-voltar {
+    border: none;
+    background: none;
+    padding: 0;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #6b6b6b;
+    cursor: pointer;
+}
+
+    .btn-voltar:hover {
+        color: #1cb0f6;
+    }
+
+.dicionario-titulo {
+    margin-bottom: 0.35rem;
+}
+
+.dicionario-subtitulo {
+    color: #6b6b6b;
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+}
+
+.dicionario-acoes {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem 0 1rem;
+    background-color: #fff;
+}
+
+.campo-busca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 14px;
+    padding: 0.7rem 0.9rem;
+    background-color: #f7f7f7;
+}
+
+    .campo-busca:focus-within {
+        border-color: #1cb0f6;
+        background-color: #fff;
+    }
+
+.campo-busca-icone {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: #afafaf;
+}
+
+    .campo-busca-icone svg {
+        width: 100%;
+        height: 100%;
+    }
+
+.campo-busca-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    color: #3c3c3c;
+}
+
+.btn-revisar {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 1rem;
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #fff;
+    background-color: #58cc02;
+    box-shadow: 0 4px 0 #58a700;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+}
+
+    .btn-revisar:hover:not(:disabled) {
+        transform: translateY(-2px);
+    }
+
+    .btn-revisar:disabled {
+        background-color: #e5e5e5;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+.carregando,
+.lista-vazia {
+    text-align: center;
+    color: #6b6b6b;
+    margin-top: 2rem;
+}
+
+.lista-palavras {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.palavra-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) auto minmax(120px, 1fr) auto;
+    align-items: center;
+    gap: 0.9rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 14px;
+    padding: 0.9rem 1.1rem;
+}
+
+.palavra-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    min-width: 0;
+}
+
+.palavra-texto {
+    font-size: 1.05rem;
+    text-transform: capitalize;
+}
+
+.palavra-traducao {
+    color: #6b6b6b;
+    font-size: 0.88rem;
+}
+
+.palavra-estatisticas {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.badge-acerto,
+.badge-erro {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+}
+
+.badge-icone {
+    width: 13px;
+    height: 13px;
+}
+
+.badge-acerto {
+    color: #58a700;
+    background-color: rgba(88, 167, 0, 0.12);
+}
+
+.badge-erro {
+    color: #ff4b4b;
+    background-color: rgba(255, 75, 75, 0.12);
+}
+
+.palavra-aprendizado {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.aprendizado-topo {
+    display: flex;
+    flex-direction: column;
+}
+
+.aprendizado-percentual {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #3c3c3c;
+}
+
+.aprendizado-detalhe {
+    font-size: 0.72rem;
+    color: #afafaf;
+}
+
+.aprendizado-barra {
+    height: 8px;
+    border-radius: 999px;
+    background-color: #e5e5e5;
+    overflow: hidden;
+}
+
+.aprendizado-barra-preenchida {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.25s ease-in-out;
+}
+
+.aprendizado-alto {
+    background-color: #58cc02;
+}
+
+.aprendizado-medio {
+    background-color: #ffc800;
+}
+
+.aprendizado-baixo {
+    background-color: #ff4b4b;
+}
+
+.btn-reduzir {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 2px solid #ffd0d0;
+    border-radius: 12px;
+    color: #ff4b4b;
+    background-color: rgba(255, 75, 75, 0.08);
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+    .btn-reduzir svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .btn-reduzir:hover:not(:disabled) {
+        background-color: rgba(255, 75, 75, 0.18);
+    }
+
+    .btn-reduzir:disabled {
+        color: #afafaf;
+        border-color: #e5e5e5;
+        background-color: transparent;
+        cursor: not-allowed;
+    }
+
+@media (max-width: 560px) {
+    .palavra-card {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "info acoes"
+            "stats acoes"
+            "progresso progresso";
+    }
+
+    .palavra-info {
+        grid-area: info;
+    }
+
+    .palavra-estatisticas {
+        grid-area: stats;
+    }
+
+    .palavra-aprendizado {
+        grid-area: progresso;
+    }
+
+    .btn-reduzir {
+        grid-area: acoes;
+    }
+}
