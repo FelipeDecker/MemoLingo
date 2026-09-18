@@ -5,8 +5,6 @@
 <PageTitle>Prática Focada</PageTitle>
 
 <div class="pratica-container">
-    <button class="btn-voltar" @onclick="GoBackToHub">← Praticar</button>
-
     @if (loading)
     {
         <p class="carregando"><em>Preparando sua prática...</em></p>
@@ -24,7 +22,19 @@
         <div class="resumo-sessao">
             <h2>Sessão concluída! 🎉</h2>
             <p>Você acertou @sessionCorrectCount de @queue.Count palavras.</p>
-            <button class="btn-iniciar" @onclick="RestartAsync">Praticar novamente</button>
+
+            <div class="resumo-metricas">
+                <div class="resumo-metrica">
+                    <span class="resumo-metrica-valor">@AccuracyPercentage%</span>
+                    <span class="resumo-metrica-rotulo">Acertos</span>
+                </div>
+                <div class="resumo-metrica">
+                    <span class="resumo-metrica-valor">+@EarnedXp XP</span>
+                    <span class="resumo-metrica-rotulo">Experiência</span>
+                </div>
+            </div>
+
+            <button class="btn-iniciar" @onclick="GoBackToHub">Concluir</button>
         </div>
     }
     else
@@ -56,12 +66,21 @@
 </div>
 
 @code {
+    // XP concedido por cada palavra respondida corretamente na Prática Focada.
+    private const int XpPerCorrectAnswer = 2;
+
     private List<PracticeWordModel> queue = new();
     private int currentIndex;
     private int sessionCorrectCount;
     private bool showTranslation;
     private bool sessionCompleted;
     private bool loading = true;
+
+    private int AccuracyPercentage => queue.Count == 0
+        ? 0
+        : (int)Math.Round((double)sessionCorrectCount / queue.Count * 100, MidpointRounding.AwayFromZero);
+
+    private int EarnedXp => sessionCorrectCount * XpPerCorrectAnswer;
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,11 +120,6 @@
         {
             sessionCompleted = true;
         }
-    }
-
-    private async Task RestartAsync()
-    {
-        await StartSessionAsync();
     }
 
     private void GoBackToHub()

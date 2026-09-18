@@ -23,8 +23,8 @@
     gap: 1rem;
     color: #fff;
     border-radius: 16px;
-    padding: 0.7rem 1.25rem;
-    margin: 1.5rem 0 2.5rem 0;
+    padding: 0.35rem 1.25rem;
+    margin: 0.75rem 0 1.25rem 0;
     width: 100%;
     transition: background-color 0.2s ease-in-out;
 }
@@ -187,6 +187,6 @@
 
 @media (min-width: 641px) {
     .unit-banner {
-        top: 1rem;
+        top: 0.5rem;
     }
 }

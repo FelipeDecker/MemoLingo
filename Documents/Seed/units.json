@@ -7,6 +7,8 @@
   { "languageCode": "en", "courseName": "Inglês Básico", "sectionTitle": "Seção 1 - Primeiros Passos", "title": "Cores", "topic": "Cores básicas", "position": 6, "active": true },
   { "languageCode": "en", "courseName": "Inglês Básico", "sectionTitle": "Seção 1 - Primeiros Passos", "title": "Números", "topic": "Números de um a cinco", "position": 7, "active": true },
   { "languageCode": "en", "courseName": "Inglês Básico", "sectionTitle": "Seção 1 - Primeiros Passos", "title": "Verbos Essenciais", "topic": "Verbos mais usados no dia a dia", "position": 8, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "sectionTitle": "Seção 1 - Primeiros Passos", "title": "Rotina e Trabalho", "topic": "Vida profissional, estudos e rotina", "position": 9, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "sectionTitle": "Seção 1 - Primeiros Passos", "title": "Ideias e Sociedade", "topic": "Opiniões, conhecimento e meio ambiente", "position": 10, "active": true },
 
   { "languageCode": "en", "courseName": "Inglês para Viagem", "sectionTitle": "Seção 1 - Na Estrada", "title": "No Aeroporto", "topic": "Embarque, voos e bagagem", "position": 1, "active": true },
   { "languageCode": "en", "courseName": "Inglês para Viagem", "sectionTitle": "Seção 1 - Na Estrada", "title": "No Hotel", "topic": "Check-in, quarto e chave", "position": 2, "active": true },

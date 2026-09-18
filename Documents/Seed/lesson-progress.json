@@ -1,5 +1,0 @@
-[
-  { "userEmail": "demo@memolingo.com", "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Saudações", "nodePosition": 1, "lessonPosition": 1, "status": "Completed", "correctCount": 9, "wrongCount": 1, "xpEarned": 20 },
-  { "userEmail": "demo@memolingo.com", "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Pronomes", "nodePosition": 1, "lessonPosition": 1, "status": "Completed", "correctCount": 8, "wrongCount": 2, "xpEarned": 20 },
-  { "userEmail": "demo@memolingo.com", "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Pessoas e Família", "nodePosition": 1, "lessonPosition": 1, "status": "InProgress", "correctCount": 4, "wrongCount": 3, "xpEarned": 0 }
-]

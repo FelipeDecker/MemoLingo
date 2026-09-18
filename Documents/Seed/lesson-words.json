@@ -85,5 +85,37 @@
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodePosition": 1, "lessonPosition": 1, "wordText": "street", "position": 2 },
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodePosition": 1, "lessonPosition": 1, "wordText": "map", "position": 3 },
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodePosition": 1, "lessonPosition": 1, "wordText": "money", "position": 4 },
-  { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodePosition": 1, "lessonPosition": 1, "wordText": "restaurant", "position": 5 }
+  { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodePosition": 1, "lessonPosition": 1, "wordText": "restaurant", "position": 5 },
+
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 1, "lessonPosition": 1, "wordText": "career", "position": 1 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 1, "lessonPosition": 1, "wordText": "opportunity", "position": 2 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 1, "lessonPosition": 1, "wordText": "industry", "position": 3 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 1, "lessonPosition": 1, "wordText": "to manage", "position": 4 },
+
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 2, "lessonPosition": 1, "wordText": "meeting", "position": 1 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 2, "lessonPosition": 1, "wordText": "decision", "position": 2 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 2, "lessonPosition": 1, "wordText": "to require", "position": 3 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 2, "lessonPosition": 1, "wordText": "to support", "position": 4 },
+
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 3, "lessonPosition": 1, "wordText": "to achieve", "position": 1 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 3, "lessonPosition": 1, "wordText": "to improve", "position": 2 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 3, "lessonPosition": 1, "wordText": "purpose", "position": 3 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 3, "lessonPosition": 1, "wordText": "deadline", "position": 4 },
+
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 1, "lessonPosition": 1, "wordText": "knowledge", "position": 1 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 1, "lessonPosition": 1, "wordText": "research", "position": 2 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 1, "lessonPosition": 1, "wordText": "to consider", "position": 3 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 1, "lessonPosition": 1, "wordText": "society", "position": 4 },
+
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 2, "lessonPosition": 1, "wordText": "environment", "position": 1 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 2, "lessonPosition": 1, "wordText": "issue", "position": 2 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 2, "lessonPosition": 1, "wordText": "source", "position": 3 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 2, "lessonPosition": 1, "wordText": "to avoid", "position": 4 },
+
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 3, "lessonPosition": 1, "wordText": "challenge", "position": 1 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 3, "lessonPosition": 1, "wordText": "therefore", "position": 2 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 3, "lessonPosition": 1, "wordText": "however", "position": 3 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 3, "lessonPosition": 1, "wordText": "although", "position": 4 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 3, "lessonPosition": 1, "wordText": "advantage", "position": 5 },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 3, "lessonPosition": 1, "wordText": "to suggest", "position": 6 }
 ]

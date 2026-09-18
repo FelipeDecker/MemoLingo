@@ -54,8 +54,11 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             var nodes = await SeedPathNodesAsync(seedPath, languages, courses, units, cancellationToken);
             var lessons = await SeedLessonsAsync(seedPath, languages, courses, units, nodes, cancellationToken);
             await SeedLessonWordsAsync(seedPath, languages, courses, units, nodes, lessons, words, cancellationToken);
-            var users = await SeedUsersAsync(seedPath, languages, cancellationToken);
-            await SeedLessonProgressAsync(seedPath, languages, users, courses, units, nodes, lessons, cancellationToken);
+
+            // O seed carrega apenas o conteúdo do curso. Nenhum progresso do usuário
+            // (UserNodeProgress, StudySession, ExerciseAttempt) é inserido: o mapa começa
+            // totalmente bloqueado e o histórico de tentativas nasce vazio.
+            await SeedUsersAsync(seedPath, languages, cancellationToken);
 
             _logger.LogInformation("Seed concluído.");
         }
@@ -721,13 +724,17 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                     continue;
                 }
 
+                // O vínculo com o curso é criado zerado: o usuário começa no nível 1,
+                // sem XP e sem ofensiva, com toda a trilha bloqueada.
                 _context.LanguageProgresses.Add(new LanguageProgress
                 {
                     UserId = userId,
                     LanguageId = languageId,
-                    Level = seed.Level,
-                    TotalXp = seed.TotalXp,
-                    CurrentStreakDays = seed.CurrentStreakDays,
+                    Level = 1,
+                    TotalXp = 0,
+                    CurrentStreakDays = 0,
+                    TotalLearnedWords = 0,
+                    TotalCompletedLessons = 0,
                     IsActiveCourse = true,
                     CreatedAt = DateTime.UtcNow
                 });
@@ -739,103 +746,6 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             {
                 await _context.SaveChangesAsync(cancellationToken);
                 _logger.LogInformation("{Count} progresso(s) de idioma inserido(s).", created);
-            }
-        }
-
-        private async Task SeedLessonProgressAsync(
-            string seedPath,
-            Dictionary<string, int> languages,
-            Dictionary<string, int> users,
-            Dictionary<(int LanguageId, string Name), int> courses,
-            Dictionary<(int CourseId, string Title), int> units,
-            Dictionary<(int UnitId, int Position), int> nodes,
-            Dictionary<(int PathNodeId, int Position), int> lessons,
-            CancellationToken cancellationToken)
-        {
-            var seeds = await ReadAsync<LessonProgressSeed>(seedPath, "lesson-progress.json", cancellationToken);
-
-            var existing = (await _context.StudySessions
-                .Where(ss => ss.LessonId.HasValue)
-                .Select(ss => new { ss.UserId, LessonId = ss.LessonId.Value })
-                .ToListAsync(cancellationToken))
-                .Select(ss => (ss.UserId, ss.LessonId))
-                .ToHashSet();
-
-            var nodeProgresses = (await _context.UserNodeProgresses
-                .Select(unp => new { unp.UserId, unp.PathNodeId })
-                .ToListAsync(cancellationToken))
-                .Select(unp => (unp.UserId, unp.PathNodeId))
-                .ToHashSet();
-
-            var created = 0;
-
-            foreach (var seed in seeds)
-            {
-                if (!users.TryGetValue(seed.UserEmail.ToLowerInvariant(), out var userId))
-                {
-                    _logger.LogWarning("Usuário {Email} não encontrado para o progresso da unidade {Unit}.", seed.UserEmail, seed.UnitTitle);
-                    continue;
-                }
-
-                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
-                {
-                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o progresso da unidade {Unit}.", seed.LanguageCode, seed.UnitTitle);
-                    continue;
-                }
-
-                if (!TryResolveNode(languages, courses, units, nodes, seed.LanguageCode, seed.CourseName, seed.UnitTitle, seed.NodePosition, out var pathNodeId)
-                    || !lessons.TryGetValue((pathNodeId, seed.LessonPosition), out var lessonId))
-                {
-                    _logger.LogWarning("Lição da unidade {Unit} não encontrada para o progresso do usuário {Email}.", seed.UnitTitle, seed.UserEmail);
-                    continue;
-                }
-
-                if (!existing.Add((userId, lessonId)))
-                {
-                    continue;
-                }
-
-                var startedAt = DateTime.UtcNow.AddDays(-1);
-                var isCompleted = seed.Status == ProgressStatus.Completed;
-
-                _context.StudySessions.Add(new StudySession
-                {
-                    UserId = userId,
-                    LanguageId = languageId,
-                    LessonId = lessonId,
-                    Status = seed.Status,
-                    StartedAt = startedAt,
-                    FinishedAt = isCompleted ? startedAt.AddMinutes(10) : null,
-                    CorrectCount = seed.CorrectCount,
-                    WrongCount = seed.WrongCount,
-                    XpEarned = seed.XpEarned
-                });
-
-                if (nodeProgresses.Add((userId, pathNodeId)))
-                {
-                    var totalLessons = await _context.PathNodes
-                        .Where(pn => pn.Id == pathNodeId)
-                        .Select(pn => pn.TotalLessons)
-                        .FirstOrDefaultAsync(cancellationToken);
-
-                    _context.UserNodeProgresses.Add(new UserNodeProgress
-                    {
-                        UserId = userId,
-                        PathNodeId = pathNodeId,
-                        CompletedLessonsCount = isCompleted ? 1 : 0,
-                        IsCompleted = isCompleted && totalLessons <= 1,
-                        CompletedAt = isCompleted && totalLessons <= 1 ? startedAt.AddMinutes(10) : null,
-                        LastPracticedAt = startedAt
-                    });
-                }
-
-                created++;
-            }
-
-            if (created > 0)
-            {
-                await _context.SaveChangesAsync(cancellationToken);
-                _logger.LogInformation("{Count} progresso(s) de lição inserido(s).", created);
             }
         }
 

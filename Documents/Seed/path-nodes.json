@@ -8,6 +8,14 @@
   { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Números", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
   { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Verbos Essenciais", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
 
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodeType": "Skill", "position": 2, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodeType": "Practice", "position": 3, "totalLessons": 1, "active": true },
+
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodeType": "Skill", "position": 2, "totalLessons": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodeType": "Chest", "position": 3, "totalLessons": 1, "active": true },
+
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "No Aeroporto", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "No Hotel", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true },
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodeType": "Skill", "position": 1, "totalLessons": 1, "active": true }

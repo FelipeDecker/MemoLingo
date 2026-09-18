@@ -8,6 +8,14 @@
   { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Números", "nodePosition": 1, "position": 1, "xpReward": 20, "active": true },
   { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Verbos Essenciais", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true },
 
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 2, "position": 1, "xpReward": 30, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Rotina e Trabalho", "nodePosition": 3, "position": 1, "xpReward": 35, "active": true },
+
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 1, "position": 1, "xpReward": 35, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 2, "position": 1, "xpReward": 35, "active": true },
+  { "languageCode": "en", "courseName": "Inglês Básico", "unitTitle": "Ideias e Sociedade", "nodePosition": 3, "position": 1, "xpReward": 40, "active": true },
+
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "No Aeroporto", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true },
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "No Hotel", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true },
   { "languageCode": "en", "courseName": "Inglês para Viagem", "unitTitle": "Pela Cidade", "nodePosition": 1, "position": 1, "xpReward": 30, "active": true }
