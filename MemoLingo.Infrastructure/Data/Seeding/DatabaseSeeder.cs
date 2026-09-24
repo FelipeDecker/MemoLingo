@@ -44,6 +44,10 @@ namespace MemoLingo.Infrastructure.Data.Seeding
 
             _logger.LogInformation("Carregando dados de seed a partir de {SeedPath}.", seedPath);
 
+            // O seed sempre recria a base do zero: primeiro limpa todas as tabelas e
+            // depois reinsere todo o conteúdo dos arquivos JSON.
+            await ClearAsync(cancellationToken);
+
             var languages = await SeedLanguagesAsync(seedPath, cancellationToken);
             var words = await SeedWordsAsync(seedPath, languages, cancellationToken);
             var sentences = await SeedSentencesAsync(seedPath, languages, cancellationToken);
@@ -61,6 +65,38 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             await SeedUsersAsync(seedPath, languages, cancellationToken);
 
             _logger.LogInformation("Seed concluído.");
+        }
+
+        /// <summary>
+        /// Remove todos os registros das tabelas mapeadas no modelo, reiniciando as sequências
+        /// de identidade. O histórico de migrations do EF não é afetado.
+        /// </summary>
+        private async Task ClearAsync(CancellationToken cancellationToken)
+        {
+            var tables = _context.Model
+                .GetEntityTypes()
+                .Select(entityType => new
+                {
+                    Schema = entityType.GetSchema() ?? "public",
+                    Table = entityType.GetTableName()
+                })
+                .Where(table => !string.IsNullOrWhiteSpace(table.Table))
+                .Select(table => $"\"{table.Schema}\".\"{table.Table}\"")
+                .Distinct()
+                .ToList();
+
+            if (tables.Count == 0)
+            {
+                return;
+            }
+
+            _logger.LogInformation("Limpando {Count} tabela(s) antes de reinserir o seed.", tables.Count);
+
+            var sql = $"TRUNCATE TABLE {string.Join(", ", tables)} RESTART IDENTITY CASCADE;";
+
+            await _context.Database.ExecuteSqlRawAsync(sql, cancellationToken);
+
+            _context.ChangeTracker.Clear();
         }
 
         private string ResolveSeedPath()

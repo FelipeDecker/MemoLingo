@@ -110,10 +110,10 @@
     line-height: 1;
 }
 
-/* Marcador invisível (sem altura) posicionado no início de cada unidade,
-   usado apenas como referência de scroll para trocar o banner fixo. */
-.unidade-marcador {
-    height: 0;
+/* Bloco de uma unidade (separador + nós). É o elemento observado pelo
+   IntersectionObserver para trocar o banner fixo durante o scroll. */
+.unit-block {
+    display: block;
     scroll-margin-top: 4.5rem;
 }
 

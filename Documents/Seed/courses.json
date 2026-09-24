@@ -1,18 +1,10 @@
 [
   {
     "languageCode": "en",
-    "name": "Inglês Básico",
-    "description": "Trilha inicial com o vocabulário essencial do dia a dia: saudações, pessoas, comidas, animais, cores, números e verbos.",
+    "name": "Inglês",
+    "description": "Curso completo de inglês, do vocabulário essencial do dia a dia até situações de viagem.",
     "position": 1,
     "cefrLevel": "A1",
-    "active": true
-  },
-  {
-    "languageCode": "en",
-    "name": "Inglês para Viagem",
-    "description": "Trilha voltada para situações de viagem: aeroporto, hotel e deslocamento pela cidade.",
-    "position": 2,
-    "cefrLevel": "A2",
     "active": true
   }
 ]

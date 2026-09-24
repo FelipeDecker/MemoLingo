@@ -10,22 +10,23 @@ namespace MemoLingo.Application.Services
         private readonly ICourseRepository _courseRepository;
         private readonly IStudySessionRepository _studySessionRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ILanguageRepository _languageRepository;
 
         public CourseService(
             ICourseRepository courseRepository,
             IStudySessionRepository studySessionRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            ILanguageRepository languageRepository)
         {
             _courseRepository = courseRepository;
             _studySessionRepository = studySessionRepository;
             _userRepository = userRepository;
+            _languageRepository = languageRepository;
         }
 
         public async Task<IEnumerable<CourseModel>> GetTrackAsync(int? userId)
         {
-            var user = userId.HasValue
-                ? await _userRepository.GetWithProgressesAsync(userId.Value)
-                : await _userRepository.GetDefaultAsync();
+            var user = await ResolveUserAsync(userId);
 
             var languageId = ResolveLanguageId(user);
             var courses = await _courseRepository.GetActiveTrackAsync(languageId);
@@ -83,6 +84,126 @@ namespace MemoLingo.Application.Services
             }
 
             return models;
+        }
+
+        public async Task<IEnumerable<UserCourseModel>> GetUserCoursesAsync(int? userId)
+        {
+            var user = await ResolveUserAsync(userId);
+
+            if (user is null)
+            {
+                return Enumerable.Empty<UserCourseModel>();
+            }
+
+            var progresses = await _userRepository.GetProgressesAsync(user.Id);
+
+            return progresses.Select(ToModel).ToList();
+        }
+
+        public async Task<IEnumerable<LanguageModel>> GetAvailableLanguagesAsync(int? userId)
+        {
+            var languages = await _languageRepository.GetAllAsync();
+            var user = await ResolveUserAsync(userId);
+
+            var enrolled = new HashSet<int>();
+
+            if (user is not null)
+            {
+                var progresses = await _userRepository.GetProgressesAsync(user.Id);
+                enrolled = progresses.Select(lp => lp.LanguageId).ToHashSet();
+
+                // O idioma nativo não é oferecido como curso a ser aprendido.
+                enrolled.Add(user.NativeLanguageId);
+            }
+
+            return languages
+                .Where(l => !enrolled.Contains(l.Id))
+                .Select(l => new LanguageModel { Id = l.Id, Code = l.Code, Name = l.Name })
+                .ToList();
+        }
+
+        public async Task<UserCourseModel> EnrollAsync(int? userId, int languageId)
+        {
+            var user = await ResolveUserAsync(userId);
+
+            if (user is null)
+            {
+                throw new InvalidOperationException("Nenhum usuário disponível para matricular no curso.");
+            }
+
+            var language = await _languageRepository.GetByIdAsync(languageId);
+
+            if (language is null)
+            {
+                throw new ArgumentException("Idioma não encontrado.", nameof(languageId));
+            }
+
+            var existing = await _userRepository.GetProgressAsync(user.Id, languageId);
+
+            if (existing is null)
+            {
+                // Toda matrícula nasce zerada: nível 1, sem XP e sem ofensiva.
+                await _userRepository.AddProgressAsync(new LanguageProgress
+                {
+                    UserId = user.Id,
+                    LanguageId = languageId,
+                    Level = 1,
+                    TotalXp = 0,
+                    CurrentStreakDays = 0,
+                    TotalLearnedWords = 0,
+                    TotalCompletedLessons = 0,
+                    IsActiveCourse = false,
+                    CreatedAt = DateTime.UtcNow
+                });
+            }
+
+            // O curso recém-adicionado passa a ser o curso ativo, como no Duolingo.
+            await _userRepository.SetActiveCourseAsync(user.Id, languageId);
+
+            var progress = await _userRepository.GetProgressAsync(user.Id, languageId);
+
+            return ToModel(progress);
+        }
+
+        public async Task<bool> SetActiveCourseAsync(int? userId, int languageId)
+        {
+            var user = await ResolveUserAsync(userId);
+
+            if (user is null)
+            {
+                return false;
+            }
+
+            var progress = await _userRepository.GetProgressAsync(user.Id, languageId);
+
+            if (progress is null)
+            {
+                return false;
+            }
+
+            await _userRepository.SetActiveCourseAsync(user.Id, languageId);
+
+            return true;
+        }
+
+        private async Task<User> ResolveUserAsync(int? userId)
+        {
+            return userId.HasValue
+                ? await _userRepository.GetWithProgressesAsync(userId.Value)
+                : await _userRepository.GetDefaultAsync();
+        }
+
+        private static UserCourseModel ToModel(LanguageProgress progress)
+        {
+            return new UserCourseModel
+            {
+                LanguageId = progress.LanguageId,
+                LanguageCode = progress.Language?.Code,
+                LanguageName = progress.Language?.Name,
+                Level = progress.Level,
+                TotalXp = progress.TotalXp,
+                IsActive = progress.IsActiveCourse
+            };
         }
 
         private static IEnumerable<(Section Section, Unit Unit, PathNode Node, Lesson Lesson)> Flatten(Course course)

@@ -1,7 +1,7 @@
 [
   {
     "languageCode": "en",
-    "courseName": "Inglês Básico",
+    "courseName": "Inglês",
     "title": "Seção 1 - Primeiros Passos",
     "description": "Vocabulário essencial do dia a dia: saudações, pessoas, comidas, animais, cores, números e verbos.",
     "position": 1,
@@ -10,10 +10,10 @@
   },
   {
     "languageCode": "en",
-    "courseName": "Inglês para Viagem",
-    "title": "Seção 1 - Na Estrada",
+    "courseName": "Inglês",
+    "title": "Seção 2 - Na Estrada",
     "description": "Situações de viagem: aeroporto, hotel e deslocamento pela cidade.",
-    "position": 1,
+    "position": 2,
     "cefrLevel": "A2",
     "active": true
   }

@@ -35,33 +35,41 @@ else
     </div>
 
     <div class="path-container">
-        @foreach (var unit in units)
+        @for (var unitIndex = 0; unitIndex < units.Count; unitIndex++)
         {
-            @* Marcador invisível usado apenas para detectar, via scroll, qual unidade está em foco. *@
-            <div class="unidade-marcador" data-unidade-id="@unit.Id"></div>
+            var unit = units[unitIndex];
 
-            <div class="path">
-                @{
-                    var i = 0;
-                }
-                @foreach (var lesson in unit.Lessons.OrderBy(l => l.Order))
+            @* Cada unidade é um bloco observado pelo IntersectionObserver: quando o topo do
+               bloco (o separador) passa sob o banner fixo, o cabeçalho é atualizado. *@
+            <section class="unit-block" data-unit-id="@unit.Id">
+                @if (unitIndex > 0)
                 {
-                    @* Onda senoidal: gera o deslocamento horizontal que desenha a trilha sinuosa. *@
-                    double translateX = Math.Sin(i * Frequency) * Amplitude;
-                    i++;
-
-                    var nodeColor = GetLessonColor(unit, lesson);
-
-                    <div class="path-row">
-                        <button type="button"
-                                class="path-node @GetStatusClass(lesson.Status)"
-                                style="transform: translateX(@Px(translateX)); background-color:@nodeColor; box-shadow:0 5px 0 @Darken(nodeColor)"
-                                title="@lesson.Title">
-                            <span class="path-node-icon">@GetIcon(lesson)</span>
-                        </button>
-                    </div>
+                    <UnitSeparator Text="@GetSeparatorText(unit)" Color="@unit.PrimaryColor" />
                 }
-            </div>
+
+                <div class="path">
+                    @{
+                        var i = 0;
+                    }
+                    @foreach (var lesson in unit.Lessons.OrderBy(l => l.Order))
+                    {
+                        @* Onda senoidal: gera o deslocamento horizontal que desenha a trilha sinuosa. *@
+                        double translateX = Math.Sin(i * Frequency) * Amplitude;
+                        i++;
+
+                        var nodeColor = GetLessonColor(unit, lesson);
+
+                        <div class="path-row">
+                            <button type="button"
+                                    class="path-node @GetStatusClass(lesson.Status)"
+                                    style="transform: translateX(@Px(translateX)); background-color:@nodeColor; box-shadow:0 5px 0 @Darken(nodeColor)"
+                                    title="@lesson.Title">
+                                <span class="path-node-icon">@GetIcon(lesson)</span>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </section>
         }
     </div>
 }
@@ -102,7 +110,7 @@ else
             // Registra o observador de scroll em JS para saber qual unidade está visível
             // logo abaixo do cabeçalho fixo, e assim atualizar o título exibido.
             jsReference = DotNetObjectReference.Create(this);
-            await JS.InvokeVoidAsync("trilhaScroll.iniciar", jsReference);
+            await JS.InvokeVoidAsync("unitScrollSpy.start", jsReference);
         }
     }
 
@@ -126,7 +134,7 @@ else
         {
             try
             {
-                await JS.InvokeVoidAsync("trilhaScroll.finalizar");
+                await JS.InvokeVoidAsync("unitScrollSpy.stop");
             }
             catch (JSDisconnectedException)
             {
@@ -138,6 +146,12 @@ else
     }
 
     private int GetUnitNumber(Unit unit) => units == null ? 1 : units.IndexOf(unit) + 1;
+
+    /// <summary>
+    /// Texto exibido no separador que antecede a unidade (ex.: "Diga de onde você é").
+    /// </summary>
+    private static string GetSeparatorText(Unit unit) =>
+        string.IsNullOrWhiteSpace(unit.Description) ? unit.Name : unit.Description;
 
     /// <summary>
     /// Formata o deslocamento horizontal em pixels usando cultura invariante,

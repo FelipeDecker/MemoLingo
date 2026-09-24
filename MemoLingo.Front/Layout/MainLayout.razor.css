@@ -17,10 +17,22 @@ main {
     border-right: 2px solid #e5e5e5;
 }
 
+/* Coluna da direita, no padrão Duolingo: separada do conteúdo por uma borda sutil. */
+.rail {
+    background-color: #fff;
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
 @media (max-width: 640.98px) {
     .sidebar {
         border-right: none;
         border-bottom: 2px solid #e5e5e5;
+    }
+
+    .rail {
+        border-top: 2px solid #e5e5e5;
     }
 }
 
@@ -36,8 +48,28 @@ main {
         top: 0;
     }
 
+    main {
+        min-width: 0;
+    }
+
+    .rail {
+        width: 340px;
+        flex: 0 0 340px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        border-left: 2px solid #e5e5e5;
+    }
+
     article {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
+    }
+}
+
+@media (max-width: 1099.98px) and (min-width: 641px) {
+    .rail {
+        width: 200px;
+        flex: 0 0 200px;
     }
 }

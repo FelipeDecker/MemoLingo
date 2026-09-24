@@ -1,0 +1,21 @@
+@* Separador de unidades da trilha: linha fina horizontal com o texto de introdução
+   da próxima unidade centralizado no meio da linha (efeito Duolingo). *@
+<div class="unit-separator">
+    <span class="unit-separator-line"></span>
+    <span class="unit-separator-text" style="color:@Color">@Text</span>
+    <span class="unit-separator-line"></span>
+</div>
+
+@code {
+    /// <summary>
+    /// Texto de introdução da próxima unidade exibido no centro da linha.
+    /// </summary>
+    [Parameter]
+    public string Text { get; set; }
+
+    /// <summary>
+    /// Cor principal da próxima unidade, aplicada ao texto do separador.
+    /// </summary>
+    [Parameter]
+    public string Color { get; set; } = "#afafaf";
+}

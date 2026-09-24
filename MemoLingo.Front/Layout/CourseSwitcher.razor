@@ -1,0 +1,189 @@
+@using MemoLingo.Front.Models
+@inject IUserCourseService UserCourseService
+@inject NavigationManager Navigation
+
+@* Seletor de cursos no estilo Duolingo: o botão mostra a bandeira do curso ativo com o
+   progresso (nível e gemas) e, ao ser clicado, abre a lista dos cursos em andamento
+   junto da opção de adicionar um curso novo. *@
+<div class="course-switcher">
+    <button type="button"
+            class="course-flag @(isMenuOpen ? "open" : null)"
+            title="@(activeCourse?.LanguageName ?? "Cursos")"
+            aria-haspopup="true"
+            aria-expanded="@(isMenuOpen ? "true" : "false")"
+            @onclick="ToggleMenu">
+        @if (!string.IsNullOrWhiteSpace(activeCourse?.FlagImage))
+        {
+            <img class="course-flag-image" src="@activeCourse.FlagImage" alt="@activeCourse.LanguageName" />
+        }
+        else
+        {
+            <span class="course-flag-icon" aria-hidden="true">🌐</span>
+        }
+        <span class="course-flag-level">@(activeCourse?.Level ?? 1)</span>
+    </button>
+
+    @if (isMenuOpen)
+    {
+        @* Camada transparente que fecha o menu ao clicar fora dele. *@
+        <div class="course-menu-backdrop" @onclick="CloseMenu"></div>
+
+        <div class="course-menu">
+            <p class="course-menu-title">MEUS CURSOS</p>
+
+            @if (courses.Count == 0)
+            {
+                <p class="course-menu-empty">Nenhum curso em andamento.</p>
+            }
+            else
+            {
+                @foreach (var course in courses)
+                {
+                    <button type="button"
+                            class="course-menu-item @(course.IsActive ? "active" : null)"
+                            @onclick="() => SelectCourseAsync(course)">
+                        <span class="course-menu-icon">
+                            @if (!string.IsNullOrWhiteSpace(course.FlagImage))
+                            {
+                                <img class="course-menu-image" src="@course.FlagImage" alt="@course.LanguageName" />
+                            }
+                            else
+                            {
+                                <span aria-hidden="true">🌐</span>
+                            }
+                        </span>
+                        <span class="course-menu-name">@course.LanguageName</span>
+                    </button>
+                }
+            }
+
+            <div class="course-menu-separator"></div>
+
+            <button type="button" class="course-menu-item course-menu-add" @onclick="OpenAddCourseAsync">
+                <span class="course-menu-icon course-menu-plus" aria-hidden="true">+</span>
+                <span class="course-menu-name">Adicionar curso</span>
+            </button>
+        </div>
+    }
+</div>
+
+@if (showAddCourse)
+{
+    <div class="course-modal-backdrop" @onclick="CloseAddCourse">
+        <div class="course-modal" @onclick:stopPropagation="true">
+            <h3 class="course-modal-title">Adicionar curso</h3>
+
+            @if (availableLanguages == null)
+            {
+                <p class="course-modal-empty">Carregando idiomas...</p>
+            }
+            else if (availableLanguages.Count == 0)
+            {
+                <p class="course-modal-empty">Você já está matriculado em todos os idiomas disponíveis.</p>
+            }
+            else
+            {
+                @foreach (var language in availableLanguages)
+                {
+                    <button type="button" class="course-modal-item" @onclick="() => AddCourseAsync(language)">
+                        <span class="course-menu-icon">
+                            @if (!string.IsNullOrWhiteSpace(language.FlagImage))
+                            {
+                                <img class="course-menu-image" src="@language.FlagImage" alt="@language.Name" />
+                            }
+                            else
+                            {
+                                <span aria-hidden="true">🌐</span>
+                            }
+                        </span>
+                        <span class="course-menu-name">@language.Name</span>
+                    </button>
+                }
+            }
+
+            <button type="button" class="course-modal-close" @onclick="CloseAddCourse">Fechar</button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<UserCourse> courses = new();
+    private List<LanguageOption> availableLanguages;
+    private bool showAddCourse;
+    private bool isMenuOpen;
+
+    private UserCourse activeCourse => courses.FirstOrDefault(c => c.IsActive) ?? courses.FirstOrDefault();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCoursesAsync();
+    }
+
+    private async Task LoadCoursesAsync()
+    {
+        try
+        {
+            courses = await UserCourseService.GetUserCoursesAsync();
+        }
+        catch
+        {
+            // A indisponibilidade da API não deve quebrar o layout; o seletor apenas fica vazio.
+            courses = new List<UserCourse>();
+        }
+    }
+
+    private void ToggleMenu()
+    {
+        isMenuOpen = !isMenuOpen;
+    }
+
+    private void CloseMenu()
+    {
+        isMenuOpen = false;
+    }
+
+    private async Task SelectCourseAsync(UserCourse course)
+    {
+        isMenuOpen = false;
+
+        if (course.IsActive)
+        {
+            return;
+        }
+
+        await UserCourseService.SetActiveCourseAsync(course.LanguageId);
+
+        // Recarrega a aplicação para que a trilha passe a refletir o novo curso ativo.
+        Navigation.NavigateTo("learn", forceLoad: true);
+    }
+
+    private async Task OpenAddCourseAsync()
+    {
+        isMenuOpen = false;
+        showAddCourse = true;
+        availableLanguages = null;
+
+        try
+        {
+            availableLanguages = await UserCourseService.GetAvailableLanguagesAsync();
+        }
+        catch
+        {
+            availableLanguages = new List<LanguageOption>();
+        }
+    }
+
+    private void CloseAddCourse()
+    {
+        showAddCourse = false;
+    }
+
+    private async Task AddCourseAsync(LanguageOption language)
+    {
+        await UserCourseService.AddCourseAsync(language.Id);
+
+        showAddCourse = false;
+
+        Navigation.NavigateTo("learn", forceLoad: true);
+    }
+}

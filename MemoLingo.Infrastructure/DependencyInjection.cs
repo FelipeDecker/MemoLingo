@@ -21,6 +21,7 @@ namespace MemoLingo.Infrastructure
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IWordRepository, WordRepository>();
             services.AddScoped<IWordPerformanceRepository, WordPerformanceRepository>();

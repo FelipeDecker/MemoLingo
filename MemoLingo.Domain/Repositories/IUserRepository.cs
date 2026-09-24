@@ -9,5 +9,9 @@ namespace MemoLingo.Domain.Repositories
     {
         Task<User> GetWithProgressesAsync(int id);
         Task<User> GetDefaultAsync();
+        Task<IEnumerable<LanguageProgress>> GetProgressesAsync(int userId);
+        Task<LanguageProgress> GetProgressAsync(int userId, int languageId);
+        Task AddProgressAsync(LanguageProgress progress);
+        Task SetActiveCourseAsync(int userId, int languageId);
     }
 }

@@ -20,5 +20,6 @@ builder.Services.AddScoped<ICoursesClient>(sp => new CoursesClient(api, sp.GetRe
 builder.Services.AddScoped<IPracticeClient>(sp => new PracticeClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
+builder.Services.AddScoped<IUserCourseService, UserCourseService>();
 
 await builder.Build().RunAsync();

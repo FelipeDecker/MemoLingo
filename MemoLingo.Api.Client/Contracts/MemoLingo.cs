@@ -34,6 +34,34 @@ namespace MemoLingo.Api.Client.Contracts
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CourseModel>> GetAsync(int? userId, System.Threading.CancellationToken cancellationToken);
 
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserCourseModel>> GetUserCoursesAsync(int? userId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserCourseModel>> GetUserCoursesAsync(int? userId, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LanguageModel>> GetAvailableLanguagesAsync(int? userId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<LanguageModel>> GetAvailableLanguagesAsync(int? userId, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UserCourseModel> EnrollAsync(EnrollCourseModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UserCourseModel> EnrollAsync(EnrollCourseModel model, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task SetActiveCourseAsync(EnrollCourseModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task SetActiveCourseAsync(EnrollCourseModel model, System.Threading.CancellationToken cancellationToken);
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -47,11 +75,11 @@ namespace MemoLingo.Api.Client.Contracts
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetWordsAsync(int? userId, int? take, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetFocusedWordsAsync(int userId, int? take);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetFocusedWordsAsync(int? userId, int? take);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetFocusedWordsAsync(int userId, int? take, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PracticeWordModel>> GetFocusedWordsAsync(int? userId, int? take, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<PracticeWordModel> RegisterResultAsync(PracticeResultModel model);
@@ -235,6 +263,57 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("errors")]
         public string Errors { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UserCourseModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("languageId")]
+        public int LanguageId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("languageCode")]
+        public string LanguageCode { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("languageName")]
+        public string LanguageName { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("level")]
+        public int Level { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("totalXp")]
+        public int TotalXp { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isActive")]
+        public bool IsActive { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LanguageModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+        public string Code { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string Name { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class EnrollCourseModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public int? UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("languageId")]
+        public int LanguageId { get; set; }
 
     }
 

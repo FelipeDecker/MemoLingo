@@ -1,0 +1,231 @@
+/* O trilho da direita é um flex container de 100vh: sem o align-self o seletor
+   esticaria até o rodapé e o menu (top: 100%) abriria fora da tela. */
+.course-switcher {
+    position: relative;
+    display: inline-block;
+    align-self: flex-start;
+}
+
+.course-flag {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background-color: #fff;
+    border: 2px solid #e5e5e5;
+    border-radius: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+    .course-flag:hover {
+        border-color: #d0d0d0;
+        background-color: #f7f7f7;
+    }
+
+    .course-flag.open {
+        border-color: #84d8ff;
+        background-color: #ddf4ff;
+    }
+
+.course-flag-icon {
+    font-size: 1.75rem;
+    line-height: 1;
+}
+
+/* Bandeira do curso ativo (SVG no estilo Duolingo). */
+.course-flag-image {
+    width: 2.25rem;
+    height: auto;
+    flex-shrink: 0;
+    display: block;
+}
+
+/* Apenas o número do nível, como no Duolingo. */
+.course-flag-level {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #4b4b4b;
+    line-height: 1;
+}
+
+/* Camada invisível que captura o clique fora do menu para fechá-lo. */
+.course-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+}
+
+.course-menu {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    right: 0;
+    min-width: 17rem;
+    background-color: #fff;
+    border: 2px solid #e5e5e5;
+    border-radius: 1rem;
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 30;
+}
+
+    /* Setinha branca apontando para o botão do curso ativo. */
+    .course-menu::before,
+    .course-menu::after {
+        content: "";
+        position: absolute;
+        right: 1.75rem;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+    }
+
+    .course-menu::before {
+        top: -12px;
+        border-bottom: 12px solid #e5e5e5;
+    }
+
+    .course-menu::after {
+        top: -9px;
+        border-bottom: 12px solid #fff;
+    }
+
+.course-menu-title {
+    margin: 0;
+    padding: 0.5rem 1rem 0.75rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #afafaf;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.course-menu-empty {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    color: #afafaf;
+}
+
+.course-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.7rem 1.25rem;
+    cursor: pointer;
+    text-align: left;
+    color: #4b4b4b;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+    .course-menu-item:hover {
+        background-color: #f7f7f7;
+    }
+
+    .course-menu-item.active {
+        background-color: #ddf4ff;
+        color: #1cb0f6;
+    }
+
+/* Largura fixa faz a bandeira e o "+" ocuparem a mesma coluna, mantendo
+   todos os textos do menu alinhados à esquerda. */
+.course-menu-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.25rem;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.course-menu-image {
+    width: 2.25rem;
+    height: auto;
+    display: block;
+}
+
+.course-menu-plus {
+    height: 1.9rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 0.5rem;
+    font-size: 1.2rem;
+    color: #afafaf;
+}
+
+.course-menu-add {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.course-menu-separator {
+    height: 2px;
+    margin: 0.35rem 0;
+    background-color: #f0f0f0;
+}
+
+.course-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.course-modal {
+    background-color: #fff;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    min-width: 20rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.course-modal-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #4b4b4b;
+}
+
+.course-modal-empty {
+    color: #afafaf;
+}
+
+.course-modal-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    background: none;
+    border: 2px solid #e5e5e5;
+    border-radius: 0.75rem;
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    text-align: left;
+    color: #4b4b4b;
+    font-weight: 700;
+}
+
+    .course-modal-item:hover {
+        background-color: #f7f7f7;
+    }
+
+.course-modal-close {
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: #58cc02;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.65rem 1rem;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+}

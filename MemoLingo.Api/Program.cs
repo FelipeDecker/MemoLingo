@@ -36,8 +36,9 @@ if (!app.Environment.IsEnvironment("NSwagGenerator"))
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 
-    if (app.Configuration.GetValue("Seed:Enabled", true))
+    if (app.Configuration.GetValue("Seed:Enabled", false))
     {
+        // Com o seed habilitado a base é limpa e recarregada por completo.
         var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
         await seeder.SeedAsync();
     }
