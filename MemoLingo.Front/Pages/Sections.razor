@@ -1,6 +1,4 @@
 @page "/sections"
-@inject ILessonService LessonService
-@inject NavigationManager Navigation
 
 <PageTitle>Seções</PageTitle>
 
@@ -80,17 +78,3 @@
         }
     }
 </div>
-
-@code {
-    private List<Section> sections;
-
-    protected override async Task OnInitializedAsync()
-    {
-        sections = await LessonService.GetSectionsAsync();
-    }
-
-    private void OpenSection(Section section)
-    {
-        Navigation.NavigateTo($"/section/{section.Id}");
-    }
-}
