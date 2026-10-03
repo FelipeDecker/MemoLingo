@@ -64,6 +64,48 @@ namespace MemoLingo.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<NuanceAttemptSample>> GetNuanceAttemptsAsync(int userId, int languageId)
+        {
+            return await _context.ExerciseAttempts
+                .AsNoTracking()
+                .Where(ea => ea.NuanceExerciseId != null
+                    && ea.StudySession.UserId == userId
+                    && ea.NuanceExercise.SynonymGroup.LanguageId == languageId)
+                .Select(ea => new NuanceAttemptSample
+                {
+                    NuanceExerciseId = ea.NuanceExerciseId.Value,
+                    SynonymGroupId = ea.NuanceExercise.SynonymGroupId,
+                    IsCorrect = ea.IsCorrect,
+                    AnsweredAt = ea.AnsweredAt
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<NuanceAttemptSample>> GetRecentNuanceByGroupAsync(int userId, int synonymGroupId, int sampleSize)
+        {
+            if (sampleSize <= 0)
+            {
+                return new List<NuanceAttemptSample>();
+            }
+
+            return await _context.ExerciseAttempts
+                .AsNoTracking()
+                .Where(ea => ea.NuanceExerciseId != null
+                    && ea.StudySession.UserId == userId
+                    && ea.NuanceExercise.SynonymGroupId == synonymGroupId)
+                .OrderByDescending(ea => ea.AnsweredAt)
+                .ThenByDescending(ea => ea.Id)
+                .Take(sampleSize)
+                .Select(ea => new NuanceAttemptSample
+                {
+                    NuanceExerciseId = ea.NuanceExerciseId.Value,
+                    SynonymGroupId = synonymGroupId,
+                    IsCorrect = ea.IsCorrect,
+                    AnsweredAt = ea.AnsweredAt
+                })
+                .ToListAsync();
+        }
+
         public async Task AddAsync(ExerciseAttempt attempt)
         {
             await _context.ExerciseAttempts.AddAsync(attempt);

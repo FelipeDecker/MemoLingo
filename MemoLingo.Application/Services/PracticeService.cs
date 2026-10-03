@@ -27,19 +27,22 @@ namespace MemoLingo.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IStudySessionRepository _studySessionRepository;
         private readonly IExerciseAttemptRepository _attemptRepository;
+        private readonly INuanceService _nuanceService;
 
         public PracticeService(
             IWordRepository wordRepository,
             IWordPerformanceRepository performanceRepository,
             IUserRepository userRepository,
             IStudySessionRepository studySessionRepository,
-            IExerciseAttemptRepository attemptRepository)
+            IExerciseAttemptRepository attemptRepository,
+            INuanceService nuanceService)
         {
             _wordRepository = wordRepository;
             _performanceRepository = performanceRepository;
             _userRepository = userRepository;
             _studySessionRepository = studySessionRepository;
             _attemptRepository = attemptRepository;
+            _nuanceService = nuanceService;
         }
 
         public async Task<IEnumerable<PracticeWordModel>> GetWordsAsync(int? userId, int? take)
@@ -226,6 +229,12 @@ namespace MemoLingo.Application.Services
 
             await RegisterAttemptAsync(user, word, result.Correct, now);
 
+            if (!result.Correct)
+            {
+                // Errar uma palavra que faz parte de um grupo de nuances prioriza esse grupo.
+                await _nuanceService.FlagGroupsForWordErrorAsync(user.Id, word.Id);
+            }
+
             var stats = await GetRecentStatsAsync(user.Id, word.Id);
 
             return ToModel(word, performance, stats);
@@ -272,6 +281,8 @@ namespace MemoLingo.Application.Services
 
             // O clique do usuário vira uma tentativa errada no histórico da palavra.
             await RegisterAttemptAsync(user, word, false, now);
+
+            await _nuanceService.FlagGroupsForWordErrorAsync(user.Id, word.Id);
 
             // Recalcula o percentual considerando a janela das tentativas mais recentes.
             var stats = await GetRecentStatsAsync(user.Id, word.Id);

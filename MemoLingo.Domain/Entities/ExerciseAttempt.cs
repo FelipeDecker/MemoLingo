@@ -13,6 +13,7 @@ namespace MemoLingo.Domain.Entities
         public int? ChallengeId { get; set; }
         public int? WordId { get; set; }
         public int? SentenceId { get; set; }
+        public int? NuanceExerciseId { get; set; }
         public ExerciseType ExerciseType { get; set; }
         public string GivenAnswer { get; set; }
         public string ExpectedAnswer { get; set; }
@@ -24,5 +25,6 @@ namespace MemoLingo.Domain.Entities
         public Challenge Challenge { get; set; }
         public Word Word { get; set; }
         public Sentence Sentence { get; set; }
+        public NuanceExercise NuanceExercise { get; set; }
     }
 }

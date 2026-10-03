@@ -18,8 +18,10 @@ builder.Services.AddScoped(_ => new HttpClient { BaseAddress = apiUri });
 builder.Services.AddScoped<IUsersClient>(sp => new UsersClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<ICoursesClient>(sp => new CoursesClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<IPracticeClient>(sp => new PracticeClient(api, sp.GetRequiredService<HttpClient>()));
+builder.Services.AddScoped<INuanceClient>(sp => new NuanceClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
+builder.Services.AddScoped<INuanceService, NuanceService>();
 builder.Services.AddScoped<IUserCourseService, UserCourseService>();
 
 await builder.Build().RunAsync();

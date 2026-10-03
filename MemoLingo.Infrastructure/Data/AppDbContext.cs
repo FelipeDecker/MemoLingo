@@ -10,38 +10,26 @@ namespace MemoLingo.Infrastructure.Data
         }
 
         public DbSet<User> Users => Set<User>();
-
         public DbSet<Language> Languages => Set<Language>();
-
         public DbSet<LanguageProgress> LanguageProgresses => Set<LanguageProgress>();
-
         public DbSet<Word> Words => Set<Word>();
-
         public DbSet<Sentence> Sentences => Set<Sentence>();
-
         public DbSet<SentenceWord> SentenceWords => Set<SentenceWord>();
-
         public DbSet<Course> Courses => Set<Course>();
-
         public DbSet<Section> Sections => Set<Section>();
-
         public DbSet<Unit> Units => Set<Unit>();
-
         public DbSet<PathNode> PathNodes => Set<PathNode>();
-
         public DbSet<Lesson> Lessons => Set<Lesson>();
-
         public DbSet<Challenge> Challenges => Set<Challenge>();
-
         public DbSet<LessonWord> LessonWords => Set<LessonWord>();
-
         public DbSet<UserNodeProgress> UserNodeProgresses => Set<UserNodeProgress>();
-
         public DbSet<StudySession> StudySessions => Set<StudySession>();
-
         public DbSet<ExerciseAttempt> ExerciseAttempts => Set<ExerciseAttempt>();
-
         public DbSet<WordPerformance> WordPerformances => Set<WordPerformance>();
+        public DbSet<SynonymGroup> SynonymGroups => Set<SynonymGroup>();
+        public DbSet<SynonymGroupItem> SynonymGroupItems => Set<SynonymGroupItem>();
+        public DbSet<NuanceExercise> NuanceExercises => Set<NuanceExercise>();
+        public DbSet<UserNuanceProgress> UserNuanceProgresses => Set<UserNuanceProgress>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -278,7 +266,13 @@ namespace MemoLingo.Infrastructure.Data
                     .HasForeignKey(ea => ea.SentenceId)
                     .OnDelete(DeleteBehavior.Restrict);
 
+                entity.HasOne(ea => ea.NuanceExercise)
+                    .WithMany()
+                    .HasForeignKey(ea => ea.NuanceExerciseId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
                 entity.HasIndex(ea => new { ea.WordId, ea.AnsweredAt });
+                entity.HasIndex(ea => new { ea.NuanceExerciseId, ea.AnsweredAt });
             });
 
             modelBuilder.Entity<WordPerformance>(entity =>
@@ -296,6 +290,73 @@ namespace MemoLingo.Infrastructure.Data
                 entity.HasIndex(wp => new { wp.UserId, wp.WordId }).IsUnique();
                 entity.HasIndex(wp => new { wp.UserId, wp.NextReview });
                 entity.HasIndex(wp => new { wp.UserId, wp.LastReview });
+            });
+
+            modelBuilder.Entity<SynonymGroup>(entity =>
+            {
+                entity.Property(sg => sg.Name).IsRequired().HasMaxLength(200);
+                entity.Property(sg => sg.Meaning).IsRequired().HasMaxLength(200);
+
+                entity.HasOne(sg => sg.Language)
+                    .WithMany()
+                    .HasForeignKey(sg => sg.LanguageId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(sg => new { sg.LanguageId, sg.Name }).IsUnique();
+            });
+
+            modelBuilder.Entity<SynonymGroupItem>(entity =>
+            {
+                entity.Property(sgi => sgi.NuanceExplanation).IsRequired().HasMaxLength(1000);
+
+                entity.HasOne(sgi => sgi.SynonymGroup)
+                    .WithMany(sg => sg.Items)
+                    .HasForeignKey(sgi => sgi.SynonymGroupId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(sgi => sgi.Word)
+                    .WithMany()
+                    .HasForeignKey(sgi => sgi.WordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(sgi => new { sgi.SynonymGroupId, sgi.WordId }).IsUnique();
+                entity.HasIndex(sgi => sgi.WordId);
+            });
+
+            modelBuilder.Entity<NuanceExercise>(entity =>
+            {
+                entity.Property(ne => ne.SentenceContext).IsRequired().HasMaxLength(1000);
+                entity.Property(ne => ne.SentenceTranslation).HasMaxLength(1000);
+                entity.Property(ne => ne.AcceptedAnswers).IsRequired().HasMaxLength(300);
+                entity.Property(ne => ne.Explanation).IsRequired().HasMaxLength(2000);
+
+                entity.HasOne(ne => ne.SynonymGroup)
+                    .WithMany(sg => sg.Exercises)
+                    .HasForeignKey(ne => ne.SynonymGroupId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(ne => ne.TargetWord)
+                    .WithMany()
+                    .HasForeignKey(ne => ne.TargetWordId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(ne => ne.SynonymGroupId);
+            });
+
+            modelBuilder.Entity<UserNuanceProgress>(entity =>
+            {
+                entity.HasOne(unp => unp.User)
+                    .WithMany()
+                    .HasForeignKey(unp => unp.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(unp => unp.SynonymGroup)
+                    .WithMany()
+                    .HasForeignKey(unp => unp.SynonymGroupId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(unp => new { unp.UserId, unp.SynonymGroupId }).IsUnique();
+                entity.HasIndex(unp => new { unp.UserId, unp.NextReview });
             });
 
             base.OnModelCreating(modelBuilder);

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace MemoLingo.Front.Models
 {
     /// <summary>
@@ -9,7 +7,7 @@ namespace MemoLingo.Front.Models
     {
         private const string BasePath = "img/flags/";
 
-        private static readonly Dictionary<string, string> Images = new(System.StringComparer.OrdinalIgnoreCase)
+        private static readonly Dictionary<string, string> Images = new(StringComparer.OrdinalIgnoreCase)
         {
             ["en"] = BasePath + "FlagUs.svg",
             ["pt"] = BasePath + "FlagBr.svg",

@@ -1,0 +1,709 @@
+[
+  {
+    "languageCode": "en",
+    "groupName": "guilt / blame / fault",
+    "wordText": "guilt",
+    "position": 1,
+    "nuanceExplanation": "Sentimento interno de culpa, o peso na consciência. Fala do que a pessoa sente, não de quem é o responsável (feel guilt, a sense of guilt)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "guilt / blame / fault",
+    "wordText": "blame",
+    "position": 2,
+    "nuanceExplanation": "Responsabilização: o ato de apontar alguém como culpado. Aparece em 'take the blame', 'put the blame on someone' e no verbo 'to blame'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "guilt / blame / fault",
+    "wordText": "fault",
+    "position": 3,
+    "nuanceExplanation": "Responsabilidade por um erro ou problema: 'it's my fault', 'whose fault is it?'. Também significa defeito."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "deal with / handle / cope with",
+    "wordText": "to deal with",
+    "position": 1,
+    "nuanceExplanation": "Tomar providências para resolver um problema, tarefa ou pessoa. O foco é agir e resolver (deal with complaints, deal with an issue)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "deal with / handle / cope with",
+    "wordText": "to handle",
+    "position": 2,
+    "nuanceExplanation": "Administrar algo com habilidade e controle; também manusear fisicamente (handle with care). O foco é o manejo."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "deal with / handle / cope with",
+    "wordText": "to cope with",
+    "position": 3,
+    "nuanceExplanation": "Aguentar emocionalmente uma situação difícil, conseguir suportar (cope with stress, cope with loss). O foco é resistir."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "plain / simple",
+    "wordText": "plain",
+    "position": 1,
+    "nuanceExplanation": "Simples no sentido de sem enfeite, sem sabor ou estampa extra (plain yogurt, plain bread, a plain white shirt). Também 'claro, óbvio'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "plain / simple",
+    "wordText": "simple",
+    "position": 2,
+    "nuanceExplanation": "Simples no sentido de fácil, sem complicação (a simple question, a simple recipe)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "hang up / turn off / hang",
+    "wordText": "to hang up",
+    "position": 1,
+    "nuanceExplanation": "Desligar o telefone, encerrar a ligação. Também pode ser pendurar roupas (hang up your coat), mas o uso mais comum é terminar uma chamada."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "hang up / turn off / hang",
+    "wordText": "to turn off",
+    "position": 2,
+    "nuanceExplanation": "Desligar um aparelho, luz ou máquina, apertando o botão ou interruptor (turn off the TV, the lights)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "hang up / turn off / hang",
+    "wordText": "to hang",
+    "position": 3,
+    "nuanceExplanation": "Pendurar algo em algum lugar (hang a picture on the wall). Não tem sentido de desligar."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "farther / further",
+    "wordText": "farther",
+    "position": 1,
+    "nuanceExplanation": "Mais longe em distância física e mensurável (walk farther, farther away). É a forma preferida para distâncias reais."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "farther / further",
+    "wordText": "further",
+    "position": 2,
+    "nuanceExplanation": "Também pode indicar distância, mas é a única opção no sentido figurado: 'adicional', 'mais' ou 'avançar' (further information, go further in your studies)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "seem / look / appear",
+    "wordText": "to seem",
+    "position": 1,
+    "nuanceExplanation": "Parecer, com base na impressão geral ou em informações, não só no que se vê (it seems that..., he seems nice)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "seem / look / appear",
+    "wordText": "to look",
+    "position": 2,
+    "nuanceExplanation": "Parecer pela aparência visual (you look tired, it looks like rain)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "seem / look / appear",
+    "wordText": "to appear",
+    "position": 3,
+    "nuanceExplanation": "Parecer em registro mais formal, ou aparecer/surgir (he appeared at the door)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "upset / annoyed / disappointed",
+    "wordText": "upset",
+    "position": 1,
+    "nuanceExplanation": "Chateado, magoado, emocionalmente abalado. Mistura tristeza e incômodo; é o mais emocional dos três."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "upset / annoyed / disappointed",
+    "wordText": "annoyed",
+    "position": 2,
+    "nuanceExplanation": "Irritado, incomodado com algo pequeno ou repetitivo. É raiva leve, sem tristeza."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "upset / annoyed / disappointed",
+    "wordText": "disappointed",
+    "position": 3,
+    "nuanceExplanation": "Decepcionado: algo foi pior do que você esperava."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "annoying / annoyed",
+    "wordText": "annoying",
+    "position": 1,
+    "nuanceExplanation": "Irritante: descreve a coisa ou a pessoa que CAUSA a irritação (the noise is annoying)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "annoying / annoyed",
+    "wordText": "annoyed",
+    "position": 2,
+    "nuanceExplanation": "Irritado: descreve a pessoa que SENTE a irritação (I am annoyed)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "sorry / apology / regret",
+    "wordText": "sorry",
+    "position": 1,
+    "nuanceExplanation": "Adjetivo/interjeição do dia a dia para pedir desculpas ou lamentar: 'I'm sorry', 'Sorry!'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "sorry / apology / regret",
+    "wordText": "apology",
+    "position": 2,
+    "nuanceExplanation": "Substantivo: um pedido de desculpas (make/accept an apology, a letter of apology). Mais formal."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "sorry / apology / regret",
+    "wordText": "to regret",
+    "position": 3,
+    "nuanceExplanation": "Verbo: arrepender-se de algo que fez ou deixou de fazer (I regret quitting)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "refuse / deny / reject",
+    "wordText": "to refuse",
+    "position": 1,
+    "nuanceExplanation": "Recusar-se a fazer algo ou recusar algo oferecido (refuse to help, refuse an offer)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "refuse / deny / reject",
+    "wordText": "to deny",
+    "position": 2,
+    "nuanceExplanation": "Negar que algo é verdade, como uma acusação ou um fato (deny stealing, deny the rumors)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "refuse / deny / reject",
+    "wordText": "to reject",
+    "position": 3,
+    "nuanceExplanation": "Rejeitar formalmente uma proposta, candidato ou ideia depois de avaliar (reject an application)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "borrow / lend / loan",
+    "wordText": "to borrow",
+    "position": 1,
+    "nuanceExplanation": "Pegar emprestado: você RECEBE algo (Can I borrow your pen?)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "borrow / lend / loan",
+    "wordText": "to lend",
+    "position": 2,
+    "nuanceExplanation": "Emprestar: você DÁ algo temporariamente (Can you lend me your pen?)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "borrow / lend / loan",
+    "wordText": "loan",
+    "position": 3,
+    "nuanceExplanation": "Substantivo: empréstimo, normalmente de dinheiro de um banco (take out a loan)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "asleep / sleepy / awake",
+    "wordText": "asleep",
+    "position": 1,
+    "nuanceExplanation": "Dormindo (o estado de estar dormindo): the baby is asleep, fall asleep."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "asleep / sleepy / awake",
+    "wordText": "sleepy",
+    "position": 2,
+    "nuanceExplanation": "Com sono, sonolento: ainda acordado, mas com vontade de dormir."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "asleep / sleepy / awake",
+    "wordText": "awake",
+    "position": 3,
+    "nuanceExplanation": "Acordado, desperto (wide awake = totalmente acordado)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "odd / strange / weird",
+    "wordText": "odd",
+    "position": 1,
+    "nuanceExplanation": "Estranho, fora do comum (tom neutro). Também significa ímpar (odd numbers) e avulso/ocasional (odd jobs = bicos)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "odd / strange / weird",
+    "wordText": "strange",
+    "position": 2,
+    "nuanceExplanation": "Estranho no sentido geral e também desconhecido, não familiar (a strange city, a strange place)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "odd / strange / weird",
+    "wordText": "weird",
+    "position": 3,
+    "nuanceExplanation": "Esquisito, bizarro. Bem informal e mais forte."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "certain / sure",
+    "wordText": "certain",
+    "position": 1,
+    "nuanceExplanation": "Certo, seguro (mais formal). Antes de um substantivo significa 'determinado, específico' (certain foods, a certain person)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "certain / sure",
+    "wordText": "sure",
+    "position": 2,
+    "nuanceExplanation": "Certo, seguro (informal). Expressões fixas: 'Sure!' (claro) e 'make sure' (garantir, certificar-se)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "jealous / envious",
+    "wordText": "jealous",
+    "position": 1,
+    "nuanceExplanation": "Com ciúmes: medo de perder alguém ou algo que é seu, típico de relacionamentos. No uso informal também aparece como inveja."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "jealous / envious",
+    "wordText": "envious",
+    "position": 2,
+    "nuanceExplanation": "Invejoso: querer algo que outra pessoa tem (sucesso, bens). Nunca é usado para ciúme de parceiro."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "breath / breathe",
+    "wordText": "breath",
+    "position": 1,
+    "nuanceExplanation": "Substantivo (pronúncia /breθ/): fôlego, respiração, o ar que entra e sai (take a deep breath, out of breath)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "breath / breathe",
+    "wordText": "to breathe",
+    "position": 2,
+    "nuanceExplanation": "Verbo (pronúncia /briːð/): respirar (breathe in, breathe out)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "attend / assist / watch",
+    "wordText": "to attend",
+    "position": 1,
+    "nuanceExplanation": "Comparecer, estar presente (attend a meeting, a class, a wedding). Falso cognato: NÃO é 'atender'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "attend / assist / watch",
+    "wordText": "to assist",
+    "position": 2,
+    "nuanceExplanation": "Ajudar, auxiliar (formal): assist the doctor, assist customers. Falso cognato: NÃO é 'assistir' a algo."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "attend / assist / watch",
+    "wordText": "to watch",
+    "position": 3,
+    "nuanceExplanation": "Assistir (TV, filme, jogo) ou observar com atenção algo em movimento."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "retire / remove / withdraw",
+    "wordText": "to retire",
+    "position": 1,
+    "nuanceExplanation": "Aposentar-se, parar de trabalhar por idade ou tempo de serviço. Falso cognato: não é 'retirar'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "retire / remove / withdraw",
+    "wordText": "to remove",
+    "position": 2,
+    "nuanceExplanation": "Remover, tirar algo de um lugar (remove a stain, remove your shoes)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "retire / remove / withdraw",
+    "wordText": "to withdraw",
+    "position": 3,
+    "nuanceExplanation": "Sacar dinheiro; retirar-se ou desistir de algo (withdraw from a competition)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "turn on / turn up / turn down",
+    "wordText": "to turn on",
+    "position": 1,
+    "nuanceExplanation": "Ligar um aparelho ou luz."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "turn on / turn up / turn down",
+    "wordText": "to turn up",
+    "position": 2,
+    "nuanceExplanation": "Aumentar (volume, temperatura). Informalmente também significa aparecer, chegar (he turned up late)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "turn on / turn up / turn down",
+    "wordText": "to turn down",
+    "position": 3,
+    "nuanceExplanation": "Abaixar (volume, temperatura). Também significa recusar uma oferta ou convite."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "run out / end up / finish",
+    "wordText": "to run out",
+    "position": 1,
+    "nuanceExplanation": "Acabar o estoque de algo, esgotar (run out of milk, time, money)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "run out / end up / finish",
+    "wordText": "to end up",
+    "position": 2,
+    "nuanceExplanation": "Acabar (por), terminar numa situação que não foi planejada (we ended up staying home)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "run out / end up / finish",
+    "wordText": "to finish",
+    "position": 3,
+    "nuanceExplanation": "Terminar, concluir uma atividade (finish homework, finish work)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "meet / meet up / know",
+    "wordText": "to meet",
+    "position": 1,
+    "nuanceExplanation": "Conhecer alguém pela primeira vez (nice to meet you) ou encontrar-se com alguém."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "meet / meet up / know",
+    "wordText": "to meet up",
+    "position": 2,
+    "nuanceExplanation": "Encontrar-se de forma combinada e informal, geralmente com amigos (let's meet up for coffee)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "meet / meet up / know",
+    "wordText": "to know",
+    "position": 3,
+    "nuanceExplanation": "Conhecer no sentido de já ter familiaridade com alguém ou algo (I know him well). Não é o momento de conhecer."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "crowded / full / busy",
+    "wordText": "crowded",
+    "position": 1,
+    "nuanceExplanation": "Lotado de pessoas (a crowded train, a crowded beach)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "crowded / full / busy",
+    "wordText": "full",
+    "position": 2,
+    "nuanceExplanation": "Cheio, sem espaço para mais nada (a full glass); ou satisfeito depois de comer (I'm full)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "crowded / full / busy",
+    "wordText": "busy",
+    "position": 3,
+    "nuanceExplanation": "Ocupado (pessoa com muitas tarefas) ou movimentado (a busy street)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "happy / cheerful / delighted",
+    "wordText": "happy",
+    "position": 1,
+    "nuanceExplanation": "Feliz: a palavra geral, serve para quase tudo (Happy birthday!)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "happy / cheerful / delighted",
+    "wordText": "cheerful",
+    "position": 2,
+    "nuanceExplanation": "Alegre, animado: um traço de personalidade ou um jeito visível (a cheerful person, a cheerful room)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "happy / cheerful / delighted",
+    "wordText": "delighted",
+    "position": 3,
+    "nuanceExplanation": "Encantado, muito contente com algo específico. Mais forte e mais formal (I'd be delighted to...)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "out of date / old-fashioned / old",
+    "wordText": "out of date",
+    "position": 1,
+    "nuanceExplanation": "Desatualizado ou vencido: algo que perdeu a validade (an out-of-date passport, map, information)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "out of date / old-fashioned / old",
+    "wordText": "old-fashioned",
+    "position": 2,
+    "nuanceExplanation": "Antiquado, fora de moda: estilo, ideias ou costumes de outra época."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "out of date / old-fashioned / old",
+    "wordText": "old",
+    "position": 3,
+    "nuanceExplanation": "Velho, antigo em idade: que tem muitos anos."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "customs / custom / costume / habit",
+    "wordText": "customs",
+    "position": 1,
+    "nuanceExplanation": "Alfândega, no aeroporto ou na fronteira. Sempre no plural nesse sentido."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "customs / custom / costume / habit",
+    "wordText": "custom",
+    "position": 2,
+    "nuanceExplanation": "Costume, tradição de um povo ou de um grupo (a local custom)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "customs / custom / costume / habit",
+    "wordText": "costume",
+    "position": 3,
+    "nuanceExplanation": "Fantasia ou traje típico (a Halloween costume). Falso cognato: não é 'costume'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "customs / custom / costume / habit",
+    "wordText": "habit",
+    "position": 4,
+    "nuanceExplanation": "Hábito pessoal, algo que um indivíduo faz repetidamente (a bad habit)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "just / only / already",
+    "wordText": "just",
+    "position": 1,
+    "nuanceExplanation": "Acabou de (tempo muito recente: I've just arrived); também 'só, apenas' no uso informal."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "just / only / already",
+    "wordText": "only",
+    "position": 2,
+    "nuanceExplanation": "Apenas, somente: limita quantidade ou indica exclusividade (only two, the only one)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "just / only / already",
+    "wordText": "already",
+    "position": 3,
+    "nuanceExplanation": "Já: algo aconteceu antes do esperado ou antes deste momento."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "land / ground / floor",
+    "wordText": "land",
+    "position": 1,
+    "nuanceExplanation": "Terra firme (em oposição ao mar) ou terreno, propriedade (buy land)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "land / ground / floor",
+    "wordText": "ground",
+    "position": 2,
+    "nuanceExplanation": "Chão ao ar livre, o solo, a superfície da terra (sit on the ground)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "land / ground / floor",
+    "wordText": "floor",
+    "position": 3,
+    "nuanceExplanation": "Piso de um cômodo, dentro de casa, ou andar de um prédio."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "thought / though / through",
+    "wordText": "thought",
+    "position": 1,
+    "nuanceExplanation": "Pensamento; também o passado de 'think' (I thought)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "thought / though / through",
+    "wordText": "though",
+    "position": 2,
+    "nuanceExplanation": "Embora; contudo (no fim da frase: It was cold, though)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "thought / though / through",
+    "wordText": "through",
+    "position": 3,
+    "nuanceExplanation": "Através de, por dentro de; do início ao fim."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "homesick / miss",
+    "wordText": "homesick",
+    "position": 1,
+    "nuanceExplanation": "Adjetivo: com saudade de casa ou da terra natal, sentimento de quem está longe."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "homesick / miss",
+    "wordText": "to miss",
+    "position": 2,
+    "nuanceExplanation": "Verbo: sentir falta de alguém ou algo (I miss you). Também significa perder (um ônibus, um voo)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "take back / give back / return",
+    "wordText": "to take back",
+    "position": 1,
+    "nuanceExplanation": "Retirar o que disse (I take it back) ou levar algo de volta a uma loja."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "take back / give back / return",
+    "wordText": "to give back",
+    "position": 2,
+    "nuanceExplanation": "Devolver algo à pessoa de quem você pegou (give it back to me)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "take back / give back / return",
+    "wordText": "to return",
+    "position": 3,
+    "nuanceExplanation": "Voltar a um lugar ou devolver algo (mais formal)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "support / put up with / stand",
+    "wordText": "to support",
+    "position": 1,
+    "nuanceExplanation": "Apoiar, dar suporte, torcer por um time. Falso cognato: NÃO é 'suportar' no sentido de aguentar."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "support / put up with / stand",
+    "wordText": "to put up with",
+    "position": 2,
+    "nuanceExplanation": "Tolerar, aguentar algo desagradável sem reclamar muito."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "support / put up with / stand",
+    "wordText": "to stand",
+    "position": 3,
+    "nuanceExplanation": "Aguentar, suportar; quase sempre na negativa: I can't stand it (não suporto)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "set in / start / begin",
+    "wordText": "to set in",
+    "position": 1,
+    "nuanceExplanation": "Começar e se instalar, persistindo (geralmente algo ruim: winter, rain, panic, an infection sets in)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "set in / start / begin",
+    "wordText": "to start",
+    "position": 2,
+    "nuanceExplanation": "Começar ou iniciar algo; também dar a partida em máquinas e motores (start the car)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "set in / start / begin",
+    "wordText": "to begin",
+    "position": 3,
+    "nuanceExplanation": "Começar (um pouco mais formal que 'start'); não se usa para ligar máquinas."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "at last / finally / eventually",
+    "wordText": "at last",
+    "position": 1,
+    "nuanceExplanation": "Enfim! Expressa alívio depois de uma longa espera; muitas vezes em exclamações."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "at last / finally / eventually",
+    "wordText": "finally",
+    "position": 2,
+    "nuanceExplanation": "Finalmente, depois de espera ou demora; também 'por último' ao listar etapas."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "at last / finally / eventually",
+    "wordText": "eventually",
+    "position": 3,
+    "nuanceExplanation": "Com o tempo, no fim das contas: resultado de um processo longo. Falso cognato: NÃO é 'eventualmente'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "bother / annoy / disturb",
+    "wordText": "to bother",
+    "position": 1,
+    "nuanceExplanation": "Incomodar, importunar. Também 'dar-se ao trabalho' (don't bother = não se preocupe/não precisa)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "bother / annoy / disturb",
+    "wordText": "to annoy",
+    "position": 2,
+    "nuanceExplanation": "Irritar, deixar alguém com raiva leve, muitas vezes de propósito ou repetidamente."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "bother / annoy / disturb",
+    "wordText": "to disturb",
+    "position": 3,
+    "nuanceExplanation": "Interromper, perturbar alguém que está ocupado ou descansando (Do not disturb)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "on / above / over",
+    "wordText": "on",
+    "position": 1,
+    "nuanceExplanation": "Sobre, em cima, encostado na superfície (the book is on the table)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "on / above / over",
+    "wordText": "above",
+    "position": 2,
+    "nuanceExplanation": "Acima, em um nível mais alto e sem contato (the picture is above the sofa); também acima de um número ou nível."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "on / above / over",
+    "wordText": "over",
+    "position": 3,
+    "nuanceExplanation": "Por cima de, cobrindo ou atravessando (a bridge over the river, jump over the fence); também 'mais de'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "regards / regarding",
+    "wordText": "regards",
+    "position": 1,
+    "nuanceExplanation": "Substantivo no plural: cumprimentos, lembranças (Best regards, give my regards to...)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "regards / regarding",
+    "wordText": "regarding",
+    "position": 2,
+    "nuanceExplanation": "Preposição formal: a respeito de, sobre (regarding your request)."
+  }
+]

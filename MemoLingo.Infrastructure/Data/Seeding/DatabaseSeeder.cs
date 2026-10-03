@@ -50,6 +50,9 @@ namespace MemoLingo.Infrastructure.Data.Seeding
 
             var languages = await SeedLanguagesAsync(seedPath, cancellationToken);
             var words = await SeedWordsAsync(seedPath, languages, cancellationToken);
+            var synonymGroups = await SeedSynonymGroupsAsync(seedPath, languages, cancellationToken);
+            await SeedSynonymGroupItemsAsync(seedPath, languages, synonymGroups, words, cancellationToken);
+            await SeedNuanceExercisesAsync(seedPath, languages, synonymGroups, words, cancellationToken);
             var sentences = await SeedSentencesAsync(seedPath, languages, cancellationToken);
             await SeedSentenceWordsAsync(seedPath, words, sentences, cancellationToken);
             var courses = await SeedCoursesAsync(seedPath, languages, cancellationToken);
@@ -204,6 +207,189 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                 .ToListAsync(cancellationToken);
 
             return words.ToDictionary(w => (w.LanguageId, w.Text.ToLowerInvariant()), w => w.Id);
+        }
+
+        private async Task<Dictionary<(int LanguageId, string Name), int>> SeedSynonymGroupsAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<SynonymGroupSeed>(seedPath, "synonym-groups.json", cancellationToken);
+
+            var existing = await LoadSynonymGroupsAsync(cancellationToken);
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o grupo de nuance {Group}.", seed.LanguageCode, seed.Name);
+                    continue;
+                }
+
+                if (!existing.TryAdd((languageId, seed.Name.ToLowerInvariant()), 0))
+                {
+                    continue;
+                }
+
+                _context.SynonymGroups.Add(new SynonymGroup
+                {
+                    LanguageId = languageId,
+                    Name = seed.Name,
+                    Meaning = seed.Meaning,
+                    CefrLevel = seed.CefrLevel
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} grupo(s) de nuance inserido(s).", created);
+            }
+
+            return await LoadSynonymGroupsAsync(cancellationToken);
+        }
+
+        private async Task<Dictionary<(int LanguageId, string Name), int>> LoadSynonymGroupsAsync(CancellationToken cancellationToken)
+        {
+            var groups = await _context.SynonymGroups
+                .Select(g => new { g.Id, g.LanguageId, g.Name })
+                .ToListAsync(cancellationToken);
+
+            return groups.ToDictionary(g => (g.LanguageId, g.Name.ToLowerInvariant()), g => g.Id);
+        }
+
+        private async Task SeedSynonymGroupItemsAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> groups,
+            Dictionary<(int LanguageId, string Text), int> words,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<SynonymGroupItemSeed>(seedPath, "synonym-group-items.json", cancellationToken);
+
+            var existing = (await _context.SynonymGroupItems
+                .Select(i => new { i.SynonymGroupId, i.WordId })
+                .ToListAsync(cancellationToken))
+                .Select(i => (i.SynonymGroupId, i.WordId))
+                .ToHashSet();
+
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!TryResolveGroupWord(seed.LanguageCode, seed.GroupName, seed.WordText, languages, groups, words, out var groupId, out var wordId))
+                {
+                    continue;
+                }
+
+                if (!existing.Add((groupId, wordId)))
+                {
+                    continue;
+                }
+
+                _context.SynonymGroupItems.Add(new SynonymGroupItem
+                {
+                    SynonymGroupId = groupId,
+                    WordId = wordId,
+                    Position = seed.Position,
+                    NuanceExplanation = seed.NuanceExplanation
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} palavra(s) vinculada(s) a grupos de nuance.", created);
+            }
+        }
+
+        private async Task SeedNuanceExercisesAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> groups,
+            Dictionary<(int LanguageId, string Text), int> words,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<NuanceExerciseSeed>(seedPath, "nuance-exercises.json", cancellationToken);
+
+            var existing = (await _context.NuanceExercises
+                .Select(e => new { e.SynonymGroupId, e.SentenceContext })
+                .ToListAsync(cancellationToken))
+                .Select(e => (e.SynonymGroupId, e.SentenceContext))
+                .ToHashSet();
+
+            var created = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!TryResolveGroupWord(seed.LanguageCode, seed.GroupName, seed.TargetWordText, languages, groups, words, out var groupId, out var wordId))
+                {
+                    continue;
+                }
+
+                if (!existing.Add((groupId, seed.SentenceContext)))
+                {
+                    continue;
+                }
+
+                _context.NuanceExercises.Add(new NuanceExercise
+                {
+                    SynonymGroupId = groupId,
+                    TargetWordId = wordId,
+                    SentenceContext = seed.SentenceContext,
+                    SentenceTranslation = seed.SentenceTranslation,
+                    // As respostas aceitas ficam em uma única coluna, separadas por '|'.
+                    AcceptedAnswers = string.Join('|', seed.AcceptedAnswers ?? new List<string>()),
+                    Explanation = seed.Explanation
+                });
+
+                created++;
+            }
+
+            if (created > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Count} exercício(s) de nuance inserido(s).", created);
+            }
+        }
+
+        private bool TryResolveGroupWord(
+            string languageCode,
+            string groupName,
+            string wordText,
+            Dictionary<string, int> languages,
+            Dictionary<(int LanguageId, string Name), int> groups,
+            Dictionary<(int LanguageId, string Text), int> words,
+            out int groupId,
+            out int wordId)
+        {
+            groupId = 0;
+            wordId = 0;
+
+            if (!languages.TryGetValue(languageCode.ToLowerInvariant(), out var languageId))
+            {
+                _logger.LogWarning("Idioma {LanguageCode} não encontrado para o grupo de nuance {Group}.", languageCode, groupName);
+                return false;
+            }
+
+            if (!groups.TryGetValue((languageId, groupName.ToLowerInvariant()), out groupId))
+            {
+                _logger.LogWarning("Grupo de nuance {Group} não encontrado.", groupName);
+                return false;
+            }
+
+            if (!words.TryGetValue((languageId, wordText.ToLowerInvariant()), out wordId))
+            {
+                _logger.LogWarning("Palavra {Word} não encontrada para o grupo de nuance {Group}.", wordText, groupName);
+                return false;
+            }
+
+            return true;
         }
 
         private async Task<Dictionary<string, (int Id, int LanguageId)>> SeedSentencesAsync(

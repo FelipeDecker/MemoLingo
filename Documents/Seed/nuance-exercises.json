@@ -1,0 +1,1172 @@
+[
+  {
+    "languageCode": "en",
+    "groupName": "guilt / blame / fault",
+    "targetWordText": "guilt",
+    "sentenceContext": "After shouting at his little sister for no reason and hearing her cry in her room, Tom couldn't sleep; the {{blank}} kept him awake all night, even though nobody had punished him.",
+    "sentenceTranslation": "Depois de gritar com a irmãzinha sem motivo e ouvi-la chorar no quarto, Tom não conseguiu dormir; a culpa o manteve acordado a noite toda, embora ninguém o tivesse punido.",
+    "acceptedAnswers": [
+      "guilt"
+    ],
+    "explanation": "Aqui a culpa é um sentimento interno, o peso na consciência de Tom. Ninguém o acusou (não é 'blame') e não se discute de quem é a responsabilidade pelo erro (não é 'fault'). Sentimento = guilt."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "guilt / blame / fault",
+    "targetWordText": "blame",
+    "sentenceContext": "When the project failed, the manager didn't want to look bad in front of the directors, so he put the {{blank}} on the new intern, even though she had joined the team only a week before.",
+    "sentenceTranslation": "Quando o projeto fracassou, o gerente não quis ficar mal na frente dos diretores, então jogou a culpa na estagiária nova, embora ela tivesse entrado no time só uma semana antes.",
+    "acceptedAnswers": [
+      "blame"
+    ],
+    "explanation": "'Put the blame on someone' = jogar a culpa em alguém. É a ação de responsabilizar outra pessoa. 'Fault' não se combina com 'put ... on' e 'guilt' é o sentimento de quem se sente culpado."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "guilt / blame / fault",
+    "targetWordText": "fault",
+    "sentenceContext": "Don't apologize to me, Anna. You followed the instructions exactly as I wrote them; the instructions were wrong, so it's my {{blank}}, not yours.",
+    "sentenceTranslation": "Não me peça desculpas, Anna. Você seguiu as instruções exatamente como eu escrevi; as instruções estavam erradas, então a culpa é minha, não sua.",
+    "acceptedAnswers": [
+      "fault"
+    ],
+    "explanation": "'It's my fault' = a culpa (a responsabilidade pelo erro) é minha. É a expressão fixa com possessivo (my/your/his fault). 'It's my blame' não é natural e 'guilt' seria o sentimento."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "deal with / handle / cope with",
+    "targetWordText": "to cope with",
+    "sentenceContext": "After her father passed away and she lost her job in the same month, Maria found it very hard to {{blank}} all that sadness, so she started seeing a therapist every week.",
+    "sentenceTranslation": "Depois que o pai faleceu e ela perdeu o emprego no mesmo mês, Maria achou muito difícil aguentar toda aquela tristeza, então começou a ir a um terapeuta toda semana.",
+    "acceptedAnswers": [
+      "cope with"
+    ],
+    "explanation": "A situação é emocionalmente pesada e o foco é suportar, não resolver: isso é 'cope with'. 'Deal with' soaria como tomar providências práticas e 'handle' como controlar com habilidade."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "deal with / handle / cope with",
+    "targetWordText": "to handle",
+    "sentenceContext": "The box was full of antique glass plates from her grandmother, so the movers were told to {{blank}} it with extreme care and never put anything on top of it.",
+    "sentenceTranslation": "A caixa estava cheia de pratos de vidro antigos da avó dela, então os carregadores foram orientados a manusear com extremo cuidado e nunca colocar nada em cima.",
+    "acceptedAnswers": [
+      "handle"
+    ],
+    "explanation": "Manusear fisicamente algo frágil: 'handle with care'. Só 'handle' tem esse sentido físico de pegar e manusear."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "deal with / handle / cope with",
+    "targetWordText": "to deal with",
+    "sentenceContext": "I can't go to lunch yet; there are twenty angry customer emails in my inbox and I need to {{blank}} them before noon, answering each one and solving their problems.",
+    "sentenceTranslation": "Ainda não posso ir almoçar; há vinte e-mails de clientes irritados na minha caixa de entrada e preciso resolvê-los antes do meio-dia, respondendo cada um e solucionando os problemas.",
+    "acceptedAnswers": [
+      "deal with"
+    ],
+    "explanation": "Tomar providências para resolver uma lista de problemas práticos: 'deal with emails/complaints'. Não é questão de aguentar emocionalmente ('cope with')."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "plain / simple",
+    "targetWordText": "plain",
+    "sentenceContext": "I don't want the strawberry or the vanilla one; please give me the {{blank}} yogurt, with no sugar, no fruit and no flavor added at all.",
+    "sentenceTranslation": "Não quero o de morango nem o de baunilha; por favor, me dê o iogurte natural, sem açúcar, sem fruta e sem nenhum sabor adicionado.",
+    "acceptedAnswers": [
+      "plain"
+    ],
+    "explanation": "Sem nada adicionado = plain (plain yogurt = iogurte natural). 'Simple' significaria 'fácil', o que não faz sentido para iogurte."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "plain / simple",
+    "targetWordText": "simple",
+    "sentenceContext": "The math teacher said the test would be {{blank}}: only ten easy questions, and anyone who had studied the basic rules would finish in fifteen minutes.",
+    "sentenceTranslation": "O professor de matemática disse que a prova seria simples: só dez questões fáceis, e quem tivesse estudado as regras básicas terminaria em quinze minutos.",
+    "acceptedAnswers": [
+      "simple"
+    ],
+    "explanation": "Aqui 'simples' = fácil, sem complicação: isso é 'simple'. 'Plain' descreve ausência de enfeite, não facilidade."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "plain / simple",
+    "targetWordText": "plain",
+    "sentenceContext": "My kids love cakes full of chocolate and cream, but my husband prefers {{blank}} bread with nothing on it: no butter, no jam, not even salt.",
+    "sentenceTranslation": "Meus filhos adoram bolos cheios de chocolate e creme, mas meu marido prefere pão puro, sem nada: sem manteiga, sem geleia, nem sal.",
+    "acceptedAnswers": [
+      "plain"
+    ],
+    "explanation": "Pão sem nada por cima = plain bread. A ideia é ausência de acompanhamento, não facilidade."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "hang up / turn off / hang",
+    "targetWordText": "to hang up",
+    "sentenceContext": "My sister was so angry during our phone call that she said 'I don't want to talk to you anymore' and {{blank}} before I could answer.",
+    "sentenceTranslation": "Minha irmã estava tão brava durante a nossa ligação que disse 'não quero mais falar com você' e desligou antes que eu pudesse responder.",
+    "acceptedAnswers": [
+      "hung up"
+    ],
+    "explanation": "Encerrar uma ligação telefônica = hang up (passado: hung up). 'Turn off' seria desligar o aparelho em si, não terminar a chamada."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "hang up / turn off / hang",
+    "targetWordText": "to turn off",
+    "sentenceContext": "Before leaving the house for a two-week trip, please {{blank}} all the lights and the air conditioner, so we don't get a huge electricity bill.",
+    "sentenceTranslation": "Antes de sair de casa para uma viagem de duas semanas, por favor desligue todas as luzes e o ar-condicionado, para não recebermos uma conta de luz enorme.",
+    "acceptedAnswers": [
+      "turn off"
+    ],
+    "explanation": "Desligar aparelhos e luzes elétricas = turn off. 'Hang up' só se usa para telefone."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "hang up / turn off / hang",
+    "targetWordText": "to hang",
+    "sentenceContext": "We bought a beautiful painting at the market, and now we need a nail and a hammer to {{blank}} it on the living room wall.",
+    "sentenceTranslation": "Compramos um quadro lindo na feira e agora precisamos de um prego e um martelo para pendurá-lo na parede da sala.",
+    "acceptedAnswers": [
+      "hang"
+    ],
+    "explanation": "Pendurar um quadro na parede = hang. Não há nada sendo desligado aqui."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "farther / further",
+    "targetWordText": "farther",
+    "sentenceContext": "The nearest gas station is closed, so we'll have to drive about thirty kilometers {{blank}} down the highway to find another one.",
+    "sentenceTranslation": "O posto de gasolina mais próximo está fechado, então vamos ter que dirigir uns trinta quilômetros mais adiante na rodovia para encontrar outro.",
+    "acceptedAnswers": [
+      "farther"
+    ],
+    "explanation": "Distância física, medida em quilômetros: 'farther' é a forma preferida. 'Further' também aparece nesse caso (principalmente no inglês britânico), mas o treino aqui é associar distância real a 'farther'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "farther / further",
+    "targetWordText": "further",
+    "sentenceContext": "Thank you for your application. If you need {{blank}} information about the position, such as salary or working hours, please contact our HR department.",
+    "sentenceTranslation": "Obrigado pela sua candidatura. Se precisar de mais informações sobre a vaga, como salário ou horário de trabalho, entre em contato com o nosso RH.",
+    "acceptedAnswers": [
+      "further"
+    ],
+    "explanation": "'Further information' = informações adicionais. No sentido abstrato de 'mais/adicional' só 'further' é possível."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "farther / further",
+    "targetWordText": "further",
+    "sentenceContext": "She already has a master's degree, but she wants to take her studies even {{blank}} and do a PhD abroad.",
+    "sentenceTranslation": "Ela já tem mestrado, mas quer levar os estudos ainda mais adiante e fazer um doutorado no exterior.",
+    "acceptedAnswers": [
+      "further"
+    ],
+    "explanation": "Avançar de forma figurada (nos estudos, na carreira) = further. Não é uma distância física, então 'farther' não cabe."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "seem / look / appear",
+    "targetWordText": "to look",
+    "sentenceContext": "You {{blank}} really tired today; your eyes are red and you have dark circles under them. Did you sleep at all?",
+    "sentenceTranslation": "Você parece muito cansado hoje; seus olhos estão vermelhos e você está com olheiras. Você dormiu?",
+    "acceptedAnswers": [
+      "look"
+    ],
+    "explanation": "A impressão vem do que se vê (olhos vermelhos, olheiras): isso é 'look'. 'Seem' se baseia na impressão geral e 'appear' seria formal demais para uma conversa assim."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "seem / look / appear",
+    "targetWordText": "to seem",
+    "sentenceContext": "I've never actually seen the new neighbor, because we've only talked on the phone twice, but he {{blank}} like a very kind person.",
+    "sentenceTranslation": "Eu nunca vi o vizinho novo de fato, porque só conversamos por telefone duas vezes, mas ele parece uma pessoa muito gentil.",
+    "acceptedAnswers": [
+      "seems"
+    ],
+    "explanation": "Sem pista visual (você nunca o viu), a impressão vem da conversa: 'seem'. 'Look like' exigiria ter visto a pessoa e 'appear like' não é uma combinação natural."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "seem / look / appear",
+    "targetWordText": "to appear",
+    "sentenceContext": "Everyone was waiting in silence when suddenly a strange man {{blank}} at the door, wearing a long black coat, and nobody knew where he had come from.",
+    "sentenceTranslation": "Todos esperavam em silêncio quando, de repente, um homem estranho apareceu na porta, usando um longo casaco preto, e ninguém sabia de onde ele tinha vindo.",
+    "acceptedAnswers": [
+      "appeared"
+    ],
+    "explanation": "Aqui é 'surgir, aparecer', não 'parecer'. Só 'appear' tem esse sentido."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "upset / annoyed / disappointed",
+    "targetWordText": "disappointed",
+    "sentenceContext": "I had been waiting for this movie for two years and read every review, but the ending was so boring and predictable that I left the cinema really {{blank}}.",
+    "sentenceTranslation": "Eu esperava esse filme havia dois anos e li todas as críticas, mas o final foi tão chato e previsível que saí do cinema muito decepcionado.",
+    "acceptedAnswers": [
+      "disappointed"
+    ],
+    "explanation": "A expectativa era alta e o resultado foi pior: decepção = disappointed. Não há raiva leve ('annoyed') nem mágoa ('upset')."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "upset / annoyed / disappointed",
+    "targetWordText": "annoyed",
+    "sentenceContext": "My neighbor's dog barks every single morning at 6 a.m., and after three weeks of this I'm starting to feel quite {{blank}}, although it's not a big deal.",
+    "sentenceTranslation": "O cachorro do meu vizinho late toda manhã às 6h e, depois de três semanas assim, estou começando a ficar bem irritado, embora não seja nada grave.",
+    "acceptedAnswers": [
+      "annoyed"
+    ],
+    "explanation": "Irritação leve com algo repetitivo: annoyed. Não há tristeza ('upset') nem expectativa frustrada ('disappointed')."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "upset / annoyed / disappointed",
+    "targetWordText": "upset",
+    "sentenceContext": "When Lucy found out that her best friend had told everyone her secret, she was so {{blank}} that she cried for hours and didn't want to talk to anyone.",
+    "sentenceTranslation": "Quando Lucy descobriu que a melhor amiga tinha contado o segredo dela para todo mundo, ficou tão magoada que chorou por horas e não quis falar com ninguém.",
+    "acceptedAnswers": [
+      "upset"
+    ],
+    "explanation": "Magoada, abalada a ponto de chorar: upset. 'Annoyed' seria leve demais e 'disappointed' fala só de expectativa frustrada."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "annoying / annoyed",
+    "targetWordText": "annoying",
+    "sentenceContext": "That song from the advertisement plays on the radio every ten minutes; honestly, it's the most {{blank}} song I've ever heard.",
+    "sentenceTranslation": "Aquela música do comercial toca no rádio a cada dez minutos; sinceramente, é a música mais irritante que já ouvi.",
+    "acceptedAnswers": [
+      "annoying"
+    ],
+    "explanation": "A música é a causa da irritação: adjetivo com -ing (annoying). Quem sente a irritação fica 'annoyed'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "annoying / annoyed",
+    "targetWordText": "annoyed",
+    "sentenceContext": "The bus was forty minutes late again, and all the passengers waiting in the rain were visibly {{blank}}, checking their watches and complaining.",
+    "sentenceTranslation": "O ônibus atrasou quarenta minutos de novo, e todos os passageiros esperando na chuva estavam visivelmente irritados, olhando o relógio e reclamando.",
+    "acceptedAnswers": [
+      "annoyed"
+    ],
+    "explanation": "Os passageiros sentem a irritação: adjetivo com -ed (annoyed). 'Annoying passengers' significaria que eles irritam os outros."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "sorry / apology / regret",
+    "targetWordText": "apology",
+    "sentenceContext": "After the airline lost our luggage for three days, the company sent us a formal letter of {{blank}} and a voucher for our next flight.",
+    "sentenceTranslation": "Depois que a companhia aérea perdeu nossa bagagem por três dias, a empresa nos enviou uma carta formal de desculpas e um voucher para o próximo voo.",
+    "acceptedAnswers": [
+      "apology"
+    ],
+    "explanation": "'Letter of apology' = carta de desculpas. A posição pede um substantivo: apology."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "sorry / apology / regret",
+    "targetWordText": "to regret",
+    "sentenceContext": "I really {{blank}} not studying English when I was younger; now that I need it for my job, I wish I had started twenty years ago.",
+    "sentenceTranslation": "Eu realmente me arrependo de não ter estudado inglês quando era mais novo; agora que preciso dele no trabalho, queria ter começado vinte anos atrás.",
+    "acceptedAnswers": [
+      "regret"
+    ],
+    "explanation": "Arrependimento de algo do passado, com verbo + -ing: regret. 'I'm sorry not studying' não é natural."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "sorry / apology / regret",
+    "targetWordText": "sorry",
+    "sentenceContext": "Oh, I'm so {{blank}}! I didn't see you standing there and I stepped on your foot. Are you okay?",
+    "sentenceTranslation": "Ah, me desculpe! Não vi você aí e pisei no seu pé. Você está bem?",
+    "acceptedAnswers": [
+      "sorry"
+    ],
+    "explanation": "Desculpas rápidas do dia a dia: 'I'm sorry' (adjetivo depois de 'to be')."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "refuse / deny / reject",
+    "targetWordText": "to deny",
+    "sentenceContext": "The police found his fingerprints on the window, but the suspect continued to {{blank}} that he had been inside the house that night.",
+    "sentenceTranslation": "A polícia encontrou as digitais dele na janela, mas o suspeito continuou negando que tivesse estado dentro da casa naquela noite.",
+    "acceptedAnswers": [
+      "deny"
+    ],
+    "explanation": "Negar que um fato é verdade: deny. 'Refuse' seria recusar-se a fazer algo e 'reject' seria rejeitar uma proposta."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "refuse / deny / reject",
+    "targetWordText": "to refuse",
+    "sentenceContext": "My little son is so stubborn: every night he {{blank}} to eat his vegetables and just sits at the table with his arms crossed.",
+    "sentenceTranslation": "Meu filho pequeno é tão teimoso: toda noite ele se recusa a comer os legumes e fica sentado à mesa de braços cruzados.",
+    "acceptedAnswers": [
+      "refuses"
+    ],
+    "explanation": "Recusar-se a fazer algo = refuse to + verbo. Ele não está negando um fato ('deny')."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "refuse / deny / reject",
+    "targetWordText": "to reject",
+    "sentenceContext": "The university received three thousand applications and had to {{blank}} most of them, because there were only two hundred places available.",
+    "sentenceTranslation": "A universidade recebeu três mil inscrições e teve que rejeitar a maioria, porque havia apenas duzentas vagas.",
+    "acceptedAnswers": [
+      "reject"
+    ],
+    "explanation": "Recusar formalmente candidaturas depois de avaliá-las: reject."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "borrow / lend / loan",
+    "targetWordText": "to lend",
+    "sentenceContext": "I forgot my wallet at home. Could you {{blank}} me twenty dollars until tomorrow? I promise I'll pay you back first thing in the morning.",
+    "sentenceTranslation": "Esqueci a carteira em casa. Você poderia me emprestar vinte dólares até amanhã? Prometo te pagar logo cedo.",
+    "acceptedAnswers": [
+      "lend"
+    ],
+    "explanation": "A outra pessoa é quem empresta para mim: 'lend me'. Com 'borrow' a frase seria 'Could I borrow twenty dollars from you?'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "borrow / lend / loan",
+    "targetWordText": "to borrow",
+    "sentenceContext": "My laptop broke yesterday, so I asked my roommate if I could {{blank}} hers for a few hours to finish my presentation.",
+    "sentenceTranslation": "Meu notebook quebrou ontem, então perguntei à minha colega de quarto se eu podia pegar o dela emprestado por algumas horas para terminar minha apresentação.",
+    "acceptedAnswers": [
+      "borrow"
+    ],
+    "explanation": "Eu recebo o notebook emprestado: borrow. 'Lend' seria se eu estivesse emprestando algo a alguém."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "borrow / lend / loan",
+    "targetWordText": "loan",
+    "sentenceContext": "They didn't have enough money to buy the house, so they went to the bank and took out a thirty-year {{blank}}.",
+    "sentenceTranslation": "Eles não tinham dinheiro suficiente para comprar a casa, então foram ao banco e fizeram um empréstimo de trinta anos.",
+    "acceptedAnswers": [
+      "loan"
+    ],
+    "explanation": "'Take out a loan' = fazer um empréstimo. A frase pede o substantivo: loan."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "asleep / sleepy / awake",
+    "targetWordText": "asleep",
+    "sentenceContext": "Please speak quietly when you come in; the baby finally fell {{blank}} ten minutes ago after crying for two hours.",
+    "sentenceTranslation": "Por favor, fale baixo quando entrar; o bebê finalmente pegou no sono há dez minutos, depois de chorar por duas horas.",
+    "acceptedAnswers": [
+      "asleep"
+    ],
+    "explanation": "'Fall asleep' = pegar no sono. O estado de estar dormindo é 'asleep'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "asleep / sleepy / awake",
+    "targetWordText": "sleepy",
+    "sentenceContext": "I had a huge lunch and the meeting room is very warm, so I'm feeling really {{blank}}; I can barely keep my eyes open.",
+    "sentenceTranslation": "Almocei muito e a sala de reunião está bem quente, então estou com muito sono; mal consigo manter os olhos abertos.",
+    "acceptedAnswers": [
+      "sleepy"
+    ],
+    "explanation": "Ainda acordado, mas com sono: sleepy. 'Asleep' seria já estar dormindo."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "asleep / sleepy / awake",
+    "targetWordText": "awake",
+    "sentenceContext": "It was three in the morning, but I was still wide {{blank}}, staring at the ceiling and thinking about my exam.",
+    "sentenceTranslation": "Eram três da manhã, mas eu ainda estava totalmente acordado, olhando para o teto e pensando na prova.",
+    "acceptedAnswers": [
+      "awake"
+    ],
+    "explanation": "'Wide awake' = completamente acordado."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "odd / strange / weird",
+    "targetWordText": "odd",
+    "sentenceContext": "In this game, players with {{blank}} numbers like 1, 3, 5 and 7 stay on the left side of the field, and the others go to the right.",
+    "sentenceTranslation": "Neste jogo, os jogadores com números ímpares, como 1, 3, 5 e 7, ficam do lado esquerdo do campo, e os outros vão para a direita.",
+    "acceptedAnswers": [
+      "odd"
+    ],
+    "explanation": "'Odd numbers' = números ímpares. Só 'odd' tem esse sentido."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "odd / strange / weird",
+    "targetWordText": "strange",
+    "sentenceContext": "When I first moved to Tokyo I didn't know anyone and couldn't read the signs; I felt completely lost in a {{blank}} city where everything was unfamiliar.",
+    "sentenceTranslation": "Quando me mudei para Tóquio, eu não conhecia ninguém e não conseguia ler as placas; me sentia totalmente perdido numa cidade desconhecida onde nada era familiar.",
+    "acceptedAnswers": [
+      "strange"
+    ],
+    "explanation": "'Strange' também significa desconhecido, não familiar. 'An odd city' ou 'a weird city' diriam que a cidade é esquisita, não que ela é desconhecida para você."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "odd / strange / weird",
+    "targetWordText": "odd",
+    "sentenceContext": "During the summer he doesn't have a regular job; he just does {{blank}} jobs like painting fences and walking dogs for his neighbors.",
+    "sentenceTranslation": "Durante o verão ele não tem um emprego fixo; só faz bicos, como pintar cercas e passear com os cachorros dos vizinhos.",
+    "acceptedAnswers": [
+      "odd"
+    ],
+    "explanation": "'Odd jobs' = bicos, trabalhos ocasionais. É uma expressão fixa com 'odd'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "certain / sure",
+    "targetWordText": "sure",
+    "sentenceContext": "Before you leave the office, make {{blank}} that all the windows are closed and the alarm is on.",
+    "sentenceTranslation": "Antes de sair do escritório, certifique-se de que todas as janelas estão fechadas e o alarme está ligado.",
+    "acceptedAnswers": [
+      "sure"
+    ],
+    "explanation": "'Make sure' é a expressão fixa para 'garantir, certificar-se'. 'Make certain' existe, mas é raro e formal."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "certain / sure",
+    "targetWordText": "certain",
+    "sentenceContext": "The doctor said that {{blank}} foods, like peanuts and shellfish, could cause a serious allergic reaction, so I need to avoid them.",
+    "sentenceTranslation": "O médico disse que determinados alimentos, como amendoim e frutos do mar, podem causar uma reação alérgica grave, então preciso evitá-los.",
+    "acceptedAnswers": [
+      "certain"
+    ],
+    "explanation": "Antes de substantivo, com sentido de 'determinados, alguns específicos': certain. 'Sure foods' não existe."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "certain / sure",
+    "targetWordText": "sure",
+    "sentenceContext": "'Can you help me carry these boxes to the car?' '{{blank}}! Just give me a minute to put my shoes on.'",
+    "sentenceTranslation": "'Você pode me ajudar a levar essas caixas até o carro?' 'Claro! Só me dá um minuto para eu calçar os sapatos.'",
+    "acceptedAnswers": [
+      "sure"
+    ],
+    "explanation": "Resposta informal 'Claro!': Sure! 'Certain!' não é usado assim."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "jealous / envious",
+    "targetWordText": "jealous",
+    "sentenceContext": "Every time his girlfriend talks to another man at a party, Mark gets {{blank}} and asks her who he is and why she was smiling at him.",
+    "sentenceTranslation": "Toda vez que a namorada conversa com outro homem numa festa, Mark fica com ciúmes e pergunta quem ele é e por que ela estava sorrindo para ele.",
+    "acceptedAnswers": [
+      "jealous"
+    ],
+    "explanation": "Medo de perder a parceira = ciúme: jealous. 'Envious' nunca é usado para ciúme amoroso."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "jealous / envious",
+    "targetWordText": "envious",
+    "sentenceContext": "Her colleagues were quietly {{blank}} of her promotion and her new office with a view of the sea, secretly wishing they had the same success.",
+    "sentenceTranslation": "Os colegas dela sentiam uma inveja silenciosa da promoção e da nova sala com vista para o mar, desejando em segredo ter o mesmo sucesso.",
+    "acceptedAnswers": [
+      "envious"
+    ],
+    "explanation": "Desejar o que o outro tem (sucesso, promoção) = inveja: envious. No inglês informal 'jealous' também aparece aqui, mas 'envious' é a palavra precisa para inveja."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "breath / breathe",
+    "targetWordText": "breath",
+    "sentenceContext": "After running up six floors because the elevator was broken, I was completely out of {{blank}} and had to sit down on the stairs.",
+    "sentenceTranslation": "Depois de subir seis andares correndo porque o elevador estava quebrado, eu estava completamente sem fôlego e tive que sentar na escada.",
+    "acceptedAnswers": [
+      "breath"
+    ],
+    "explanation": "'Out of breath' = sem fôlego. Depois de 'of' vem um substantivo: breath."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "breath / breathe",
+    "targetWordText": "to breathe",
+    "sentenceContext": "The doctor put the stethoscope on my back and asked me to {{blank}} in slowly and deeply, then hold the air for a few seconds.",
+    "sentenceTranslation": "O médico colocou o estetoscópio nas minhas costas e pediu que eu respirasse fundo e devagar e depois segurasse o ar por alguns segundos.",
+    "acceptedAnswers": [
+      "breathe"
+    ],
+    "explanation": "Depois de 'asked me to' vem um verbo: breathe (respirar)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "breath / breathe",
+    "targetWordText": "breath",
+    "sentenceContext": "Before going on stage in front of two thousand people, the singer closed her eyes and took a deep {{blank}} to calm down.",
+    "sentenceTranslation": "Antes de subir ao palco na frente de duas mil pessoas, a cantora fechou os olhos e respirou fundo para se acalmar.",
+    "acceptedAnswers": [
+      "breath"
+    ],
+    "explanation": "'Take a deep breath' = respirar fundo. Depois de 'a deep' vem o substantivo: breath."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "attend / assist / watch",
+    "targetWordText": "to attend",
+    "sentenceContext": "All employees must {{blank}} the safety meeting on Monday morning; anyone who is absent will not be allowed to use the machines.",
+    "sentenceTranslation": "Todos os funcionários devem comparecer à reunião de segurança na segunda de manhã; quem faltar não poderá usar as máquinas.",
+    "acceptedAnswers": [
+      "attend"
+    ],
+    "explanation": "Estar presente em uma reunião = attend. 'Assist' é ajudar e 'watch' é assistir como espectador."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "attend / assist / watch",
+    "targetWordText": "to assist",
+    "sentenceContext": "During the surgery, two nurses {{blank}} the doctor by passing her the instruments and monitoring the patient's heart rate.",
+    "sentenceTranslation": "Durante a cirurgia, duas enfermeiras auxiliaram a médica, passando os instrumentos e monitorando os batimentos do paciente.",
+    "acceptedAnswers": [
+      "assisted"
+    ],
+    "explanation": "Ajudar alguém em uma tarefa = assist. Apesar da semelhança, 'assist' nunca significa assistir a um filme ou jogo."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "attend / assist / watch",
+    "targetWordText": "to watch",
+    "sentenceContext": "On Sunday evenings the whole family sits on the sofa together to {{blank}} a movie and eat popcorn.",
+    "sentenceTranslation": "Nas noites de domingo a família toda senta junta no sofá para assistir a um filme e comer pipoca.",
+    "acceptedAnswers": [
+      "watch"
+    ],
+    "explanation": "Assistir a um filme = watch a movie. 'Assist a movie' é um erro clássico de falso cognato."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "retire / remove / withdraw",
+    "targetWordText": "to retire",
+    "sentenceContext": "After working as a teacher for thirty-five years, my grandfather decided to {{blank}} at sixty-five and spend more time fishing and traveling.",
+    "sentenceTranslation": "Depois de trabalhar como professor por trinta e cinco anos, meu avô decidiu se aposentar aos sessenta e cinco e passar mais tempo pescando e viajando.",
+    "acceptedAnswers": [
+      "retire"
+    ],
+    "explanation": "Parar de trabalhar pela idade = retire (aposentar-se). Não tem nada a ver com 'retirar' algo."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "retire / remove / withdraw",
+    "targetWordText": "to withdraw",
+    "sentenceContext": "I need to go to the ATM to {{blank}} some cash, because the small restaurant we're going to doesn't accept cards.",
+    "sentenceTranslation": "Preciso ir ao caixa eletrônico sacar um pouco de dinheiro, porque o restaurantezinho aonde vamos não aceita cartão.",
+    "acceptedAnswers": [
+      "withdraw"
+    ],
+    "explanation": "Sacar dinheiro = withdraw cash. 'Remove cash' não é usado e 'retire' é aposentar-se."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "retire / remove / withdraw",
+    "targetWordText": "to remove",
+    "sentenceContext": "Please {{blank}} your shoes before entering the temple and leave them on the shelf next to the door.",
+    "sentenceTranslation": "Por favor, tire os sapatos antes de entrar no templo e deixe-os na prateleira ao lado da porta.",
+    "acceptedAnswers": [
+      "remove"
+    ],
+    "explanation": "Tirar algo de um lugar ou do corpo (formal) = remove. 'Withdraw' é sacar ou desistir."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "turn on / turn up / turn down",
+    "targetWordText": "to turn down",
+    "sentenceContext": "It's midnight and the neighbors are trying to sleep. Could you please {{blank}} the music a little? It's way too loud.",
+    "sentenceTranslation": "É meia-noite e os vizinhos estão tentando dormir. Você poderia abaixar um pouco a música? Está alta demais.",
+    "acceptedAnswers": [
+      "turn down"
+    ],
+    "explanation": "Diminuir o volume = turn down. 'Turn up' faria o contrário (aumentar)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "turn on / turn up / turn down",
+    "targetWordText": "to turn up",
+    "sentenceContext": "We waited for Jake for an hour at the restaurant, and he finally {{blank}} at nine o'clock without even apologizing.",
+    "sentenceTranslation": "Esperamos o Jake por uma hora no restaurante, e ele finalmente apareceu às nove sem nem pedir desculpas.",
+    "acceptedAnswers": [
+      "turned up"
+    ],
+    "explanation": "Aparecer, chegar (informal) = turn up. É o outro sentido de 'turn up', além de aumentar o volume."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "turn on / turn up / turn down",
+    "targetWordText": "to turn down",
+    "sentenceContext": "She was offered a job in another country with a great salary, but she {{blank}} the offer because she didn't want to leave her family.",
+    "sentenceTranslation": "Ofereceram a ela um emprego em outro país com um ótimo salário, mas ela recusou a oferta porque não queria deixar a família.",
+    "acceptedAnswers": [
+      "turned down"
+    ],
+    "explanation": "Recusar uma oferta = turn down an offer. É o sentido figurado de 'turn down'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "turn on / turn up / turn down",
+    "targetWordText": "to turn on",
+    "sentenceContext": "It's getting dark in here; can you {{blank}} the lights so we can keep reading?",
+    "sentenceTranslation": "Está ficando escuro aqui; você pode acender as luzes para continuarmos lendo?",
+    "acceptedAnswers": [
+      "turn on"
+    ],
+    "explanation": "Acender a luz ou ligar um aparelho = turn on. 'Turn up the lights' seria aumentar a intensidade de luzes que já estão acesas."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "run out / end up / finish",
+    "targetWordText": "to run out",
+    "sentenceContext": "We need to go to the supermarket today; we've {{blank}} of milk and there's only one egg left in the fridge.",
+    "sentenceTranslation": "Precisamos ir ao mercado hoje; o leite acabou e só sobrou um ovo na geladeira.",
+    "acceptedAnswers": [
+      "run out"
+    ],
+    "explanation": "Algo que se esgotou = run out of. 'Finish' seria concluir uma atividade e 'end up' uma situação não planejada."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "run out / end up / finish",
+    "targetWordText": "to end up",
+    "sentenceContext": "We planned to go to the beach, but it started raining so heavily that we {{blank}} staying at home and watching movies all day.",
+    "sentenceTranslation": "Planejamos ir à praia, mas começou a chover tanto que acabamos ficando em casa vendo filmes o dia todo.",
+    "acceptedAnswers": [
+      "ended up"
+    ],
+    "explanation": "Terminar numa situação que não estava nos planos = end up + -ing."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "run out / end up / finish",
+    "targetWordText": "to finish",
+    "sentenceContext": "You can't play video games until you {{blank}} your homework, so sit down and do it now.",
+    "sentenceTranslation": "Você não pode jogar videogame até terminar a lição de casa, então sente e faça agora.",
+    "acceptedAnswers": [
+      "finish"
+    ],
+    "explanation": "Concluir uma atividade = finish. A lição de casa não 'se esgota' (run out)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "meet / meet up / know",
+    "targetWordText": "to meet",
+    "sentenceContext": "I {{blank}} my wife at a friend's birthday party in 2015; she was standing next to the cake and we started talking.",
+    "sentenceTranslation": "Conheci minha esposa na festa de aniversário de um amigo em 2015; ela estava perto do bolo e começamos a conversar.",
+    "acceptedAnswers": [
+      "met"
+    ],
+    "explanation": "O momento em que você conhece alguém = meet (passado: met). 'Know' é já ter familiaridade, não o primeiro encontro."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "meet / meet up / know",
+    "targetWordText": "to know",
+    "sentenceContext": "I've {{blank}} Peter since we were in primary school, so I can tell you he's a very honest person.",
+    "sentenceTranslation": "Conheço o Peter desde o primário, então posso te dizer que ele é uma pessoa muito honesta.",
+    "acceptedAnswers": [
+      "known"
+    ],
+    "explanation": "Familiaridade que dura desde o passado = have known (present perfect de 'know')."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "meet / meet up / know",
+    "targetWordText": "to meet up",
+    "sentenceContext": "Are you free on Saturday? A few of us from the old class are going to {{blank}} at the café downtown for a coffee and a chat.",
+    "sentenceTranslation": "Você está livre no sábado? Alguns de nós da antiga turma vamos nos encontrar no café do centro para tomar um café e conversar.",
+    "acceptedAnswers": [
+      "meet up",
+      "meet"
+    ],
+    "explanation": "Encontro informal e combinado entre amigos = meet up. 'Meet' sozinho também é aceito aqui, mas 'meet up' transmite exatamente esse encontro casual."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "crowded / full / busy",
+    "targetWordText": "full",
+    "sentenceContext": "No more cake for me, thank you. I've already eaten two plates of pasta and I'm completely {{blank}}.",
+    "sentenceTranslation": "Chega de bolo para mim, obrigado. Já comi dois pratos de macarrão e estou completamente satisfeito.",
+    "acceptedAnswers": [
+      "full"
+    ],
+    "explanation": "Satisfeito depois de comer = I'm full. 'Busy' seria ocupado e 'crowded' é lotado de gente."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "crowded / full / busy",
+    "targetWordText": "busy",
+    "sentenceContext": "I'm sorry, I can't talk right now; I'm very {{blank}} with a report that I have to send to my boss in an hour.",
+    "sentenceTranslation": "Desculpe, não posso falar agora; estou muito ocupado com um relatório que preciso enviar ao meu chefe em uma hora.",
+    "acceptedAnswers": [
+      "busy"
+    ],
+    "explanation": "Pessoa com muitas tarefas = busy."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "crowded / full / busy",
+    "targetWordText": "crowded",
+    "sentenceContext": "The subway at 6 p.m. is so {{blank}} that people are pressed against each other and you can hardly move your arms.",
+    "sentenceTranslation": "O metrô às 18h fica tão lotado que as pessoas ficam espremidas umas contra as outras e mal dá para mexer os braços.",
+    "acceptedAnswers": [
+      "crowded"
+    ],
+    "explanation": "Cheio de pessoas, espremidas = crowded. 'Full' é possível, mas a ideia de multidão apertada é exatamente 'crowded'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "happy / cheerful / delighted",
+    "targetWordText": "cheerful",
+    "sentenceContext": "Our new receptionist is always so {{blank}}: she smiles at everyone, sings while she works and never seems to have a bad day.",
+    "sentenceTranslation": "Nossa nova recepcionista está sempre tão alegre: sorri para todo mundo, canta enquanto trabalha e parece nunca ter um dia ruim.",
+    "acceptedAnswers": [
+      "cheerful"
+    ],
+    "explanation": "Um jeito alegre e animado que se nota o tempo todo = cheerful (traço de personalidade)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "happy / cheerful / delighted",
+    "targetWordText": "delighted",
+    "sentenceContext": "Dear Mr. and Mrs. Brown, thank you very much for the kind invitation to your daughter's wedding; we would be {{blank}} to attend.",
+    "sentenceTranslation": "Prezados Sr. e Sra. Brown, muito obrigado pelo gentil convite para o casamento da filha de vocês; teremos imenso prazer em comparecer.",
+    "acceptedAnswers": [
+      "delighted"
+    ],
+    "explanation": "Em uma resposta formal a um convite, 'would be delighted to' expressa muita satisfação. 'Happy' também é possível, mas 'delighted' é mais forte e combina com o tom formal."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "happy / cheerful / delighted",
+    "targetWordText": "happy",
+    "sentenceContext": "The whole family sang together when grandma blew out the candles: '{{blank}} birthday to you!'",
+    "sentenceTranslation": "A família toda cantou junta quando a vovó soprou as velas: 'Parabéns pra você!'",
+    "acceptedAnswers": [
+      "happy"
+    ],
+    "explanation": "'Happy birthday' é a expressão fixa. Nenhuma das outras palavras funciona aqui."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "out of date / old-fashioned / old",
+    "targetWordText": "out of date",
+    "sentenceContext": "You can't travel with this passport; it expired in March, so it's {{blank}} and you need to renew it.",
+    "sentenceTranslation": "Você não pode viajar com este passaporte; ele venceu em março, então está vencido e você precisa renová-lo.",
+    "acceptedAnswers": [
+      "out of date"
+    ],
+    "explanation": "Um documento que perdeu a validade = out of date. 'Old-fashioned' falaria do estilo, não da validade."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "out of date / old-fashioned / old",
+    "targetWordText": "old-fashioned",
+    "sentenceContext": "My grandfather has very {{blank}} ideas: he thinks women shouldn't wear trousers and that nobody needs a cell phone.",
+    "sentenceTranslation": "Meu avô tem ideias muito antiquadas: ele acha que mulheres não deviam usar calça e que ninguém precisa de celular.",
+    "acceptedAnswers": [
+      "old-fashioned",
+      "old fashioned"
+    ],
+    "explanation": "Ideias de outra época, fora de moda = old-fashioned. 'Out of date' funcionaria para informações, mas para ideias e costumes o natural é 'old-fashioned'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "out of date / old-fashioned / old",
+    "targetWordText": "old",
+    "sentenceContext": "This tree is more than three hundred years {{blank}}; it was already here when the town was founded.",
+    "sentenceTranslation": "Esta árvore tem mais de trezentos anos; ela já estava aqui quando a cidade foi fundada.",
+    "acceptedAnswers": [
+      "old"
+    ],
+    "explanation": "Idade = 'X years old'. É a expressão fixa para idade."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "customs / custom / costume / habit",
+    "targetWordText": "customs",
+    "sentenceContext": "When we landed in London we had to go through {{blank}}, where an officer opened our bags to check if we were carrying food or too much alcohol.",
+    "sentenceTranslation": "Quando pousamos em Londres, tivemos que passar pela alfândega, onde um agente abriu nossas malas para ver se levávamos comida ou álcool demais.",
+    "acceptedAnswers": [
+      "customs"
+    ],
+    "explanation": "Controle no aeroporto = customs (alfândega), sempre com -s."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "customs / custom / costume / habit",
+    "targetWordText": "costume",
+    "sentenceContext": "For the Halloween party, my son wore a pirate {{blank}} with a black hat, an eye patch and a plastic sword.",
+    "sentenceTranslation": "Para a festa de Halloween, meu filho usou uma fantasia de pirata com chapéu preto, tapa-olho e uma espada de plástico.",
+    "acceptedAnswers": [
+      "costume"
+    ],
+    "explanation": "Fantasia = costume. Apesar da semelhança com o português, 'costume' não significa hábito."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "customs / custom / costume / habit",
+    "targetWordText": "habit",
+    "sentenceContext": "Biting your nails is a bad {{blank}}; I've been trying to stop for years, but I always do it when I'm nervous.",
+    "sentenceTranslation": "Roer unhas é um mau hábito; estou tentando parar há anos, mas sempre faço isso quando fico nervoso.",
+    "acceptedAnswers": [
+      "habit"
+    ],
+    "explanation": "Algo que uma pessoa faz repetidamente = habit. 'Custom' é uma tradição coletiva."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "customs / custom / costume / habit",
+    "targetWordText": "custom",
+    "sentenceContext": "In Japan it is a {{blank}} to take off your shoes before entering someone's home; almost everybody in the country does it.",
+    "sentenceTranslation": "No Japão é costume tirar os sapatos antes de entrar na casa de alguém; quase todo mundo no país faz isso.",
+    "acceptedAnswers": [
+      "custom"
+    ],
+    "explanation": "Tradição de um povo inteiro = custom. 'Habit' seria algo individual."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "just / only / already",
+    "targetWordText": "just",
+    "sentenceContext": "Sorry, you missed him by a minute: he has {{blank}} left the building. Maybe you can still catch him in the parking lot.",
+    "sentenceTranslation": "Desculpe, você perdeu ele por um minuto: ele acabou de sair do prédio. Talvez ainda consiga alcançá-lo no estacionamento.",
+    "acceptedAnswers": [
+      "just"
+    ],
+    "explanation": "Algo que aconteceu há instantes = have just + particípio (acabou de)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "just / only / already",
+    "targetWordText": "only",
+    "sentenceContext": "She is the {{blank}} person in the office who speaks Japanese, so every call from Tokyo goes to her.",
+    "sentenceTranslation": "Ela é a única pessoa do escritório que fala japonês, então toda ligação de Tóquio vai para ela.",
+    "acceptedAnswers": [
+      "only"
+    ],
+    "explanation": "'The only person' = a única pessoa. Indica exclusividade."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "just / only / already",
+    "targetWordText": "already",
+    "sentenceContext": "Don't buy bread on your way home; I've {{blank}} bought some this morning.",
+    "sentenceTranslation": "Não compre pão no caminho de casa; eu já comprei hoje de manhã.",
+    "acceptedAnswers": [
+      "already"
+    ],
+    "explanation": "Algo que já foi feito antes deste momento = already."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "land / ground / floor",
+    "targetWordText": "land",
+    "sentenceContext": "After three weeks at sea, the sailors were overjoyed when they finally saw {{blank}} on the horizon.",
+    "sentenceTranslation": "Depois de três semanas no mar, os marinheiros ficaram radiantes quando finalmente avistaram terra no horizonte.",
+    "acceptedAnswers": [
+      "land"
+    ],
+    "explanation": "Terra firme em oposição ao mar = land."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "land / ground / floor",
+    "targetWordText": "floor",
+    "sentenceContext": "Our apartment is on the fifth {{blank}}, and the elevator is broken, so we have to take the stairs.",
+    "sentenceTranslation": "Nosso apartamento fica no quinto andar e o elevador está quebrado, então temos que ir de escada.",
+    "acceptedAnswers": [
+      "floor"
+    ],
+    "explanation": "Andar de um prédio = floor."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "land / ground / floor",
+    "targetWordText": "ground",
+    "sentenceContext": "During the picnic in the park we didn't have chairs, so we sat on the {{blank}} on a big blanket under a tree.",
+    "sentenceTranslation": "Durante o piquenique no parque não tínhamos cadeiras, então sentamos no chão sobre uma manta grande debaixo de uma árvore.",
+    "acceptedAnswers": [
+      "ground"
+    ],
+    "explanation": "Chão ao ar livre, o solo = ground. 'Floor' é o piso de um ambiente interno."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "thought / though / through",
+    "targetWordText": "through",
+    "sentenceContext": "To get to the old castle, we had to walk {{blank}} a dark forest for almost two hours.",
+    "sentenceTranslation": "Para chegar ao castelo antigo, tivemos que atravessar uma floresta escura a pé por quase duas horas.",
+    "acceptedAnswers": [
+      "through"
+    ],
+    "explanation": "Passar por dentro de algo = through."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "thought / though / through",
+    "targetWordText": "though",
+    "sentenceContext": "{{blank}} it was raining heavily, the children insisted on playing football in the garden.",
+    "sentenceTranslation": "Embora estivesse chovendo muito, as crianças insistiram em jogar futebol no jardim.",
+    "acceptedAnswers": [
+      "though"
+    ],
+    "explanation": "Ideia de concessão (embora) = though."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "thought / though / through",
+    "targetWordText": "thought",
+    "sentenceContext": "I {{blank}} the meeting was at ten, but when I arrived everybody was already leaving; it had started at eight.",
+    "sentenceTranslation": "Achei que a reunião fosse às dez, mas quando cheguei todo mundo já estava saindo; tinha começado às oito.",
+    "acceptedAnswers": [
+      "thought"
+    ],
+    "explanation": "Passado de 'think' (achar, pensar) = thought."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "homesick / miss",
+    "targetWordText": "homesick",
+    "sentenceContext": "During her first months studying in Canada, Julia was so {{blank}} that she called her family in Brazil every single night.",
+    "sentenceTranslation": "Nos primeiros meses estudando no Canadá, Julia estava com tanta saudade de casa que ligava para a família no Brasil todas as noites.",
+    "acceptedAnswers": [
+      "homesick"
+    ],
+    "explanation": "Saudade de casa como estado (adjetivo depois de 'was so') = homesick."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "homesick / miss",
+    "targetWordText": "to miss",
+    "sentenceContext": "I love living abroad, but I really {{blank}} my mother's cooking and the Sunday lunches with my cousins.",
+    "sentenceTranslation": "Adoro morar fora, mas sinto muita falta da comida da minha mãe e dos almoços de domingo com meus primos.",
+    "acceptedAnswers": [
+      "miss"
+    ],
+    "explanation": "Sentir falta de algo específico = miss + objeto. 'Homesick' é adjetivo e não recebe objeto."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "homesick / miss",
+    "targetWordText": "to miss",
+    "sentenceContext": "Hurry up or we'll {{blank}} the last bus and have to walk home in the rain!",
+    "sentenceTranslation": "Anda logo ou vamos perder o último ônibus e ter que voltar a pé na chuva!",
+    "acceptedAnswers": [
+      "miss"
+    ],
+    "explanation": "Perder um meio de transporte = miss the bus. É o outro sentido de 'miss'."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "take back / give back / return",
+    "targetWordText": "to take back",
+    "sentenceContext": "I'm sorry I called you lazy yesterday; I was angry and it wasn't true. I {{blank}} what I said.",
+    "sentenceTranslation": "Desculpe por ter te chamado de preguiçoso ontem; eu estava com raiva e não era verdade. Retiro o que eu disse.",
+    "acceptedAnswers": [
+      "take back"
+    ],
+    "explanation": "Retirar o que foi dito = take back (what I said)."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "take back / give back / return",
+    "targetWordText": "to give back",
+    "sentenceContext": "My little brother grabbed my phone without asking and ran into his room, so I followed him shouting: '{{blank}}, it's mine!'",
+    "sentenceTranslation": "Meu irmãozinho pegou meu celular sem pedir e correu para o quarto, então fui atrás dele gritando: 'Devolve, é meu!'",
+    "acceptedAnswers": [
+      "give it back",
+      "give back"
+    ],
+    "explanation": "Exigir que alguém devolva algo que pegou de você = give it back. É informal e direto; 'return it' soaria formal demais numa briga de irmãos."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "take back / give back / return",
+    "targetWordText": "to return",
+    "sentenceContext": "After six months working in Australia, he {{blank}} to his hometown to open a restaurant with his brother.",
+    "sentenceTranslation": "Depois de seis meses trabalhando na Austrália, ele voltou para a cidade natal para abrir um restaurante com o irmão.",
+    "acceptedAnswers": [
+      "returned"
+    ],
+    "explanation": "Voltar a um lugar = return. 'Give back' e 'take back' falam de devolver objetos ou palavras."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "support / put up with / stand",
+    "targetWordText": "to put up with",
+    "sentenceContext": "The walls in our building are so thin that we have to {{blank}} the neighbors' arguments every night, because we can't afford to move.",
+    "sentenceTranslation": "As paredes do nosso prédio são tão finas que temos que aguentar as brigas dos vizinhos toda noite, porque não temos condições de nos mudar.",
+    "acceptedAnswers": [
+      "put up with"
+    ],
+    "explanation": "Tolerar algo desagradável por falta de opção = put up with. 'Support' seria apoiar as brigas, o que não faz sentido."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "support / put up with / stand",
+    "targetWordText": "to stand",
+    "sentenceContext": "I really can't {{blank}} people who talk loudly on their phones in the cinema; it drives me crazy.",
+    "sentenceTranslation": "Eu realmente não suporto pessoas que falam alto no celular no cinema; isso me deixa louco.",
+    "acceptedAnswers": [
+      "stand"
+    ],
+    "explanation": "'Can't stand' = não suportar, detestar. É a forma mais natural para expressar aversão forte; 'can't put up with' também existe, mas soa mais como tolerar uma situação."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "support / put up with / stand",
+    "targetWordText": "to support",
+    "sentenceContext": "My parents always {{blank}} my decision to study music, even when everyone else said it was a waste of time.",
+    "sentenceTranslation": "Meus pais sempre apoiaram minha decisão de estudar música, mesmo quando todo mundo dizia que era perda de tempo.",
+    "acceptedAnswers": [
+      "supported"
+    ],
+    "explanation": "Apoiar uma decisão = support. Lembre: 'support' é apoiar, não aguentar."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "set in / start / begin",
+    "targetWordText": "to set in",
+    "sentenceContext": "It's only October, but winter has already {{blank}}: the days are dark, it's freezing, and it looks like it will stay this way for months.",
+    "sentenceTranslation": "Ainda é outubro, mas o inverno já se instalou: os dias estão escuros, está congelando e parece que vai continuar assim por meses.",
+    "acceptedAnswers": [
+      "set in"
+    ],
+    "explanation": "Algo (geralmente ruim) que começa e veio para ficar = set in. 'Started' diria só que começou, sem a ideia de persistir."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "set in / start / begin",
+    "targetWordText": "to start",
+    "sentenceContext": "I can't {{blank}} the car this morning; I think the battery died because I left the lights on all night.",
+    "sentenceTranslation": "Não consigo dar a partida no carro hoje de manhã; acho que a bateria morreu porque deixei os faróis acesos a noite toda.",
+    "acceptedAnswers": [
+      "start"
+    ],
+    "explanation": "Dar a partida em um motor = start the car. 'Begin the car' não existe."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "at last / finally / eventually",
+    "targetWordText": "eventually",
+    "sentenceContext": "Learning a language is slow, but if you practice a little every day, you will {{blank}} be able to speak fluently.",
+    "sentenceTranslation": "Aprender um idioma é lento, mas se você praticar um pouco todo dia, com o tempo vai conseguir falar com fluência.",
+    "acceptedAnswers": [
+      "eventually"
+    ],
+    "explanation": "Resultado que vem com o tempo, depois de um processo = eventually."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "at last / finally / eventually",
+    "targetWordText": "finally",
+    "sentenceContext": "First, wash the vegetables; then, cut them into small pieces; {{blank}}, put everything in the oven for twenty minutes.",
+    "sentenceTranslation": "Primeiro, lave os legumes; depois, corte-os em pedaços pequenos; por último, coloque tudo no forno por vinte minutos.",
+    "acceptedAnswers": [
+      "finally"
+    ],
+    "explanation": "Último passo de uma sequência = finally. 'At last' e 'eventually' não servem para listar etapas."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "at last / finally / eventually",
+    "targetWordText": "at last",
+    "sentenceContext": "'The train is here! {{blank}}!' shouted the passengers, after waiting for three hours in the cold.",
+    "sentenceTranslation": "'O trem chegou! Enfim!' gritaram os passageiros, depois de esperar três horas no frio.",
+    "acceptedAnswers": [
+      "at last",
+      "finally"
+    ],
+    "explanation": "Exclamação de alívio depois de longa espera = At last! ('Finally!' também é aceito.) 'Eventually' nunca é usado como exclamação."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "bother / annoy / disturb",
+    "targetWordText": "to disturb",
+    "sentenceContext": "The sign on the hotel room door said 'Do not {{blank}}', so the cleaning staff didn't knock.",
+    "sentenceTranslation": "A placa na porta do quarto do hotel dizia 'Não perturbe', então a equipe de limpeza não bateu.",
+    "acceptedAnswers": [
+      "disturb"
+    ],
+    "explanation": "Interromper quem está descansando = disturb. 'Do not disturb' é a frase fixa."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "bother / annoy / disturb",
+    "targetWordText": "to bother",
+    "sentenceContext": "Don't {{blank}} cooking dinner for me tonight; I'll eat something at the office.",
+    "sentenceTranslation": "Não se preocupe em fazer jantar para mim hoje; vou comer alguma coisa no escritório.",
+    "acceptedAnswers": [
+      "bother"
+    ],
+    "explanation": "'Don't bother + -ing' = não precisa se dar ao trabalho. Só 'bother' tem esse sentido."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "bother / annoy / disturb",
+    "targetWordText": "to annoy",
+    "sentenceContext": "My little brother loves to {{blank}} me on purpose by repeating everything I say until I get angry.",
+    "sentenceTranslation": "Meu irmãozinho adora me irritar de propósito, repetindo tudo o que eu digo até eu ficar com raiva.",
+    "acceptedAnswers": [
+      "annoy"
+    ],
+    "explanation": "Irritar alguém de propósito até causar raiva = annoy. 'Disturb' seria interromper."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "on / above / over",
+    "targetWordText": "on",
+    "sentenceContext": "I left your keys {{blank}} the kitchen table, right next to the fruit bowl.",
+    "sentenceTranslation": "Deixei suas chaves em cima da mesa da cozinha, bem ao lado da fruteira.",
+    "acceptedAnswers": [
+      "on"
+    ],
+    "explanation": "Em contato com a superfície = on."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "on / above / over",
+    "targetWordText": "over",
+    "sentenceContext": "There's a beautiful old stone bridge {{blank}} the river, and people cross it every day to go to the market.",
+    "sentenceTranslation": "Há uma bela ponte antiga de pedra sobre o rio, e as pessoas a atravessam todo dia para ir à feira.",
+    "acceptedAnswers": [
+      "over"
+    ],
+    "explanation": "Algo que atravessa de um lado a outro, por cima = over."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "on / above / over",
+    "targetWordText": "above",
+    "sentenceContext": "The temperature today is five degrees {{blank}} zero, so the snow will start melting.",
+    "sentenceTranslation": "A temperatura hoje está cinco graus acima de zero, então a neve vai começar a derreter.",
+    "acceptedAnswers": [
+      "above"
+    ],
+    "explanation": "Nível mais alto em uma escala = above zero."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "regards / regarding",
+    "targetWordText": "regards",
+    "sentenceContext": "Please give my {{blank}} to your parents and tell them I miss our Sunday dinners together.",
+    "sentenceTranslation": "Por favor, mande lembranças aos seus pais e diga que sinto falta dos nossos jantares de domingo.",
+    "acceptedAnswers": [
+      "regards"
+    ],
+    "explanation": "'Give my regards to' = mandar lembranças. Precisa do substantivo: regards."
+  },
+  {
+    "languageCode": "en",
+    "groupName": "regards / regarding",
+    "targetWordText": "regarding",
+    "sentenceContext": "Dear Sir, I am writing {{blank}} your email of March 3rd about the delay in the delivery of our order.",
+    "sentenceTranslation": "Prezado senhor, escrevo a respeito do seu e-mail de 3 de março sobre o atraso na entrega do nosso pedido.",
+    "acceptedAnswers": [
+      "regarding"
+    ],
+    "explanation": "'A respeito de' em linguagem formal = regarding (preposição)."
+  }
+]

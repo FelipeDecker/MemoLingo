@@ -134,6 +134,9 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("NuanceExerciseId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ResponseTimeMs")
                         .HasColumnType("integer");
 
@@ -153,6 +156,8 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.HasIndex("SentenceId");
 
                     b.HasIndex("StudySessionId");
+
+                    b.HasIndex("NuanceExerciseId", "AnsweredAt");
 
                     b.HasIndex("WordId", "AnsweredAt");
 
@@ -283,6 +288,48 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("LessonWords");
+                });
+
+            modelBuilder.Entity("MemoLingo.Domain.Entities.NuanceExercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AcceptedAnswers")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("Explanation")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<string>("SentenceContext")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("SentenceTranslation")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("SynonymGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TargetWordId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SynonymGroupId");
+
+                    b.HasIndex("TargetWordId");
+
+                    b.ToTable("NuanceExercises");
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.PathNode", b =>
@@ -456,6 +503,70 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.ToTable("StudySessions");
                 });
 
+            modelBuilder.Entity("MemoLingo.Domain.Entities.SynonymGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CefrLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Meaning")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("SynonymGroups");
+                });
+
+            modelBuilder.Entity("MemoLingo.Domain.Entities.SynonymGroupItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("NuanceExplanation")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SynonymGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WordId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WordId");
+
+                    b.HasIndex("SynonymGroupId", "WordId")
+                        .IsUnique();
+
+                    b.ToTable("SynonymGroupItems");
+                });
+
             modelBuilder.Entity("MemoLingo.Domain.Entities.Unit", b =>
                 {
                     b.Property<int>("Id")
@@ -566,6 +677,56 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("UserNodeProgresses");
+                });
+
+            modelBuilder.Entity("MemoLingo.Domain.Entities.UserNuanceProgress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CorrectCount")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsFlaggedForReview")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastErrorAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastReview")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("NextReview")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ProficiencyScore")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StrengthLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SynonymGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WrongCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SynonymGroupId");
+
+                    b.HasIndex("UserId", "NextReview");
+
+                    b.HasIndex("UserId", "SynonymGroupId")
+                        .IsUnique();
+
+                    b.ToTable("UserNuanceProgresses");
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.Word", b =>
@@ -691,6 +852,11 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                         .HasForeignKey("ChallengeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("MemoLingo.Domain.Entities.NuanceExercise", "NuanceExercise")
+                        .WithMany()
+                        .HasForeignKey("NuanceExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("MemoLingo.Domain.Entities.Sentence", "Sentence")
                         .WithMany()
                         .HasForeignKey("SentenceId")
@@ -708,6 +874,8 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Challenge");
+
+                    b.Navigation("NuanceExercise");
 
                     b.Navigation("Sentence");
 
@@ -763,6 +931,25 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.Navigation("Lesson");
 
                     b.Navigation("Word");
+                });
+
+            modelBuilder.Entity("MemoLingo.Domain.Entities.NuanceExercise", b =>
+                {
+                    b.HasOne("MemoLingo.Domain.Entities.SynonymGroup", "SynonymGroup")
+                        .WithMany("Exercises")
+                        .HasForeignKey("SynonymGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MemoLingo.Domain.Entities.Word", "TargetWord")
+                        .WithMany()
+                        .HasForeignKey("TargetWordId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SynonymGroup");
+
+                    b.Navigation("TargetWord");
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.PathNode", b =>
@@ -843,6 +1030,36 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MemoLingo.Domain.Entities.SynonymGroup", b =>
+                {
+                    b.HasOne("MemoLingo.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("MemoLingo.Domain.Entities.SynonymGroupItem", b =>
+                {
+                    b.HasOne("MemoLingo.Domain.Entities.SynonymGroup", "SynonymGroup")
+                        .WithMany("Items")
+                        .HasForeignKey("SynonymGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MemoLingo.Domain.Entities.Word", "Word")
+                        .WithMany()
+                        .HasForeignKey("WordId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SynonymGroup");
+
+                    b.Navigation("Word");
+                });
+
             modelBuilder.Entity("MemoLingo.Domain.Entities.Unit", b =>
                 {
                     b.HasOne("MemoLingo.Domain.Entities.Section", "Section")
@@ -880,6 +1097,25 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PathNode");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MemoLingo.Domain.Entities.UserNuanceProgress", b =>
+                {
+                    b.HasOne("MemoLingo.Domain.Entities.SynonymGroup", "SynonymGroup")
+                        .WithMany()
+                        .HasForeignKey("SynonymGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MemoLingo.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SynonymGroup");
 
                     b.Navigation("User");
                 });
@@ -953,6 +1189,13 @@ namespace MemoLingo.Infrastructure.Data.Migrations
             modelBuilder.Entity("MemoLingo.Domain.Entities.StudySession", b =>
                 {
                     b.Navigation("ExerciseAttempts");
+                });
+
+            modelBuilder.Entity("MemoLingo.Domain.Entities.SynonymGroup", b =>
+                {
+                    b.Navigation("Exercises");
+
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.Unit", b =>

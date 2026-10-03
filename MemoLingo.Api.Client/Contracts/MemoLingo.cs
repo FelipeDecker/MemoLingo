@@ -65,6 +65,25 @@ namespace MemoLingo.Api.Client.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial interface INuanceClient
+    {
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<NuanceExerciseModel>> GetSessionAsync(int? userId, int? take);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<NuanceExerciseModel>> GetSessionAsync(int? userId, int? take, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<NuanceAnswerResultModel> SubmitAnswerAsync(NuanceAnswerModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<NuanceAnswerResultModel> SubmitAnswerAsync(NuanceAnswerModel model, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IPracticeClient
     {
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
@@ -314,6 +333,168 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("languageId")]
         public int LanguageId { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class NuanceExerciseModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("synonymGroupId")]
+        public int SynonymGroupId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupName")]
+        public string GroupName { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupMeaning")]
+        public string GroupMeaning { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentenceContext")]
+        public string SentenceContext { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentenceTranslation")]
+        public string SentenceTranslation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isPriorityReview")]
+        public bool IsPriorityReview { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupProficiencyScore")]
+        public int GroupProficiencyScore { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("options")]
+        public System.Collections.Generic.ICollection<NuanceOptionModel> Options { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class NuanceOptionModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("wordId")]
+        public int WordId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("text")]
+        public string Text { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("answerForm")]
+        public string AnswerForm { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class NuanceAnswerResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseId")]
+        public int ExerciseId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCorrect")]
+        public bool IsCorrect { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedAnswer")]
+        public string SubmittedAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedWordId")]
+        public int? SubmittedWordId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctWordId")]
+        public int CorrectWordId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctWord")]
+        public string CorrectWord { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctAnswer")]
+        public string CorrectAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("completedSentence")]
+        public string CompletedSentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentenceTranslation")]
+        public string SentenceTranslation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("explanation")]
+        public string Explanation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("nuances")]
+        public System.Collections.Generic.ICollection<NuanceItemModel> Nuances { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupProgress")]
+        public NuanceGroupProgressModel GroupProgress { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class NuanceItemModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("wordId")]
+        public int WordId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("text")]
+        public string Text { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("translation")]
+        public string Translation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("nuanceExplanation")]
+        public string NuanceExplanation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCorrectAnswer")]
+        public bool IsCorrectAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isSubmittedAnswer")]
+        public bool IsSubmittedAnswer { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class NuanceGroupProgressModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("synonymGroupId")]
+        public int SynonymGroupId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("proficiencyScore")]
+        public int ProficiencyScore { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("strengthLevel")]
+        public int StrengthLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctCount")]
+        public int CorrectCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("wrongCount")]
+        public int WrongCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isFlaggedForReview")]
+        public bool IsFlaggedForReview { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("nextReview")]
+        public System.DateTimeOffset NextReview { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class NuanceAnswerModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public int UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseId")]
+        public int ExerciseId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedAnswer")]
+        public string SubmittedAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedWordId")]
+        public int? SubmittedWordId { get; set; }
 
     }
 

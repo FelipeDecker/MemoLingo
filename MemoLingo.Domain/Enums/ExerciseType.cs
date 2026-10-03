@@ -10,6 +10,7 @@ namespace MemoLingo.Domain.Enums
         FillInTheBlank = 3,
         ListenAndWrite = 4,
         Speaking = 5,
-        WordOrdering = 6
+        WordOrdering = 6,
+        NuanceDiscrimination = 7
     }
 }

@@ -86,6 +86,10 @@
     margin-top: 2.25rem;
 }
 
+.colecao-card + .colecao-card {
+    margin-top: 0.75rem;
+}
+
 .colecoes-titulo {
     font-size: 1.1rem;
     font-weight: 800;

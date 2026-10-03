@@ -3,9 +3,7 @@ namespace MemoLingo.Front.Models
     public class LanguageOption
     {
         public int Id { get; set; }
-
         public string Code { get; set; }
-
         public string Name { get; set; }
 
         /// <summary>
