@@ -15,6 +15,7 @@ namespace MemoLingo.Domain.Enums
         Interjection = 8,
         Article = 9,
         Numeral = 10,
-        Expression = 11
+        Expression = 11,
+        PhrasalVerb = 12
     }
 }

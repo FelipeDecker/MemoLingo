@@ -29,7 +29,7 @@ namespace MemoLingo.Infrastructure.Repositories
         public async Task<NuanceExercise> GetExerciseWithGroupAsync(int exerciseId)
         {
             return await _context.NuanceExercises
-                .AsNoTracking()
+                .AsNoTrackingWithIdentityResolution()
                 .Include(ne => ne.TargetWord)
                 .Include(ne => ne.SynonymGroup)
                     .ThenInclude(sg => sg.Items)

@@ -34,6 +34,15 @@ namespace MemoLingo.Api.Controllers
             return Ok(words);
         }
 
+        [HttpGet("words/phrasal-verbs")]
+        [ProducesResponseType(typeof(IEnumerable<PracticeWordModel>), 200)]
+        [ProducesResponseType(typeof(ErrorResponseModel), 500)]
+        public async Task<IActionResult> GetPhrasalVerbs([FromQuery] int userId, [FromQuery] int take = 10)
+        {
+            var words = await _practiceService.GetPhrasalVerbsPracticeAsync(userId, take);
+            return Ok(words);
+        }
+
         [HttpPost("results")]
         [ProducesResponseType(typeof(PracticeWordModel), 200)]
         [ProducesResponseType(typeof(ErrorResponseModel), 400)]

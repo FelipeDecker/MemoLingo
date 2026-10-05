@@ -43,6 +43,12 @@ if (!app.Environment.IsEnvironment("NSwagGenerator"))
         var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
         await seeder.SeedAsync();
     }
+    else
+    {
+        // Mesmo sem o seed completo, garante a coleção de verbos frasais caso ainda não exista.
+        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+        await seeder.EnsurePhrasalVerbsAsync();
+    }
 }
 
 if (app.Environment.IsDevelopment())

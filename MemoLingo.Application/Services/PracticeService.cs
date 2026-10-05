@@ -181,6 +181,51 @@ namespace MemoLingo.Application.Services
             return Shuffle(selected);
         }
 
+        public async Task<IEnumerable<PracticeWordModel>> GetPhrasalVerbsPracticeAsync(int userId, int take = FocusedPracticeSize)
+        {
+            if (take <= 0)
+            {
+                return new List<PracticeWordModel>();
+            }
+
+            var user = await ResolveUserAsync(userId > 0 ? userId : null);
+            if (user is null)
+            {
+                return new List<PracticeWordModel>();
+            }
+
+            var languageId = ResolveLanguageId(user);
+            if (languageId is null)
+            {
+                return new List<PracticeWordModel>();
+            }
+
+            // A coleção de verbos frasais não depende da trilha: todos ficam disponíveis.
+            var phrasalVerbs = await _wordRepository.GetByLanguageAndPartOfSpeechAsync(languageId.Value, PartOfSpeech.PhrasalVerb);
+
+            var performances = (await _performanceRepository.GetByUserAsync(user.Id))
+                .ToDictionary(wp => wp.WordId);
+
+            var recentStats = BuildRecentStats(
+                await _attemptRepository.GetRecentByLanguageAsync(user.Id, languageId.Value, RecentAttemptsSampleSize));
+
+            // Prioriza os verbos com mais erros; empates são sorteados para variar as sessões.
+            var selected = phrasalVerbs
+                .Select(word =>
+                {
+                    performances.TryGetValue(word.Id, out var performance);
+                    recentStats.TryGetValue(word.Id, out var stats);
+                    return ToModel(word, performance, stats);
+                })
+                .OrderBy(w => w.LearningPercentage)
+                .ThenByDescending(w => w.RecentWrongCount)
+                .ThenBy(_ => Random.Shared.Next())
+                .Take(take)
+                .ToList();
+
+            return Shuffle(selected);
+        }
+
         public async Task<PracticeWordModel> RegisterResultAsync(PracticeResultModel result)
         {
             var user = await ResolveUserAsync(result.UserId > 0 ? result.UserId : null)

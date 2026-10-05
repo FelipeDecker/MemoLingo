@@ -1,0 +1,67 @@
+@page "/pratica/verbos-frasais"
+
+<PageTitle>Verbos Frasais</PageTitle>
+
+<div class="pratica-container">
+    @if (loading)
+    {
+        <p class="carregando"><em>Preparando seus verbos frasais...</em></p>
+    }
+    else if (queue.Count == 0)
+    {
+        <div class="resumo-sessao">
+            <h2>Nenhum verbo frasal disponível</h2>
+            <p>Ainda não há verbos frasais cadastrados para o seu curso.</p>
+            <button class="btn-iniciar" @onclick="GoBackToHub">Voltar para praticar</button>
+        </div>
+    }
+    else if (sessionCompleted)
+    {
+        <div class="resumo-sessao">
+            <h2>Sessão concluída! 🎉</h2>
+            <p>Você acertou @sessionCorrectCount de @queue.Count verbos frasais.</p>
+
+            <div class="resumo-metricas">
+                <div class="resumo-metrica">
+                    <span class="resumo-metrica-valor">@AccuracyPercentage%</span>
+                    <span class="resumo-metrica-rotulo">Acertos</span>
+                </div>
+                <div class="resumo-metrica">
+                    <span class="resumo-metrica-valor">+@EarnedXp XP</span>
+                    <span class="resumo-metrica-rotulo">Experiência</span>
+                </div>
+            </div>
+
+            <div class="resumo-acoes">
+                <button class="btn-iniciar" @onclick="StartSessionAsync">Praticar mais</button>
+                <button class="btn-secundario" @onclick="GoBackToHub">Concluir</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        var currentWord = queue[currentIndex];
+
+        <div class="sessao-progresso">Verbo frasal @(currentIndex + 1) de @queue.Count</div>
+
+        <div class="flashcard">
+            <span class="flashcard-texto">@currentWord.Text</span>
+
+            @if (showTranslation)
+            {
+                <span class="flashcard-traducao">@currentWord.Translation</span>
+
+                <div class="flashcard-acoes">
+                    <button class="btn-errei" @onclick="() => AnswerAsync(false)">Errei</button>
+                    <button class="btn-acertei" @onclick="() => AnswerAsync(true)">Acertei</button>
+                </div>
+            }
+            else
+            {
+                <button class="btn-revelar" @onclick="() => showTranslation = true">
+                    Mostrar tradução
+                </button>
+            }
+        </div>
+    }
+</div>

@@ -1,4 +1,5 @@
 using MemoLingo.Domain.Entities;
+using MemoLingo.Domain.Enums;
 using MemoLingo.Domain.Repositories;
 using MemoLingo.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,16 @@ namespace MemoLingo.Infrastructure.Repositories
                 .AsNoTracking()
                 .Where(w => w.LanguageId == languageId
                     && (practicedWordIds.Contains(w.Id) || completedNodeWordIds.Contains(w.Id)))
+                .OrderBy(w => w.CefrLevel)
+                .ThenBy(w => w.Text)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Word>> GetByLanguageAndPartOfSpeechAsync(int languageId, PartOfSpeech partOfSpeech)
+        {
+            return await _context.Words
+                .AsNoTracking()
+                .Where(w => w.LanguageId == languageId && w.PartOfSpeech == partOfSpeech)
                 .OrderBy(w => w.CefrLevel)
                 .ThenBy(w => w.Text)
                 .ToListAsync();

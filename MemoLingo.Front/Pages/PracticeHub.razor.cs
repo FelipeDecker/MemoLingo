@@ -39,5 +39,18 @@ namespace MemoLingo.Front.Pages
                 OpenNuances();
             }
         }
+
+        private void OpenPhrasalVerbs()
+        {
+            Navigation.NavigateTo("/pratica/verbos-frasais");
+        }
+
+        private void HandlePhrasalVerbsKeyDown(KeyboardEventArgs args)
+        {
+            if (args.Key == "Enter" || args.Key == " ")
+            {
+                OpenPhrasalVerbs();
+            }
+        }
     }
 }

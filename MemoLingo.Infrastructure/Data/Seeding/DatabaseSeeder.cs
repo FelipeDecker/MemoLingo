@@ -50,6 +50,7 @@ namespace MemoLingo.Infrastructure.Data.Seeding
 
             var languages = await SeedLanguagesAsync(seedPath, cancellationToken);
             var words = await SeedWordsAsync(seedPath, languages, cancellationToken);
+            await SeedPhrasalVerbsAsync(seedPath, languages, cancellationToken);
             var synonymGroups = await SeedSynonymGroupsAsync(seedPath, languages, cancellationToken);
             await SeedSynonymGroupItemsAsync(seedPath, languages, synonymGroups, words, cancellationToken);
             await SeedNuanceExercisesAsync(seedPath, languages, synonymGroups, words, cancellationToken);
@@ -198,6 +199,86 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             }
 
             return await LoadWordsAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Garante a coleção de verbos frasais sem limpar a base: insere apenas os que
+        /// ainda não existem e reclassifica palavras já cadastradas com o mesmo texto.
+        /// </summary>
+        public async Task EnsurePhrasalVerbsAsync(CancellationToken cancellationToken = default)
+        {
+            var seedPath = ResolveSeedPath();
+
+            if (!Directory.Exists(seedPath))
+            {
+                _logger.LogWarning("Diretório de seed não encontrado em {SeedPath}. Verbos frasais não foram carregados.", seedPath);
+                return;
+            }
+
+            var languages = await _context.Languages
+                .ToDictionaryAsync(l => l.Code.ToLowerInvariant(), l => l.Id, cancellationToken);
+
+            await SeedPhrasalVerbsAsync(seedPath, languages, cancellationToken);
+        }
+
+        private async Task SeedPhrasalVerbsAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<WordSeed>(seedPath, "phrasal-verbs.json", cancellationToken);
+            if (seeds.Count == 0)
+            {
+                return;
+            }
+
+            var existing = (await _context.Words.ToListAsync(cancellationToken))
+                .GroupBy(w => (w.LanguageId, Text: w.Text.ToLowerInvariant()))
+                .ToDictionary(g => g.Key, g => g.First());
+
+            var created = 0;
+            var updated = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o verbo frasal {Word}.", seed.LanguageCode, seed.Text);
+                    continue;
+                }
+
+                var key = (languageId, seed.Text.ToLowerInvariant());
+
+                if (existing.TryGetValue(key, out var word))
+                {
+                    if (word.PartOfSpeech != PartOfSpeech.PhrasalVerb)
+                    {
+                        word.PartOfSpeech = PartOfSpeech.PhrasalVerb;
+                        updated++;
+                    }
+
+                    continue;
+                }
+
+                var newWord = new Word
+                {
+                    LanguageId = languageId,
+                    Text = seed.Text,
+                    Translation = seed.Translation,
+                    CefrLevel = seed.CefrLevel,
+                    PartOfSpeech = PartOfSpeech.PhrasalVerb
+                };
+
+                _context.Words.Add(newWord);
+                existing[key] = newWord;
+                created++;
+            }
+
+            if (created > 0 || updated > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Created} verbo(s) frasal(is) inserido(s) e {Updated} reclassificado(s).", created, updated);
+            }
         }
 
         private async Task<Dictionary<(int LanguageId, string Text), int>> LoadWordsAsync(CancellationToken cancellationToken)
