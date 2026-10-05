@@ -5,6 +5,8 @@ window.unitScrollSpy = {
     _dotNetRef: null,
     _observer: null,
     _resizeHandler: null,
+    _scrollHandler: null,
+    _ticking: false,
     _limit: 88,
     _currentId: null,
 
@@ -17,6 +19,21 @@ window.unitScrollSpy = {
         // O tamanho do banner (e, portanto, a linha de corte) muda com a largura da tela.
         this._resizeHandler = () => this._observe();
         window.addEventListener('resize', this._resizeHandler, { passive: true });
+
+        // Blocos de unidade altos nunca cruzam os thresholds do observer quando o topo passa
+        // pela linha de corte; o scroll (em captura, para pegar qualquer container rolável) cobre esse caso.
+        this._scrollHandler = () => {
+            if (this._ticking) {
+                return;
+            }
+
+            this._ticking = true;
+            window.requestAnimationFrame(() => {
+                this._ticking = false;
+                this._update();
+            });
+        };
+        document.addEventListener('scroll', this._scrollHandler, { passive: true, capture: true });
     },
 
     _observe: function () {
@@ -95,6 +112,13 @@ window.unitScrollSpy = {
             window.removeEventListener('resize', this._resizeHandler);
             this._resizeHandler = null;
         }
+
+        if (this._scrollHandler) {
+            document.removeEventListener('scroll', this._scrollHandler, { capture: true });
+            this._scrollHandler = null;
+        }
+
+        this._ticking = false;
 
         this._dotNetRef = null;
         this._currentId = null;

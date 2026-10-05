@@ -16,7 +16,7 @@
     {
         @foreach (var section in sections)
         {
-            var isCurrent = section.Status == ProgressStatus.InProgress;
+            var isCurrent = section.Status is ProgressStatus.InProgress or ProgressStatus.Available;
 
             <div class="section-card @(isCurrent ? "current" : "done")">
                 <div class="section-card-info">

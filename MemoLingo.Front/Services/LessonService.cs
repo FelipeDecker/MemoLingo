@@ -29,32 +29,32 @@ namespace MemoLingo.Front.Services
             var sections = new List<Section>();
             var number = 0;
 
-            // A API entrega os cursos já ordenados por nível; cada nível CEFR vira uma seção
-            // e os cursos daquele nível viram as unidades da trilha.
-            var groups = courses
-                .OrderBy(c => c.CefrLevel)
-                .ThenBy(c => c.Position)
-                .GroupBy(c => c.CefrLevel);
+            // A API entrega a cadeia completa (curso > seção > unidade > nó > lição):
+            // cada seção vira uma tela da trilha e cada nó vira uma bolinha da sua unidade.
+            var apiSections = courses
+                .OrderBy(c => c.Position)
+                .SelectMany(c => (c.Sections ?? new List<SectionModel>()).OrderBy(s => s.Position));
 
-            foreach (var group in groups)
+            foreach (var apiSection in apiSections)
             {
                 number++;
 
                 var section = new Section
                 {
-                    Id = number,
+                    Id = apiSection.Id,
                     Number = number,
-                    Title = $"Seção {number}",
-                    Description = group.First().Description,
-                    CefrLevel = group.Key.ToString(),
-                    PrimaryColor = UnitColors[(number - 1) % UnitColors.Length]
+                    Title = apiSection.Title,
+                    Description = apiSection.Description,
+                    CefrLevel = apiSection.CefrLevel.ToString(),
+                    PrimaryColor = UnitColors[(number - 1) % UnitColors.Length],
+                    Status = apiSection.Status
                 };
 
                 var index = 0;
 
-                foreach (var course in group)
+                foreach (var unit in (apiSection.Units ?? new List<UnitModel>()).OrderBy(u => u.Position))
                 {
-                    section.Units.Add(ToUnit(course, index));
+                    section.Units.Add(ToUnit(unit, index));
                     index++;
                 }
 
@@ -76,13 +76,13 @@ namespace MemoLingo.Front.Services
         {
             var sections = await GetSectionsAsync();
 
-            return sections.FirstOrDefault(s => s.Status == ProgressStatus.InProgress)
+            return sections.FirstOrDefault(s => s.Status is ProgressStatus.InProgress or ProgressStatus.Available)
                 ?? sections.FirstOrDefault(s => s.Status != ProgressStatus.Completed)
                 ?? sections.FirstOrDefault();
         }
 
         /// <summary>
-        /// Calcula o percentual de conclusão e o status da seção a partir das lições das suas unidades.
+        /// Calcula o percentual de conclusão da seção a partir dos nós (bolinhas) das suas unidades.
         /// </summary>
         private static void ApplyProgress(Section section)
         {
@@ -90,51 +90,40 @@ namespace MemoLingo.Front.Services
 
             if (lessons.Count == 0)
             {
-                section.Status = ProgressStatus.Locked;
+                section.ProgressPercent = 0;
                 return;
             }
 
             var completed = lessons.Count(l => l.Status == ProgressStatus.Completed);
 
             section.ProgressPercent = (int)Math.Round(completed * 100d / lessons.Count);
-
-            if (completed == lessons.Count)
-            {
-                section.Status = ProgressStatus.Completed;
-            }
-            else if (lessons.Any(l => l.Status is ProgressStatus.Available or ProgressStatus.InProgress or ProgressStatus.Completed))
-            {
-                section.Status = ProgressStatus.InProgress;
-            }
-            else
-            {
-                section.Status = ProgressStatus.Locked;
-            }
         }
 
-        private static Unit ToUnit(CourseModel course, int index)
+        private static Unit ToUnit(UnitModel apiUnit, int index)
         {
             var unit = new Unit
             {
-                Id = course.Id,
-                Name = course.Name,
-                Description = course.Description,
+                Id = apiUnit.Id,
+                Name = apiUnit.Title,
+                Description = apiUnit.Topic,
                 PrimaryColor = UnitColors[index % UnitColors.Length]
             };
 
-            var lessons = course.Lessons ?? new List<LessonModel>();
+            var nodes = (apiUnit.PathNodes ?? new List<PathNodeModel>()).OrderBy(pn => pn.Position).ToList();
 
-            foreach (var lesson in lessons.OrderBy(l => l.Position))
+            for (var i = 0; i < nodes.Count; i++)
             {
+                var node = nodes[i];
+
                 unit.Lessons.Add(new Lesson
                 {
-                    Id = lesson.Id,
-                    UnitId = course.Id,
-                    Title = lesson.Title,
-                    Topic = lesson.Topic,
-                    Type = lesson.IsLast ? LessonType.Exam : LessonType.Lesson,
-                    Status = lesson.Status,
-                    Order = lesson.Position
+                    Id = node.Id,
+                    UnitId = apiUnit.Id,
+                    Title = apiUnit.Title,
+                    Topic = apiUnit.Topic,
+                    Type = i == nodes.Count - 1 ? LessonType.Exam : LessonType.Lesson,
+                    Status = node.Status,
+                    Order = node.Position
                 });
             }
 

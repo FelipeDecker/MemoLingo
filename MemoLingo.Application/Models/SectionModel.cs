@@ -2,16 +2,16 @@ using MemoLingo.Domain.Enums;
 
 namespace MemoLingo.Application.Models
 {
-    public class CourseModel
+    public class SectionModel
     {
         public int Id { get; set; }
-        public int LanguageId { get; set; }
-        public string Name { get; set; }
+        public int CourseId { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public int Position { get; set; }
         public CefrLevel CefrLevel { get; set; }
         public ProgressStatus Status { get; set; }
 
-        public List<SectionModel> Sections { get; set; } = new();
+        public List<UnitModel> Units { get; set; } = new();
     }
 }

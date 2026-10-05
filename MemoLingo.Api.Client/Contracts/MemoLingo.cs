@@ -178,8 +178,11 @@ namespace MemoLingo.Api.Client.Contracts
         [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
         public CefrLevel CefrLevel { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("lessons")]
-        public System.Collections.Generic.ICollection<LessonModel> Lessons { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public ProgressStatus Status { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sections")]
+        public System.Collections.Generic.ICollection<SectionModel> Sections { get; set; }
 
     }
 
@@ -202,7 +205,23 @@ namespace MemoLingo.Api.Client.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class LessonModel
+    public enum ProgressStatus
+    {
+
+        Locked = 1,
+
+        Available = 2,
+
+        InProgress = 3,
+
+        Completed = 4,
+
+        Abandoned = 5,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SectionModel
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("id")]
@@ -211,17 +230,35 @@ namespace MemoLingo.Api.Client.Contracts
         [System.Text.Json.Serialization.JsonPropertyName("courseId")]
         public int CourseId { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("title")]
+        public string Title { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("position")]
+        public int Position { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public ProgressStatus Status { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("units")]
+        public System.Collections.Generic.ICollection<UnitModel> Units { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UnitModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("sectionId")]
         public int SectionId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("unitId")]
-        public int UnitId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("pathNodeId")]
-        public int PathNodeId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("nodeType")]
-        public NodeType NodeType { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("title")]
         public string Title { get; set; }
@@ -232,17 +269,41 @@ namespace MemoLingo.Api.Client.Contracts
         [System.Text.Json.Serialization.JsonPropertyName("position")]
         public int Position { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("xpReward")]
-        public int XpReward { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public ProgressStatus Status { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
-        public CefrLevel CefrLevel { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("pathNodes")]
+        public System.Collections.Generic.ICollection<PathNodeModel> PathNodes { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PathNodeModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("unitId")]
+        public int UnitId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("nodeType")]
+        public NodeType NodeType { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("position")]
+        public int Position { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("totalLessons")]
+        public int TotalLessons { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("completedLessons")]
+        public int CompletedLessons { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("status")]
         public ProgressStatus Status { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("isLast")]
-        public bool IsLast { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("lessons")]
+        public System.Collections.Generic.ICollection<LessonModel> Lessons { get; set; }
 
     }
 
@@ -261,18 +322,23 @@ namespace MemoLingo.Api.Client.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum ProgressStatus
+    public partial class LessonModel
     {
 
-        Locked = 1,
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
 
-        Available = 2,
+        [System.Text.Json.Serialization.JsonPropertyName("pathNodeId")]
+        public int PathNodeId { get; set; }
 
-        InProgress = 3,
+        [System.Text.Json.Serialization.JsonPropertyName("position")]
+        public int Position { get; set; }
 
-        Completed = 4,
+        [System.Text.Json.Serialization.JsonPropertyName("xpReward")]
+        public int XpReward { get; set; }
 
-        Abandoned = 5,
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public ProgressStatus Status { get; set; }
 
     }
 

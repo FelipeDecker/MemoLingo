@@ -43,9 +43,11 @@ namespace MemoLingo.Application.Services
             var models = new List<CourseModel>();
             var nextLessonAssigned = false;
 
+            // A ordem de iteração (curso > seção > unidade > nó > lição) define a sequência da
+            // trilha: a primeira lição não concluída depois das concluídas fica disponível.
             foreach (var course in courses.OrderBy(c => c.Position))
             {
-                var model = new CourseModel
+                var courseModel = new CourseModel
                 {
                     Id = course.Id,
                     LanguageId = course.LanguageId,
@@ -55,32 +57,68 @@ namespace MemoLingo.Application.Services
                     CefrLevel = course.CefrLevel
                 };
 
-                var flattened = Flatten(course).ToList();
-
-                for (var index = 0; index < flattened.Count; index++)
+                foreach (var section in (course.Sections ?? new List<Section>()).OrderBy(s => s.Position))
                 {
-                    var item = flattened[index];
-                    var status = ResolveStatus(item.Lesson.Id, completed, inProgress, ref nextLessonAssigned);
-
-                    model.Lessons.Add(new LessonModel
+                    var sectionModel = new SectionModel
                     {
-                        Id = item.Lesson.Id,
-                        CourseId = course.Id,
-                        SectionId = item.Section.Id,
-                        UnitId = item.Unit.Id,
-                        PathNodeId = item.Node.Id,
-                        NodeType = item.Node.NodeType,
-                        Title = item.Unit.Title,
-                        Topic = item.Unit.Topic,
-                        Position = index + 1,
-                        XpReward = item.Lesson.XpReward,
-                        CefrLevel = item.Section.CefrLevel,
-                        Status = status,
-                        IsLast = index == flattened.Count - 1
-                    });
+                        Id = section.Id,
+                        CourseId = section.CourseId,
+                        Title = section.Title,
+                        Description = section.Description,
+                        Position = section.Position,
+                        CefrLevel = section.CefrLevel
+                    };
+
+                    foreach (var unit in (section.Units ?? new List<Unit>()).OrderBy(u => u.Position))
+                    {
+                        var unitModel = new UnitModel
+                        {
+                            Id = unit.Id,
+                            SectionId = unit.SectionId,
+                            Title = unit.Title,
+                            Topic = unit.Topic,
+                            Position = unit.Position
+                        };
+
+                        foreach (var node in (unit.PathNodes ?? new List<PathNode>()).OrderBy(pn => pn.Position))
+                        {
+                            var nodeModel = new PathNodeModel
+                            {
+                                Id = node.Id,
+                                UnitId = node.UnitId,
+                                NodeType = node.NodeType,
+                                Position = node.Position
+                            };
+
+                            foreach (var lesson in (node.Lessons ?? new List<Lesson>()).OrderBy(l => l.Position))
+                            {
+                                nodeModel.Lessons.Add(new LessonModel
+                                {
+                                    Id = lesson.Id,
+                                    PathNodeId = lesson.PathNodeId,
+                                    Position = lesson.Position,
+                                    XpReward = lesson.XpReward,
+                                    Status = ResolveStatus(lesson.Id, completed, inProgress, ref nextLessonAssigned)
+                                });
+                            }
+
+                            nodeModel.TotalLessons = nodeModel.Lessons.Count;
+                            nodeModel.CompletedLessons = nodeModel.Lessons.Count(l => l.Status == ProgressStatus.Completed);
+                            nodeModel.Status = Aggregate(nodeModel.Lessons.Select(l => l.Status));
+
+                            unitModel.PathNodes.Add(nodeModel);
+                        }
+
+                        unitModel.Status = Aggregate(unitModel.PathNodes.Select(pn => pn.Status));
+                        sectionModel.Units.Add(unitModel);
+                    }
+
+                    sectionModel.Status = Aggregate(sectionModel.Units.Select(u => u.Status));
+                    courseModel.Sections.Add(sectionModel);
                 }
 
-                models.Add(model);
+                courseModel.Status = Aggregate(courseModel.Sections.Select(s => s.Status));
+                models.Add(courseModel);
             }
 
             return models;
@@ -206,21 +244,27 @@ namespace MemoLingo.Application.Services
             };
         }
 
-        private static IEnumerable<(Section Section, Unit Unit, PathNode Node, Lesson Lesson)> Flatten(Course course)
+        // Consolida o status de um nível da trilha a partir do status dos seus filhos.
+        private static ProgressStatus Aggregate(IEnumerable<ProgressStatus> statuses)
         {
-            foreach (var section in (course.Sections ?? new List<Section>()).OrderBy(s => s.Position))
+            var list = statuses.ToList();
+
+            if (list.Count == 0 || list.All(s => s == ProgressStatus.Locked))
             {
-                foreach (var unit in (section.Units ?? new List<Unit>()).OrderBy(u => u.Position))
-                {
-                    foreach (var node in (unit.PathNodes ?? new List<PathNode>()).OrderBy(pn => pn.Position))
-                    {
-                        foreach (var lesson in (node.Lessons ?? new List<Lesson>()).OrderBy(l => l.Position))
-                        {
-                            yield return (section, unit, node, lesson);
-                        }
-                    }
-                }
+                return ProgressStatus.Locked;
             }
+
+            if (list.All(s => s == ProgressStatus.Completed))
+            {
+                return ProgressStatus.Completed;
+            }
+
+            if (list.Any(s => s is ProgressStatus.Completed or ProgressStatus.InProgress))
+            {
+                return ProgressStatus.InProgress;
+            }
+
+            return ProgressStatus.Available;
         }
 
         private static ProgressStatus ResolveStatus(

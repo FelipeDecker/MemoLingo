@@ -19,6 +19,7 @@ namespace MemoLingo.Front.Pages
         private Unit activeUnit;
         private Section section;
         private DotNetObjectReference<Learn> jsReference;
+        private bool scrollSpyPending;
 
         // Amplitude (px) e frequência da onda senoidal que desenha a trilha sinuosa (zig-zag).
         private const double Amplitude = 70d;
@@ -41,15 +42,17 @@ namespace MemoLingo.Front.Pages
 
             units = section?.Units ?? new List<Unit>();
             activeUnit = units.FirstOrDefault();
+            scrollSpyPending = units.Count > 0;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (firstRender && units is { Count: > 0 })
+            // O primeiro render ocorre ainda durante o carregamento (sem unidades no DOM), por isso
+            // o observador é registrado somente depois que a trilha foi de fato renderizada.
+            if (scrollSpyPending && units is { Count: > 0 })
             {
-                // Registra o observador de scroll em JS para saber qual unidade está visível
-                // logo abaixo do cabeçalho fixo, e assim atualizar o título exibido.
-                jsReference = DotNetObjectReference.Create(this);
+                scrollSpyPending = false;
+                jsReference ??= DotNetObjectReference.Create(this);
                 await JS.InvokeVoidAsync("unitScrollSpy.start", jsReference);
             }
         }
