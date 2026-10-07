@@ -65,6 +65,32 @@ namespace MemoLingo.Api.Client.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial interface ILessonsClient
+    {
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LessonSessionModel> StartAsync(int pathNodeId, int? userId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LessonSessionModel> StartAsync(int pathNodeId, int? userId, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LessonAnswerResultModel> AnswerAsync(LessonAnswerModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LessonAnswerResultModel> AnswerAsync(LessonAnswerModel model, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LessonCompletionModel> CompleteAsync(int studySessionId, int? userId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LessonCompletionModel> CompleteAsync(int studySessionId, int? userId, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface INuanceClient
     {
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
@@ -406,6 +432,189 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("languageId")]
         public int LanguageId { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LessonSessionModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("studySessionId")]
+        public int StudySessionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("lessonId")]
+        public int LessonId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("pathNodeId")]
+        public int PathNodeId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sectionId")]
+        public int SectionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("unitId")]
+        public int UnitId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("unitTitle")]
+        public string UnitTitle { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("lessonPosition")]
+        public int LessonPosition { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("totalLessons")]
+        public int TotalLessons { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("completedLessons")]
+        public int CompletedLessons { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("xpReward")]
+        public int XpReward { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isReview")]
+        public bool IsReview { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exercises")]
+        public System.Collections.Generic.ICollection<LessonExerciseModel> Exercises { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LessonExerciseModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("position")]
+        public int Position { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentenceId")]
+        public int SentenceId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseType")]
+        public ExerciseType ExerciseType { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("prompt")]
+        public string Prompt { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("hint")]
+        public string Hint { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("blankWordId")]
+        public int? BlankWordId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("options")]
+        public System.Collections.Generic.ICollection<string> Options { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum ExerciseType
+    {
+
+        MultipleChoice = 1,
+
+        FreeTranslation = 2,
+
+        FillInTheBlank = 3,
+
+        ListenAndWrite = 4,
+
+        Speaking = 5,
+
+        WordOrdering = 6,
+
+        NuanceDiscrimination = 7,
+
+        TranslationToNative = 8,
+
+        TranslationToTarget = 9,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LessonAnswerResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCorrect")]
+        public bool IsCorrect { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedAnswer")]
+        public string SubmittedAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctAnswer")]
+        public string CorrectAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentenceText")]
+        public string SentenceText { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentenceTranslation")]
+        public string SentenceTranslation { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LessonAnswerModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public int? UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("studySessionId")]
+        [System.ComponentModel.DataAnnotations.Range(1, 2147483647)]
+        public int StudySessionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentenceId")]
+        [System.ComponentModel.DataAnnotations.Range(1, 2147483647)]
+        public int SentenceId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseType")]
+        public ExerciseType ExerciseType { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("blankWordId")]
+        public int? BlankWordId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("answer")]
+        public string Answer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("responseTimeMs")]
+        [System.ComponentModel.DataAnnotations.Range(0, 2147483647)]
+        public int ResponseTimeMs { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LessonCompletionModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("studySessionId")]
+        public int StudySessionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("lessonId")]
+        public int LessonId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("pathNodeId")]
+        public int PathNodeId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("xpEarned")]
+        public int XpEarned { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctCount")]
+        public int CorrectCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("wrongCount")]
+        public int WrongCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("accuracyPercentage")]
+        public int AccuracyPercentage { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("completedLessons")]
+        public int CompletedLessons { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("totalLessons")]
+        public int TotalLessons { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("nodeCompleted")]
+        public bool NodeCompleted { get; set; }
 
     }
 

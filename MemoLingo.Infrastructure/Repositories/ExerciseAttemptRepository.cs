@@ -106,6 +106,18 @@ namespace MemoLingo.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<Dictionary<int, int>> GetSentenceAttemptCountsAsync(int userId, int languageId)
+        {
+            return await _context.ExerciseAttempts
+                .AsNoTracking()
+                .Where(ea => ea.SentenceId.HasValue
+                    && ea.StudySession.UserId == userId
+                    && ea.StudySession.LanguageId == languageId)
+                .GroupBy(ea => ea.SentenceId.Value)
+                .Select(g => new { SentenceId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.SentenceId, x => x.Count);
+        }
+
         public async Task AddAsync(ExerciseAttempt attempt)
         {
             await _context.ExerciseAttempts.AddAsync(attempt);

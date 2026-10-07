@@ -59,7 +59,9 @@ else
                             <button type="button"
                                     class="path-node @GetStatusClass(lesson.Status)"
                                     style="transform: translateX(@Px(translateX)); background-color:@nodeColor; box-shadow:0 5px 0 @Darken(nodeColor)"
-                                    title="@lesson.Title">
+                                    title="@lesson.Title"
+                                    disabled="@IsLocked(lesson)"
+                                    @onclick="() => OpenLesson(lesson)">
                                 <span class="path-node-icon">@GetIcon(lesson)</span>
                             </button>
                         </div>

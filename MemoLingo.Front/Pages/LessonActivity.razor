@@ -1,0 +1,169 @@
+@page "/lesson/{PathNodeId:int}"
+@layout LessonLayout
+
+<PageTitle>Lição</PageTitle>
+
+<div class="lesson-page">
+    <header class="lesson-header">
+        <button type="button" class="lesson-close" title="Sair da lição" @onclick="Exit">✕</button>
+        <div class="lesson-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="@ProgressPercentage">
+            <div class="lesson-progress-bar" style="width:@(ProgressPercentage)%"></div>
+        </div>
+        @if (session is not null && completion is null)
+        {
+            <span class="lesson-counter">@correctCount/@TotalExercises</span>
+        }
+    </header>
+
+    <section class="lesson-body">
+        @if (loading)
+        {
+            <p class="lesson-loading"><em>Preparando sua lição...</em></p>
+        }
+        else if (!string.IsNullOrEmpty(loadError))
+        {
+            <div class="lesson-summary">
+                <h2>Não foi possível iniciar a lição</h2>
+                <p>@loadError</p>
+                <button class="btn-principal" @onclick="Exit">Voltar para a trilha</button>
+            </div>
+        }
+        else if (completion is not null)
+        {
+            <div class="lesson-summary">
+                <h2>Lição concluída! 🎉</h2>
+                <p>
+                    @if (completion.NodeCompleted)
+                    {
+                        <span>Você concluiu todas as lições desta etapa.</span>
+                    }
+                    else
+                    {
+                        <span>Lição @completion.CompletedLessons de @completion.TotalLessons desta etapa.</span>
+                    }
+                </p>
+
+                <div class="summary-metrics">
+                    <div class="summary-metric summary-metric-xp">
+                        <span class="summary-metric-value">+@completion.XpEarned</span>
+                        <span class="summary-metric-label">XP</span>
+                    </div>
+                    <div class="summary-metric">
+                        <span class="summary-metric-value">@completion.AccuracyPercentage%</span>
+                        <span class="summary-metric-label">Precisão</span>
+                    </div>
+                    <div class="summary-metric">
+                        <span class="summary-metric-value">@completion.WrongCount</span>
+                        <span class="summary-metric-label">Erros</span>
+                    </div>
+                </div>
+
+                <div class="summary-actions">
+                    @if (!completion.NodeCompleted)
+                    {
+                        <button class="btn-secundario" @onclick="StartLessonAsync">Próxima lição</button>
+                    }
+                    <button class="btn-principal" @onclick="Exit">Continuar</button>
+                </div>
+            </div>
+        }
+        else if (Current is not null)
+        {
+            var exercise = Current.Exercise;
+
+            @if (session.IsReview)
+            {
+                <span class="lesson-tag lesson-tag-review">Revisão</span>
+            }
+            @if (Current.IsRetry)
+            {
+                <span class="lesson-tag lesson-tag-retry">Erro anterior</span>
+            }
+
+            <h2 class="lesson-instruction">@GetInstruction(exercise.ExerciseType)</h2>
+
+            @if (exercise.ExerciseType == ExerciseType.FillInTheBlank)
+            {
+                var parts = SplitSentence(exercise.Prompt);
+
+                <p class="lesson-sentence" lang="en">
+                    @parts.Before<span class="lacuna @BlankCss">@BlankText</span>@parts.After
+                </p>
+
+                @if (!string.IsNullOrWhiteSpace(exercise.Hint))
+                {
+                    <p class="lesson-hint">@exercise.Hint</p>
+                }
+
+                <div class="opcoes" role="group" aria-label="Opções">
+                    @foreach (var option in exercise.Options)
+                    {
+                        <button type="button"
+                                class="opcao @(string.Equals(answer, option, StringComparison.OrdinalIgnoreCase) ? "opcao-selecionada" : string.Empty)"
+                                disabled="@(result is not null || submitting)"
+                                @onclick="() => SelectOption(option)">
+                            @option
+                        </button>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="lesson-prompt">
+                    <span class="lesson-prompt-text" lang="@(exercise.ExerciseType == ExerciseType.TranslationToNative ? "en" : "pt")">@exercise.Prompt</span>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(exercise.Hint))
+                {
+                    <p class="lesson-hint">@exercise.Hint</p>
+                }
+            }
+
+            <input @ref="answerInput"
+                   class="lesson-answer"
+                   type="text"
+                   placeholder="@GetPlaceholder(exercise.ExerciseType)"
+                   autocomplete="off"
+                   autocapitalize="off"
+                   spellcheck="false"
+                   value="@answer"
+                   disabled="@(result is not null || submitting)"
+                   @oninput="OnAnswerInput"
+                   @onkeydown="OnAnswerKeyDown" />
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <p class="mensagem-erro">@errorMessage</p>
+            }
+        }
+    </section>
+
+    @if (!loading && string.IsNullOrEmpty(loadError) && completion is null && Current is not null)
+    {
+        <footer class="lesson-footer @FooterCss">
+            <div class="lesson-footer-content">
+                @if (result is null)
+                {
+                    <div class="lesson-feedback"></div>
+                    <button class="btn-principal" disabled="@(!CanSubmit)" @onclick="SubmitAsync">Verificar</button>
+                }
+                else
+                {
+                    <div class="lesson-feedback">
+                        <h3 class="lesson-feedback-title">@(result.IsCorrect ? "Muito bem! 🎉" : "Resposta incorreta")</h3>
+                        @if (!result.IsCorrect)
+                        {
+                            <p class="lesson-feedback-answer">Resposta correta: <strong>@result.CorrectAnswer</strong></p>
+                        }
+                        <p class="lesson-feedback-sentence">
+                            <span lang="en">@result.SentenceText</span> — <span>@result.SentenceTranslation</span>
+                        </p>
+                    </div>
+                    <button @ref="continueButton" class="btn-principal @(result.IsCorrect ? string.Empty : "btn-erro")" disabled="@completing" @onclick="ContinueAsync">
+                        @(completing ? "Salvando..." : "Continuar")
+                    </button>
+                }
+            </div>
+        </footer>
+    }
+</div>

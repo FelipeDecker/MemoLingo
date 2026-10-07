@@ -13,6 +13,7 @@ namespace MemoLingo.Domain.Repositories
         Task<IEnumerable<WordAttemptSample>> GetRecentByWordAsync(int userId, int wordId, int sampleSize);
         Task<IEnumerable<NuanceAttemptSample>> GetNuanceAttemptsAsync(int userId, int languageId);
         Task<IEnumerable<NuanceAttemptSample>> GetRecentNuanceByGroupAsync(int userId, int synonymGroupId, int sampleSize);
+        Task<Dictionary<int, int>> GetSentenceAttemptCountsAsync(int userId, int languageId);
         Task AddAsync(ExerciseAttempt attempt);
         Task<bool> SaveChangesAsync();
     }

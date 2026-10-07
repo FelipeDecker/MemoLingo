@@ -8,5 +8,7 @@ namespace MemoLingo.Infrastructure.Data.Seeding.Models
         public string Text { get; set; }
         public string Translation { get; set; }
         public CefrLevel CefrLevel { get; set; }
+        public List<string> AlternativeTexts { get; set; }
+        public List<string> AlternativeTranslations { get; set; }
     }
 }

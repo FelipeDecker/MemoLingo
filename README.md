@@ -42,6 +42,7 @@ MemoLingo/
 ├── Documents/                # Modelo de domínio, entregas concluídas e seed
 │   └── Seed/                 # Dataset inicial em JSON (um arquivo por tabela)
 ├── docker-compose.yml        # Api + PostgreSQL para desenvolvimento local
+├── docker-compose.db.yml     # Somente PostgreSQL (API rodando localmente)
 ├── MemoLingo.slnx            # Solução do Visual Studio
 ├── README.md
 └── TODO.md                   # Roteiro detalhado até um app "nível Duolingo"
@@ -60,12 +61,22 @@ docker compose up -d --build
 
 Na inicialização a API aplica as migrations e executa o seed automaticamente.
 
+> A imagem da API é gerada no momento do build: sempre que o código da API
+> mudar, é preciso rodar `docker compose up -d --build` novamente.
+
 ### Somente o banco (API pelo Visual Studio / `dotnet run`)
 
+Use o `docker-compose.db.yml`, que sobe apenas o PostgreSQL. Assim a API roda
+localmente com o código atualizado, sem conflito com o container da API.
+
 ```powershell
-docker compose up -d postgres
+docker compose -f docker-compose.yml down   # se a stack completa estiver rodando
+docker compose -f docker-compose.db.yml up -d --remove-orphans
 dotnet run --project MemoLingo.Api
 ```
+
+O volume de dados é o mesmo da stack completa, então os dados são preservados
+ao alternar entre os dois modos.
 
 ### Frontend
 
@@ -84,11 +95,17 @@ O dataset inicial fica em `Documents/Seed`, com **um arquivo JSON por tabela**:
 |---|---|
 | `languages.json` | Idiomas (português, inglês, espanhol e italiano) |
 | `words.json` | Palavras em inglês com tradução, nível CEFR e classe gramatical |
-| `sentences.json` | Frases em inglês com tradução e nível CEFR |
-| `sentence-words.json` | Vínculo entre frases e palavras |
+| `sentences.json` | Frases em inglês com tradução, alternativas aceitas e nível CEFR |
 | `courses.json` | Trilhas/cursos |
 | `lessons.json` | Lições de cada trilha |
-| `lesson-words.json` | Vínculo entre lições e palavras |
+| `lesson-words.json` | Vínculo entre lições e palavras (o vocabulário que cada lição ensina) |
+
+As frases **não** são vinculadas a unidades nem a nós. O seeder gera
+automaticamente o vínculo frase/palavra (`SentenceWords`) procurando na frase as
+palavras cadastradas, e cada lição monta seus 15 exercícios com as frases do
+nível CEFR da seção cujas palavras do currículo já foram ensinadas até ali e
+que contenham ao menos uma palavra da lição — priorizando as frases que o
+usuário ainda não viu. Para enriquecer as lições, basta adicionar frases.
 
 Os arquivos usam **chaves naturais** (código do idioma, texto da palavra, nome do
 curso etc.) em vez de ids, e o `DatabaseSeeder` é idempotente: registros já

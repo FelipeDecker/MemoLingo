@@ -54,8 +54,8 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             var synonymGroups = await SeedSynonymGroupsAsync(seedPath, languages, cancellationToken);
             await SeedSynonymGroupItemsAsync(seedPath, languages, synonymGroups, words, cancellationToken);
             await SeedNuanceExercisesAsync(seedPath, languages, synonymGroups, words, cancellationToken);
-            var sentences = await SeedSentencesAsync(seedPath, languages, cancellationToken);
-            await SeedSentenceWordsAsync(seedPath, words, sentences, cancellationToken);
+            await SeedSentencesAsync(seedPath, languages, cancellationToken);
+            await LinkSentenceWordsAsync(cancellationToken);
             var courses = await SeedCoursesAsync(seedPath, languages, cancellationToken);
             var sections = await SeedSectionsAsync(seedPath, languages, courses, cancellationToken);
             var units = await SeedUnitsAsync(seedPath, languages, courses, sections, cancellationToken);
@@ -501,6 +501,8 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                     LanguageId = languageId,
                     Text = seed.Text,
                     Translation = seed.Translation,
+                    AlternativeTexts = JoinAlternatives(seed.AlternativeTexts),
+                    AlternativeTranslations = JoinAlternatives(seed.AlternativeTranslations),
                     CefrLevel = seed.CefrLevel
                 });
 
@@ -527,13 +529,32 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                 .ToDictionary(g => g.Key, g => (g.First().Id, g.First().LanguageId));
         }
 
-        private async Task SeedSentenceWordsAsync(
-            string seedPath,
-            Dictionary<(int LanguageId, string Text), int> words,
-            Dictionary<string, (int Id, int LanguageId)> sentences,
-            CancellationToken cancellationToken)
+        private static string JoinAlternatives(List<string> alternatives)
         {
-            var seeds = await ReadAsync<SentenceWordSeed>(seedPath, "sentence-words.json", cancellationToken);
+            var values = (alternatives ?? new List<string>())
+                .Where(a => !string.IsNullOrWhiteSpace(a))
+                .Select(a => a.Trim())
+                .ToList();
+
+            return values.Count == 0 ? null : string.Join("|", values);
+        }
+
+        /// <summary>
+        /// Gera automaticamente os vínculos frase/palavra procurando, em cada frase, as palavras
+        /// cadastradas do mesmo idioma. São esses vínculos que decidem em quais lições a frase pode
+        /// aparecer, então não há vínculo manual entre frases e unidades/nós.
+        /// </summary>
+        private async Task LinkSentenceWordsAsync(CancellationToken cancellationToken)
+        {
+            var words = await _context.Words
+                .AsNoTracking()
+                .Select(w => new { w.Id, w.LanguageId, w.Text })
+                .ToListAsync(cancellationToken);
+
+            var sentences = await _context.Sentences
+                .AsNoTracking()
+                .Select(s => new { s.Id, s.LanguageId, s.Text })
+                .ToListAsync(cancellationToken);
 
             var existing = (await _context.SentenceWords
                 .Select(sw => new { sw.SentenceId, sw.WordId })
@@ -541,41 +562,45 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                 .Select(sw => (sw.SentenceId, sw.WordId))
                 .ToHashSet();
 
+            var matchers = words
+                .GroupBy(w => w.LanguageId)
+                .ToDictionary(g => g.Key, g => new SentenceWordMatcher(g.Select(w => (w.Id, w.Text))));
+
             var created = 0;
 
-            foreach (var seed in seeds)
+            foreach (var sentence in sentences)
             {
-                if (!sentences.TryGetValue(seed.SentenceText.ToLowerInvariant(), out var sentence))
-                {
-                    _logger.LogWarning("Frase não encontrada para o vínculo: {Sentence}.", seed.SentenceText);
-                    continue;
-                }
-
-                if (!words.TryGetValue((sentence.LanguageId, seed.WordText.ToLowerInvariant()), out var wordId))
-                {
-                    _logger.LogWarning("Palavra {Word} não encontrada para a frase {Sentence}.", seed.WordText, seed.SentenceText);
-                    continue;
-                }
-
-                if (!existing.Add((sentence.Id, wordId)))
+                if (!matchers.TryGetValue(sentence.LanguageId, out var matcher))
                 {
                     continue;
                 }
 
-                _context.SentenceWords.Add(new SentenceWord
-                {
-                    SentenceId = sentence.Id,
-                    WordId = wordId,
-                    Position = seed.Position
-                });
+                var position = 0;
 
-                created++;
+                foreach (var wordId in matcher.Match(sentence.Text))
+                {
+                    position++;
+
+                    if (!existing.Add((sentence.Id, wordId)))
+                    {
+                        continue;
+                    }
+
+                    _context.SentenceWords.Add(new SentenceWord
+                    {
+                        SentenceId = sentence.Id,
+                        WordId = wordId,
+                        Position = position
+                    });
+
+                    created++;
+                }
             }
 
             if (created > 0)
             {
                 await _context.SaveChangesAsync(cancellationToken);
-                _logger.LogInformation("{Count} vínculo(s) frase/palavra inserido(s).", created);
+                _logger.LogInformation("{Count} vínculo(s) frase/palavra gerado(s) automaticamente.", created);
             }
         }
 

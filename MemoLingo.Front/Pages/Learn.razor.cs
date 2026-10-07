@@ -15,6 +15,9 @@ namespace MemoLingo.Front.Pages
         [Inject]
         private IJSRuntime JS { get; set; }
 
+        [Inject]
+        private NavigationManager Navigation { get; set; }
+
         private List<Unit> units;
         private Unit activeUnit;
         private Section section;
@@ -89,6 +92,17 @@ namespace MemoLingo.Front.Pages
         }
 
         private int GetUnitNumber(Unit unit) => units == null ? 1 : units.IndexOf(unit) + 1;
+
+        private static bool IsLocked(Lesson lesson) => lesson.Status is ProgressStatus.Locked or ProgressStatus.Abandoned;
+
+        // Cada nó da trilha (Lesson.Id == PathNode.Id) abre uma atividade com as lições do nó.
+        private void OpenLesson(Lesson lesson)
+        {
+            if (!IsLocked(lesson))
+            {
+                Navigation.NavigateTo($"/lesson/{lesson.Id}");
+            }
+        }
 
         /// <summary>
         /// Texto exibido no separador que antecede a unidade (ex.: "Diga de onde você é").

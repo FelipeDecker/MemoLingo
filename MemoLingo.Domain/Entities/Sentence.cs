@@ -12,6 +12,8 @@ namespace MemoLingo.Domain.Entities
         public int LanguageId { get; set; }
         public string Text { get; set; }
         public string Translation { get; set; }
+        public string AlternativeTexts { get; set; }
+        public string AlternativeTranslations { get; set; }
         public CefrLevel CefrLevel { get; set; }
 
         public Language Language { get; set; }

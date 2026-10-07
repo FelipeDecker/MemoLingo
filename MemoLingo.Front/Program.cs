@@ -19,7 +19,9 @@ builder.Services.AddScoped<IUsersClient>(sp => new UsersClient(api, sp.GetRequir
 builder.Services.AddScoped<ICoursesClient>(sp => new CoursesClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<IPracticeClient>(sp => new PracticeClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<INuanceClient>(sp => new NuanceClient(api, sp.GetRequiredService<HttpClient>()));
+builder.Services.AddScoped<ILessonsClient>(sp => new LessonsClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<ILessonActivityService, LessonActivityService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddScoped<INuanceService, NuanceService>();
 builder.Services.AddScoped<IUserCourseService, UserCourseService>();

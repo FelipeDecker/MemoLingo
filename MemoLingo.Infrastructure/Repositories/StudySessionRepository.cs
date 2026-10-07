@@ -69,5 +69,49 @@ namespace MemoLingo.Infrastructure.Repositories
 
             return session;
         }
+
+        public async Task<StudySession> GetByIdAsync(int id)
+        {
+            return await _context.StudySessions
+                .FirstOrDefaultAsync(ss => ss.Id == id);
+        }
+
+        public async Task<StudySession> StartLessonSessionAsync(int userId, int languageId, int lessonId)
+        {
+            // Uma nova tentativa da lição descarta as sessões que ficaram abertas (ex.: o usuário
+            // fechou a atividade no meio), para que os contadores sempre comecem do zero.
+            var openSessions = await _context.StudySessions
+                .Where(ss => ss.UserId == userId
+                    && ss.LessonId == lessonId
+                    && ss.Status == ProgressStatus.InProgress)
+                .ToListAsync();
+
+            var now = DateTime.UtcNow;
+
+            foreach (var open in openSessions)
+            {
+                open.Status = ProgressStatus.Abandoned;
+                open.FinishedAt = now;
+            }
+
+            var session = new StudySession
+            {
+                UserId = userId,
+                LanguageId = languageId,
+                LessonId = lessonId,
+                Status = ProgressStatus.InProgress,
+                StartedAt = now
+            };
+
+            await _context.StudySessions.AddAsync(session);
+            await _context.SaveChangesAsync();
+
+            return session;
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

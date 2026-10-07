@@ -11,6 +11,8 @@ namespace MemoLingo.Domain.Enums
         ListenAndWrite = 4,
         Speaking = 5,
         WordOrdering = 6,
-        NuanceDiscrimination = 7
+        NuanceDiscrimination = 7,
+        TranslationToNative = 8,
+        TranslationToTarget = 9
     }
 }

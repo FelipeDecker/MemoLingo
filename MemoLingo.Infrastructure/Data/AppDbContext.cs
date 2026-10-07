@@ -85,6 +85,8 @@ namespace MemoLingo.Infrastructure.Data
             {
                 entity.Property(s => s.Text).IsRequired().HasMaxLength(500);
                 entity.Property(s => s.Translation).IsRequired().HasMaxLength(500);
+                entity.Property(s => s.AlternativeTexts).HasMaxLength(1000);
+                entity.Property(s => s.AlternativeTranslations).HasMaxLength(1000);
 
                 entity.HasOne(s => s.Language)
                     .WithMany()

@@ -70,5 +70,25 @@ namespace MemoLingo.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddLessonRewardAsync(int userId, int languageId, int xp, bool isFirstCompletion)
+        {
+            var progress = await _context.LanguageProgresses
+                .FirstOrDefaultAsync(lp => lp.UserId == userId && lp.LanguageId == languageId);
+
+            if (progress is null)
+            {
+                return;
+            }
+
+            progress.TotalXp += xp;
+
+            if (isFirstCompletion)
+            {
+                progress.TotalCompletedLessons++;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
