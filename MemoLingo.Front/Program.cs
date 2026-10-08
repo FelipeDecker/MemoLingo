@@ -25,5 +25,6 @@ builder.Services.AddScoped<ILessonActivityService, LessonActivityService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddScoped<INuanceService, NuanceService>();
 builder.Services.AddScoped<IUserCourseService, UserCourseService>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
 await builder.Build().RunAsync();

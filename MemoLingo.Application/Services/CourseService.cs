@@ -7,21 +7,27 @@ namespace MemoLingo.Application.Services
 {
     public class CourseService : ICourseService
     {
+        // Percentual de acerto a partir do qual a palavra conta como dominada no nível.
+        private const int MasteryThreshold = 80;
+
         private readonly ICourseRepository _courseRepository;
         private readonly IStudySessionRepository _studySessionRepository;
         private readonly IUserRepository _userRepository;
         private readonly ILanguageRepository _languageRepository;
+        private readonly IPracticeService _practiceService;
 
         public CourseService(
             ICourseRepository courseRepository,
             IStudySessionRepository studySessionRepository,
             IUserRepository userRepository,
-            ILanguageRepository languageRepository)
+            ILanguageRepository languageRepository,
+            IPracticeService practiceService)
         {
             _courseRepository = courseRepository;
             _studySessionRepository = studySessionRepository;
             _userRepository = userRepository;
             _languageRepository = languageRepository;
+            _practiceService = practiceService;
         }
 
         public async Task<IEnumerable<CourseModel>> GetTrackAsync(int? userId)
@@ -222,6 +228,63 @@ namespace MemoLingo.Application.Services
             await _userRepository.SetActiveCourseAsync(user.Id, languageId);
 
             return true;
+        }
+
+        public async Task<SectionDetailsModel> GetSectionDetailsAsync(int sectionId, int? userId)
+        {
+            var section = await _courseRepository.GetSectionDetailsAsync(sectionId);
+
+            if (section is null)
+            {
+                return null;
+            }
+
+            // O status vem da mesma montagem da trilha usada no mapa, para ficar consistente.
+            var trackSection = (await GetTrackAsync(userId))
+                .SelectMany(c => c.Sections)
+                .FirstOrDefault(s => s.Id == sectionId);
+
+            var words = (await _practiceService.GetWordsByLevelAsync(userId, section.Course.LanguageId, section.CefrLevel)).ToList();
+
+            return new SectionDetailsModel
+            {
+                Id = section.Id,
+                CourseId = section.CourseId,
+                CourseName = section.Course.Name,
+                Title = section.Title,
+                Description = section.Description,
+                Goal = section.Goal,
+                Position = section.Position,
+                CefrLevel = section.CefrLevel,
+                Status = trackSection?.Status ?? ProgressStatus.Locked,
+                TotalUnits = section.Units?.Count ?? 0,
+                CompletedUnits = trackSection?.Units.Count(u => u.Status == ProgressStatus.Completed) ?? 0,
+                TotalWords = words.Count,
+                PracticedWords = words.Count(w => w.SampleAttemptCount > 0),
+                MasteredWords = words.Count(w => w.SampleAttemptCount > 0 && w.LearningPercentage >= MasteryThreshold),
+                MasteryThreshold = MasteryThreshold,
+                Requirements = (section.Requirements ?? new List<SectionRequirement>())
+                    .OrderBy(r => r.Position)
+                    .Select(r => r.Description)
+                    .ToList(),
+                GrammarTopics = (section.GrammarTopics ?? new List<GrammarTopic>())
+                    .OrderByDescending(g => g.IsMandatory)
+                    .ThenBy(g => g.Position)
+                    .Select(g => new GrammarTopicModel
+                    {
+                        Id = g.Id,
+                        Position = g.Position,
+                        Title = g.Title,
+                        Explanation = g.Explanation,
+                        Structure = g.Structure,
+                        IsMandatory = g.IsMandatory,
+                        Examples = (g.Examples ?? string.Empty)
+                            .Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                            .ToList()
+                    })
+                    .ToList(),
+                Words = words
+            };
         }
 
         private async Task<User> ResolveUserAsync(int? userId)

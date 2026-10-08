@@ -6,8 +6,10 @@ namespace MemoLingo.Application.Services
     {
         Task<IEnumerable<UserModel>> GetAllAsync();
         Task<UserModel> GetByIdAsync(int id);
+        Task<UserModel> GetCurrentAsync(int? userId);
         Task<UserModel> CreateAsync(UserModel user);
         Task<bool> UpdateAsync(int id, UserModel user);
+        Task<UserModel> UpdateLearningStatsModeAsync(UpdateLearningStatsModeModel model);
         Task<bool> RemoveAsync(int id);
     }
 }

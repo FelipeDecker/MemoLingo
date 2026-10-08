@@ -8,9 +8,10 @@ namespace MemoLingo.Application.Services
 {
     public class PracticeService : IPracticeService
     {
-        private const int MaxStrengthLevel = 5;
+        // Percentual a partir do qual a palavra é considerada dominada.
+        private const int MasteredPercentage = 80;
 
-        // Janela de tentativas usada para calcular o percentual de aprendizado.
+        // Janela de tentativas usada no modo Premium de "últimas tentativas".
         private const int RecentAttemptsSampleSize = 100;
 
         // Tamanho padrão da sessão de Prática Focada (6 difíceis + 2 esquecidas + 2 dominadas).
@@ -20,10 +21,9 @@ namespace MemoLingo.Application.Services
         private const int ForgottenBucketDivisor = 5;
         private const int MasteredBucketDivisor = 5;
 
-        private static readonly int[] ReviewIntervalDays = { 1, 2, 4, 7, 15, 30 };
-
         private readonly IWordRepository _wordRepository;
         private readonly IWordPerformanceRepository _performanceRepository;
+        private readonly IWordPerformanceService _performanceService;
         private readonly IUserRepository _userRepository;
         private readonly IStudySessionRepository _studySessionRepository;
         private readonly IExerciseAttemptRepository _attemptRepository;
@@ -32,6 +32,7 @@ namespace MemoLingo.Application.Services
         public PracticeService(
             IWordRepository wordRepository,
             IWordPerformanceRepository performanceRepository,
+            IWordPerformanceService performanceService,
             IUserRepository userRepository,
             IStudySessionRepository studySessionRepository,
             IExerciseAttemptRepository attemptRepository,
@@ -39,6 +40,7 @@ namespace MemoLingo.Application.Services
         {
             _wordRepository = wordRepository;
             _performanceRepository = performanceRepository;
+            _performanceService = performanceService;
             _userRepository = userRepository;
             _studySessionRepository = studySessionRepository;
             _attemptRepository = attemptRepository;
@@ -63,22 +65,16 @@ namespace MemoLingo.Application.Services
             var performances = (await _performanceRepository.GetByUserAsync(user.Id))
                 .ToDictionary(wp => wp.WordId);
 
-            // O histórico já vem recortado nas últimas tentativas de cada palavra.
-            var recentStats = BuildRecentStats(
-                await _attemptRepository.GetRecentByLanguageAsync(user.Id, languageId.Value, RecentAttemptsSampleSize));
+            var statsMode = ResolveStatsMode(user);
+            var stats = await LoadStatsAsync(user.Id, languageId.Value, statsMode, performances);
 
             var models = words
-                .Select(word =>
-                {
-                    performances.TryGetValue(word.Id, out var performance);
-                    recentStats.TryGetValue(word.Id, out var stats);
-                    return ToModel(word, performance, stats);
-                })
+                .Select(word => ToModel(word, performances.GetValueOrDefault(word.Id), stats.GetValueOrDefault(word.Id), statsMode))
                 // O diferencial do app: as palavras com mais dificuldade vêm primeiro.
                 // Palavras sem nenhuma tentativa ("virgens") ficam no fim da lista.
-                .OrderBy(w => w.RecentAttemptCount == 0)
+                .OrderBy(w => w.SampleAttemptCount == 0)
                 .ThenBy(w => w.LearningPercentage)
-                .ThenByDescending(w => w.RecentWrongCount)
+                .ThenByDescending(w => w.SampleWrongCount)
                 .ThenByDescending(w => w.WrongCount)
                 .ThenBy(w => w.Text)
                 .AsEnumerable();
@@ -89,6 +85,32 @@ namespace MemoLingo.Application.Services
             }
 
             return models.ToList();
+        }
+
+        public async Task<IEnumerable<PracticeWordModel>> GetWordsByLevelAsync(int? userId, int languageId, CefrLevel cefrLevel)
+        {
+            var user = await ResolveUserAsync(userId);
+
+            var words = (await _wordRepository.GetByLanguageAsync(languageId))
+                .Where(w => w.CefrLevel == cefrLevel)
+                .ToList();
+
+            var performances = user is null
+                ? new Dictionary<int, WordPerformance>()
+                : (await _performanceRepository.GetByUserAsync(user.Id)).ToDictionary(wp => wp.WordId);
+
+            var statsMode = user is null ? LearningStatsMode.Total : ResolveStatsMode(user);
+            var stats = user is null
+                ? new Dictionary<int, WordStats>()
+                : await LoadStatsAsync(user.Id, languageId, statsMode, performances);
+
+            return words
+                .Select(word => ToModel(word, performances.GetValueOrDefault(word.Id), stats.GetValueOrDefault(word.Id), statsMode))
+                .OrderBy(w => w.SampleAttemptCount == 0)
+                .ThenBy(w => w.LearningPercentage)
+                .ThenByDescending(w => w.SampleWrongCount)
+                .ThenBy(w => w.Text)
+                .ToList();
         }
 
         public async Task<IEnumerable<PracticeWordModel>> GetFocusedPracticeWordsAsync(int userId, int take = FocusedPracticeSize)
@@ -117,16 +139,11 @@ namespace MemoLingo.Application.Services
             var performances = (await _performanceRepository.GetByUserAsync(user.Id))
                 .ToDictionary(wp => wp.WordId);
 
-            var recentStats = BuildRecentStats(
-                await _attemptRepository.GetRecentByLanguageAsync(user.Id, languageId.Value, RecentAttemptsSampleSize));
+            var statsMode = ResolveStatsMode(user);
+            var stats = await LoadStatsAsync(user.Id, languageId.Value, statsMode, performances);
 
             var pool = learnedWords
-                .Select(word =>
-                {
-                    performances.TryGetValue(word.Id, out var performance);
-                    recentStats.TryGetValue(word.Id, out var stats);
-                    return ToModel(word, performance, stats);
-                })
+                .Select(word => ToModel(word, performances.GetValueOrDefault(word.Id), stats.GetValueOrDefault(word.Id), statsMode))
                 .ToList();
 
             if (pool.Count == 0)
@@ -142,7 +159,7 @@ namespace MemoLingo.Application.Services
             // Serve tanto para o Grupo A quanto para o fallback das vagas restantes.
             var hardestQueue = pool
                 .OrderBy(w => w.LearningPercentage)
-                .ThenByDescending(w => w.RecentWrongCount)
+                .ThenByDescending(w => w.SampleWrongCount)
                 .ThenByDescending(w => w.WrongCount)
                 .ThenBy(w => w.Text)
                 .ToList();
@@ -160,10 +177,10 @@ namespace MemoLingo.Application.Services
                 .ThenBy(w => w.Text)
                 .Take(forgottenSize));
 
-            // GRUPO C: palavras dominadas (sem erros na janela recente).
+            // GRUPO C: palavras dominadas (percentual de acerto alto).
             AddRange(selected, selectedIds, pool
                 .Where(w => !selectedIds.Contains(w.Id))
-                .Where(w => w.RecentAttemptCount > 0 && w.RecentWrongCount == 0)
+                .Where(w => w.SampleAttemptCount > 0 && w.LearningPercentage >= MasteredPercentage)
                 .OrderByDescending(w => w.LearningPercentage)
                 .ThenByDescending(w => w.StrengthLevel)
                 .ThenBy(w => w.Text)
@@ -206,19 +223,14 @@ namespace MemoLingo.Application.Services
             var performances = (await _performanceRepository.GetByUserAsync(user.Id))
                 .ToDictionary(wp => wp.WordId);
 
-            var recentStats = BuildRecentStats(
-                await _attemptRepository.GetRecentByLanguageAsync(user.Id, languageId.Value, RecentAttemptsSampleSize));
+            var statsMode = ResolveStatsMode(user);
+            var stats = await LoadStatsAsync(user.Id, languageId.Value, statsMode, performances);
 
             // Prioriza os verbos com mais erros; empates são sorteados para variar as sessões.
             var selected = phrasalVerbs
-                .Select(word =>
-                {
-                    performances.TryGetValue(word.Id, out var performance);
-                    recentStats.TryGetValue(word.Id, out var stats);
-                    return ToModel(word, performance, stats);
-                })
+                .Select(word => ToModel(word, performances.GetValueOrDefault(word.Id), stats.GetValueOrDefault(word.Id), statsMode))
                 .OrderBy(w => w.LearningPercentage)
-                .ThenByDescending(w => w.RecentWrongCount)
+                .ThenByDescending(w => w.SampleWrongCount)
                 .ThenBy(_ => Random.Shared.Next())
                 .Take(take)
                 .ToList();
@@ -234,43 +246,10 @@ namespace MemoLingo.Application.Services
             var word = await _wordRepository.GetByIdAsync(result.WordId)
                 ?? throw new ArgumentException("Palavra não encontrada.", nameof(result));
 
-            var performance = await _performanceRepository.GetByUserAndWordAsync(user.Id, word.Id);
-            var isNew = performance is null;
-
-            if (isNew)
-            {
-                performance = new WordPerformance
-                {
-                    UserId = user.Id,
-                    WordId = word.Id
-                };
-            }
-
-            if (result.Correct)
-            {
-                performance.CorrectCount++;
-                performance.StrengthLevel = Math.Min(performance.StrengthLevel + 1, MaxStrengthLevel);
-            }
-            else
-            {
-                performance.WrongCount++;
-                performance.StrengthLevel = Math.Max(performance.StrengthLevel - 1, 0);
-            }
-
             var now = DateTime.UtcNow;
-            performance.LastReview = now;
-            performance.NextReview = now.AddDays(ReviewIntervalDays[performance.StrengthLevel]);
+            var performance = await _performanceService.ApplyAttemptAsync(user.Id, word.Id, result.Correct, now);
 
-            if (isNew)
-            {
-                await _performanceRepository.AddAsync(performance);
-            }
-            else
-            {
-                _performanceRepository.Update(performance);
-            }
-
-            await _performanceRepository.SaveChangesAsync();
+            await _performanceService.SaveChangesAsync();
 
             await RegisterAttemptAsync(user, word, result.Correct, now);
 
@@ -280,9 +259,7 @@ namespace MemoLingo.Application.Services
                 await _nuanceService.FlagGroupsForWordErrorAsync(user.Id, word.Id);
             }
 
-            var stats = await GetRecentStatsAsync(user.Id, word.Id);
-
-            return ToModel(word, performance, stats);
+            return await ToModelAsync(user, word, performance);
         }
 
         public async Task<PracticeWordModel> RegisterWrongAttemptAsync(PracticeWrongAttemptModel model)
@@ -293,47 +270,22 @@ namespace MemoLingo.Application.Services
             var word = await _wordRepository.GetByIdAsync(model.WordId)
                 ?? throw new ArgumentException("Palavra não encontrada.", nameof(model));
 
-            var performance = await _performanceRepository.GetByUserAndWordAsync(user.Id, word.Id);
-            var isNew = performance is null;
-
-            if (isNew)
-            {
-                performance = new WordPerformance
-                {
-                    UserId = user.Id,
-                    WordId = word.Id
-                };
-            }
-
             var now = DateTime.UtcNow;
+            var performance = await _performanceService.ApplyAttemptAsync(user.Id, word.Id, false, now);
 
-            performance.WrongCount++;
-            performance.StrengthLevel = Math.Max(performance.StrengthLevel - 1, 0);
-            performance.LastReview = now;
             // Errar significa que a palavra volta imediatamente para a fila de revisão.
             performance.NextReview = now;
 
-            if (isNew)
-            {
-                await _performanceRepository.AddAsync(performance);
-            }
-            else
-            {
-                _performanceRepository.Update(performance);
-            }
-
-            await _performanceRepository.SaveChangesAsync();
+            await _performanceService.SaveChangesAsync();
 
             // O clique do usuário vira uma tentativa errada no histórico da palavra.
             await RegisterAttemptAsync(user, word, false, now);
 
             await _nuanceService.FlagGroupsForWordErrorAsync(user.Id, word.Id);
 
-            // Recalcula o percentual considerando a janela das tentativas mais recentes.
-            var stats = await GetRecentStatsAsync(user.Id, word.Id);
-
-            return ToModel(word, performance, stats);
+            return await ToModelAsync(user, word, performance);
         }
+
         private async Task RegisterAttemptAsync(User user, Word word, bool correct, DateTime answeredAt)
         {
             var session = await _studySessionRepository.GetOrCreatePracticeSessionAsync(user.Id, word.LanguageId);
@@ -350,19 +302,6 @@ namespace MemoLingo.Application.Services
             });
 
             await _attemptRepository.SaveChangesAsync();
-        }
-
-        private async Task<RecentWordStats> GetRecentStatsAsync(int userId, int wordId)
-        {
-            var samples = await _attemptRepository.GetRecentByWordAsync(userId, wordId, RecentAttemptsSampleSize);
-            return RecentWordStats.FromSamples(samples);
-        }
-
-        private static Dictionary<int, RecentWordStats> BuildRecentStats(IEnumerable<WordAttemptSample> samples)
-        {
-            return samples
-                .GroupBy(sample => sample.WordId)
-                .ToDictionary(group => group.Key, group => RecentWordStats.FromSamples(group));
         }
 
         private static void AddRange(List<PracticeWordModel> selected, HashSet<int> selectedIds, IEnumerable<PracticeWordModel> candidates)
@@ -398,7 +337,44 @@ namespace MemoLingo.Application.Services
                 : await _userRepository.GetDefaultAsync();
         }
 
-        private static PracticeWordModel ToModel(Word word, WordPerformance performance, RecentWordStats stats)
+        // O modo "últimas tentativas" só vale para assinantes Premium que o habilitaram no perfil.
+        private static LearningStatsMode ResolveStatsMode(User user)
+        {
+            return user.Plan == SubscriptionPlan.Premium && user.LearningStatsMode == LearningStatsMode.RecentAttempts
+                ? LearningStatsMode.RecentAttempts
+                : LearningStatsMode.Total;
+        }
+
+        private async Task<Dictionary<int, WordStats>> LoadStatsAsync(
+            int userId,
+            int languageId,
+            LearningStatsMode statsMode,
+            Dictionary<int, WordPerformance> performances)
+        {
+            if (statsMode == LearningStatsMode.RecentAttempts)
+            {
+                var samples = await _attemptRepository.GetRecentByLanguageAsync(userId, languageId, RecentAttemptsSampleSize);
+
+                return samples
+                    .GroupBy(sample => sample.WordId)
+                    .ToDictionary(group => group.Key, group => WordStats.FromSamples(group));
+            }
+
+            return performances.ToDictionary(pair => pair.Key, pair => WordStats.FromPerformance(pair.Value));
+        }
+
+        private async Task<PracticeWordModel> ToModelAsync(User user, Word word, WordPerformance performance)
+        {
+            var statsMode = ResolveStatsMode(user);
+
+            var stats = statsMode == LearningStatsMode.RecentAttempts
+                ? WordStats.FromSamples(await _attemptRepository.GetRecentByWordAsync(user.Id, word.Id, RecentAttemptsSampleSize))
+                : WordStats.FromPerformance(performance);
+
+            return ToModel(word, performance, stats, statsMode);
+        }
+
+        private static PracticeWordModel ToModel(Word word, WordPerformance performance, WordStats stats, LearningStatsMode statsMode)
         {
             return new PracticeWordModel
             {
@@ -411,20 +387,18 @@ namespace MemoLingo.Application.Services
                 CorrectCount = performance?.CorrectCount ?? 0,
                 WrongCount = performance?.WrongCount ?? 0,
                 StrengthLevel = performance?.StrengthLevel ?? 0,
-                RecentAttemptCount = stats?.Total ?? 0,
-                RecentCorrectCount = stats?.Correct ?? 0,
-                RecentWrongCount = stats?.Wrong ?? 0,
+                StatsMode = statsMode,
+                SampleAttemptCount = stats?.Total ?? 0,
+                SampleCorrectCount = stats?.Correct ?? 0,
+                SampleWrongCount = stats?.Wrong ?? 0,
                 LearningPercentage = CalculateLearningPercentage(stats),
                 LastReview = performance?.LastReview,
                 NextReview = performance?.NextReview
             };
         }
 
-        /// <summary>
-        /// O percentual considera apenas a janela das tentativas mais recentes da palavra:
-        /// (acertos recentes / total de tentativas recentes) * 100.
-        /// </summary>
-        private static int CalculateLearningPercentage(RecentWordStats stats)
+        // (acertos / tentativas consideradas) * 100, seja no total acumulado ou na janela recente.
+        private static int CalculateLearningPercentage(WordStats stats)
         {
             if (stats is null || stats.Total == 0)
             {
@@ -449,17 +423,31 @@ namespace MemoLingo.Application.Services
             return active.LanguageId;
         }
 
-        private sealed class RecentWordStats
+        private sealed class WordStats
         {
             public int Total { get; init; }
             public int Correct { get; init; }
             public int Wrong => Total - Correct;
 
-            public static RecentWordStats FromSamples(IEnumerable<WordAttemptSample> samples)
+            public static WordStats FromPerformance(WordPerformance performance)
+            {
+                if (performance is null)
+                {
+                    return null;
+                }
+
+                return new WordStats
+                {
+                    Total = performance.CorrectCount + performance.WrongCount,
+                    Correct = performance.CorrectCount
+                };
+            }
+
+            public static WordStats FromSamples(IEnumerable<WordAttemptSample> samples)
             {
                 var list = samples.ToList();
 
-                return new RecentWordStats
+                return new WordStats
                 {
                     Total = list.Count,
                     Correct = list.Count(sample => sample.IsCorrect)

@@ -8,8 +8,11 @@ namespace MemoLingo.Infrastructure.Data.Seeding.Models
         public string CourseName { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Goal { get; set; }
         public int Position { get; set; }
         public CefrLevel CefrLevel { get; set; }
         public bool Active { get; set; }
+        public List<string> Requirements { get; set; }
+        public List<GrammarTopicSeed> GrammarTopics { get; set; }
     }
 }

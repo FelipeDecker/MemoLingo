@@ -7,7 +7,14 @@
 
     <h1 class="dicionario-titulo">Dicionário de Palavras</h1>
     <p class="dicionario-subtitulo">
-        O percentual de aprendizado considera apenas as suas últimas @RecentAttemptsWindow tentativas de cada palavra.
+        @if (UsesRecentAttempts)
+        {
+            <text>O percentual de aprendizado considera apenas as suas últimas @RecentAttemptsWindow tentativas de cada palavra.</text>
+        }
+        else
+        {
+            <text>O percentual de aprendizado considera todos os seus acertos e erros em cada palavra.</text>
+        }
     </p>
 
     <div class="dicionario-acoes">
@@ -67,7 +74,7 @@
                     <div class="palavra-aprendizado">
                         <div class="aprendizado-topo">
                             <span class="aprendizado-percentual">@word.LearningPercentage%</span>
-                            <span class="aprendizado-detalhe">@GetRecentSummary(word)</span>
+                            @GetAttemptsSummary(word)
                         </div>
                         <div class="aprendizado-barra" role="progressbar"
                              aria-valuenow="@word.LearningPercentage" aria-valuemin="0" aria-valuemax="100">

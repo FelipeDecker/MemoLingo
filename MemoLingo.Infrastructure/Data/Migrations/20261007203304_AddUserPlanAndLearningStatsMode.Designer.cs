@@ -3,6 +3,7 @@ using System;
 using MemoLingo.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MemoLingo.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261007203304_AddUserPlanAndLearningStatsMode")]
+    partial class AddUserPlanAndLearningStatsMode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,47 +165,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.HasIndex("WordId", "AnsweredAt");
 
                     b.ToTable("ExerciseAttempts");
-                });
-
-            modelBuilder.Entity("MemoLingo.Domain.Entities.GrammarTopic", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Examples")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<string>("Explanation")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<bool>("IsMandatory")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("Position")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SectionId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Structure")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SectionId", "Position");
-
-                    b.ToTable("GrammarTopics");
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.Language", b =>
@@ -425,10 +387,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<string>("Goal")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
                     b.Property<int>("Position")
                         .HasColumnType("integer");
 
@@ -442,32 +400,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.HasIndex("CourseId", "Position");
 
                     b.ToTable("Sections");
-                });
-
-            modelBuilder.Entity("MemoLingo.Domain.Entities.SectionRequirement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<int>("Position")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SectionId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SectionId", "Position");
-
-                    b.ToTable("SectionRequirements");
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.Sentence", b =>
@@ -969,17 +901,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.Navigation("Word");
                 });
 
-            modelBuilder.Entity("MemoLingo.Domain.Entities.GrammarTopic", b =>
-                {
-                    b.HasOne("MemoLingo.Domain.Entities.Section", "Section")
-                        .WithMany("GrammarTopics")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
-                });
-
             modelBuilder.Entity("MemoLingo.Domain.Entities.LanguageProgress", b =>
                 {
                     b.HasOne("MemoLingo.Domain.Entities.Language", "Language")
@@ -1068,17 +989,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("MemoLingo.Domain.Entities.SectionRequirement", b =>
-                {
-                    b.HasOne("MemoLingo.Domain.Entities.Section", "Section")
-                        .WithMany("Requirements")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.Sentence", b =>
@@ -1285,10 +1195,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.Section", b =>
                 {
-                    b.Navigation("GrammarTopics");
-
-                    b.Navigation("Requirements");
-
                     b.Navigation("Units");
                 });
 

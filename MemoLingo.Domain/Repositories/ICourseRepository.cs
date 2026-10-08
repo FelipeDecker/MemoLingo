@@ -9,5 +9,6 @@ namespace MemoLingo.Domain.Repositories
     public interface ICourseRepository
     {
         Task<IEnumerable<Course>> GetActiveTrackAsync(int? languageId);
+        Task<Section> GetSectionDetailsAsync(int sectionId);
     }
 }

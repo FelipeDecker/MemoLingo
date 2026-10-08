@@ -45,6 +45,7 @@ namespace MemoLingo.Application.Services
         private readonly IWordRepository _wordRepository;
         private readonly IStudySessionRepository _studySessionRepository;
         private readonly IExerciseAttemptRepository _attemptRepository;
+        private readonly IWordPerformanceService _performanceService;
         private readonly IUserRepository _userRepository;
         private readonly IUserNodeProgressRepository _nodeProgressRepository;
         private readonly ICourseService _courseService;
@@ -55,6 +56,7 @@ namespace MemoLingo.Application.Services
             IWordRepository wordRepository,
             IStudySessionRepository studySessionRepository,
             IExerciseAttemptRepository attemptRepository,
+            IWordPerformanceService performanceService,
             IUserRepository userRepository,
             IUserNodeProgressRepository nodeProgressRepository,
             ICourseService courseService)
@@ -64,6 +66,7 @@ namespace MemoLingo.Application.Services
             _wordRepository = wordRepository;
             _studySessionRepository = studySessionRepository;
             _attemptRepository = attemptRepository;
+            _performanceService = performanceService;
             _userRepository = userRepository;
             _nodeProgressRepository = nodeProgressRepository;
             _courseService = courseService;
@@ -191,6 +194,8 @@ namespace MemoLingo.Application.Services
             var isCorrect = normalizedAnswer.Length > 0
                 && acceptedAnswers.Select(Normalize).Contains(normalizedAnswer);
 
+            var answeredAt = DateTime.UtcNow;
+
             await _attemptRepository.AddAsync(new ExerciseAttempt
             {
                 StudySessionId = session.Id,
@@ -201,8 +206,14 @@ namespace MemoLingo.Application.Services
                 ExpectedAnswer = Truncate(correctAnswer),
                 IsCorrect = isCorrect,
                 ResponseTimeMs = answer.ResponseTimeMs,
-                AnsweredAt = DateTime.UtcNow
+                AnsweredAt = answeredAt
             });
+
+            if (wordId.HasValue)
+            {
+                // Exercícios ligados a uma palavra alimentam o desempenho dela (dicionário e revisão).
+                await _performanceService.ApplyAttemptAsync(user.Id, wordId.Value, isCorrect, answeredAt);
+            }
 
             if (isCorrect)
             {
@@ -213,7 +224,8 @@ namespace MemoLingo.Application.Services
                 session.WrongCount++;
             }
 
-            // A sessão é rastreada pelo mesmo contexto, então um único SaveChanges grava os dois.
+            // A sessão, a tentativa e o desempenho da palavra são rastreados pelo mesmo contexto,
+            // então um único SaveChanges grava tudo.
             await _attemptRepository.SaveChangesAsync();
 
             return new LessonAnswerResultModel

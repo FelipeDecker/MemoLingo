@@ -12,7 +12,7 @@ namespace MemoLingo.Front.Pages
         [Inject]
         private NavigationManager Navigation { get; set; }
 
-        // Espelha a janela usada pelo back-end para calcular o percentual de aprendizado.
+        // Espelha a janela usada pelo back-end no modo Premium de últimas tentativas.
         private const int RecentAttemptsWindow = 100;
 
         private List<PracticeWordModel> words;
@@ -69,9 +69,10 @@ namespace MemoLingo.Front.Pages
                 word.CorrectCount = updated.CorrectCount;
                 word.WrongCount = updated.WrongCount;
                 word.StrengthLevel = updated.StrengthLevel;
-                word.RecentAttemptCount = updated.RecentAttemptCount;
-                word.RecentCorrectCount = updated.RecentCorrectCount;
-                word.RecentWrongCount = updated.RecentWrongCount;
+                word.StatsMode = updated.StatsMode;
+                word.SampleAttemptCount = updated.SampleAttemptCount;
+                word.SampleCorrectCount = updated.SampleCorrectCount;
+                word.SampleWrongCount = updated.SampleWrongCount;
             }
             finally
             {
@@ -85,11 +86,16 @@ namespace MemoLingo.Front.Pages
                 || (word.Translation?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false);
         }
 
-        private static string GetRecentSummary(PracticeWordModel word)
+        private bool UsesRecentAttempts =>
+            words?.FirstOrDefault()?.StatsMode == LearningStatsMode.RecentAttempts;
+
+        private static string GetAttemptsSummary(PracticeWordModel word)
         {
-            return word.RecentAttemptCount == 0
-                ? "sem tentativas recentes"
-                : $"{word.RecentCorrectCount} de {word.RecentAttemptCount} tentativas recentes";
+            var suffix = word.StatsMode == LearningStatsMode.RecentAttempts ? " recentes" : string.Empty;
+
+            return word.SampleAttemptCount == 0
+                ? $"sem tentativas{suffix}"
+                : $"{word.SampleCorrectCount} de {word.SampleAttemptCount} tentativas{suffix}";
         }
 
         private static string GetProgressCssClass(int percentage)

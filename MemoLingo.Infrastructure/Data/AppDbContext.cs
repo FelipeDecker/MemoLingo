@@ -17,6 +17,8 @@ namespace MemoLingo.Infrastructure.Data
         public DbSet<SentenceWord> SentenceWords => Set<SentenceWord>();
         public DbSet<Course> Courses => Set<Course>();
         public DbSet<Section> Sections => Set<Section>();
+        public DbSet<SectionRequirement> SectionRequirements => Set<SectionRequirement>();
+        public DbSet<GrammarTopic> GrammarTopics => Set<GrammarTopic>();
         public DbSet<Unit> Units => Set<Unit>();
         public DbSet<PathNode> PathNodes => Set<PathNode>();
         public DbSet<Lesson> Lessons => Set<Lesson>();
@@ -128,6 +130,7 @@ namespace MemoLingo.Infrastructure.Data
             {
                 entity.Property(s => s.Title).IsRequired().HasMaxLength(150);
                 entity.Property(s => s.Description).HasMaxLength(500);
+                entity.Property(s => s.Goal).HasMaxLength(1000);
 
                 entity.HasOne(s => s.Course)
                     .WithMany(c => c.Sections)
@@ -135,6 +138,33 @@ namespace MemoLingo.Infrastructure.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasIndex(s => new { s.CourseId, s.Position });
+            });
+
+            modelBuilder.Entity<SectionRequirement>(entity =>
+            {
+                entity.Property(r => r.Description).IsRequired().HasMaxLength(500);
+
+                entity.HasOne(r => r.Section)
+                    .WithMany(s => s.Requirements)
+                    .HasForeignKey(r => r.SectionId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(r => new { r.SectionId, r.Position });
+            });
+
+            modelBuilder.Entity<GrammarTopic>(entity =>
+            {
+                entity.Property(g => g.Title).IsRequired().HasMaxLength(150);
+                entity.Property(g => g.Explanation).HasMaxLength(2000);
+                entity.Property(g => g.Structure).HasMaxLength(500);
+                entity.Property(g => g.Examples).HasMaxLength(2000);
+
+                entity.HasOne(g => g.Section)
+                    .WithMany(s => s.GrammarTopics)
+                    .HasForeignKey(g => g.SectionId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(g => new { g.SectionId, g.Position });
             });
 
             modelBuilder.Entity<Unit>(entity =>

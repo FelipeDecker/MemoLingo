@@ -9,5 +9,6 @@ namespace MemoLingo.Application.Services
         Task<IEnumerable<LanguageModel>> GetAvailableLanguagesAsync(int? userId);
         Task<UserCourseModel> EnrollAsync(int? userId, int languageId);
         Task<bool> SetActiveCourseAsync(int? userId, int languageId);
+        Task<SectionDetailsModel> GetSectionDetailsAsync(int sectionId, int? userId);
     }
 }

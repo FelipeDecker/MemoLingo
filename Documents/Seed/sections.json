@@ -3,10 +3,84 @@
     "languageCode": "en",
     "courseName": "Inglês",
     "title": "Seção 1 - Primeiros Passos",
-    "description": "Vocabulário essencial do dia a dia: saudações, pessoas, comidas, animais, cores, números e verbos.",
+    "description": "Todo o vocabulário essencial de nível A1: saudações, família, comida, casa, corpo, tempo, cidade, viagem, compras, escola, lazer, natureza e sentimentos.",
     "position": 1,
     "cefrLevel": "A1",
-    "active": true
+    "active": true,
+    "goal": "Compreender e usar expressões do dia a dia e frases simples para se apresentar, falar de si, da família, da rotina e fazer perguntas básicas.",
+    "requirements": [
+      "Aprender todas as palavras de nível A1 listadas nesta página, mantendo pelo menos 80% de acerto em cada uma.",
+      "Concluir todas as lições das unidades da Seção 1.",
+      "Dominar o Presente Simples (Present Simple) em frases afirmativas, negativas e interrogativas.",
+      "Usar o verbo \"to be\" (am, is, are) para se apresentar e descrever pessoas, lugares e objetos.",
+      "Entender e responder perguntas simples com what, where, who, when, how e how much."
+    ],
+    "grammarTopics": [
+      {
+        "title": "Present Simple (Presente Simples)",
+        "explanation": "Tempo verbal obrigatório do nível A1. Usado para rotinas, hábitos, fatos e verdades gerais. Na 3ª pessoa do singular (he, she, it) o verbo recebe -s ou -es. Negativas e perguntas usam o auxiliar do/does.",
+        "structure": "Afirmativa: sujeito + verbo (+s/es) | Negativa: sujeito + do/does not + verbo | Pergunta: Do/Does + sujeito + verbo?",
+        "examples": [
+          "I work in an office.",
+          "She eats bread with cheese.",
+          "We do not like coffee.",
+          "Does he speak English?"
+        ],
+        "isMandatory": true
+      },
+      {
+        "title": "Verbo to be (am, is, are)",
+        "explanation": "Verbo \"ser/estar\". Base para se apresentar, dizer idade, profissão, sentimentos e localização.",
+        "structure": "I am | you/we/they are | he/she/it is | Pergunta: Am/Is/Are + sujeito?",
+        "examples": [
+          "I am Anna.",
+          "She is my sister.",
+          "Are you tired?"
+        ],
+        "isMandatory": true
+      },
+      {
+        "title": "Pronomes pessoais e possessivos",
+        "explanation": "Pronomes sujeito (I, you, he...), objeto (me, him, her...) e adjetivos possessivos (my, your, his...).",
+        "structure": "I/me/my | you/you/your | he/him/his | she/her/her | we/us/our | they/them/their",
+        "examples": [
+          "He knows me.",
+          "This is my house.",
+          "Her name is Maria."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "There is / There are",
+        "explanation": "Indica a existência de algo (haver/ter).",
+        "structure": "There is + singular | There are + plural",
+        "examples": [
+          "There is a sofa in the living room.",
+          "There are two cats in the garden."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Plural dos substantivos e artigos",
+        "explanation": "Plural regular com -s/-es e alguns irregulares; artigos a/an (indefinido) e the (definido).",
+        "structure": "a + som de consoante | an + som de vogal | the + específico",
+        "examples": [
+          "I eat an egg and an apple.",
+          "The children play outside."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Imperativo",
+        "explanation": "Usado para dar instruções e pedidos. Negativa com \"do not\".",
+        "structure": "Verbo no infinitivo sem \"to\" | Do not + verbo",
+        "examples": [
+          "Close the door, please.",
+          "Do not be late."
+        ],
+        "isMandatory": false
+      }
+    ]
   },
   {
     "languageCode": "en",
@@ -15,6 +89,317 @@
     "description": "Situações de viagem: aeroporto, hotel e deslocamento pela cidade.",
     "position": 2,
     "cefrLevel": "A2",
-    "active": true
+    "active": true,
+    "goal": "Comunicar-se em situações rotineiras e de viagem, descrever experiências passadas e falar sobre planos simples.",
+    "requirements": [
+      "Aprender todas as palavras de nível A2 com pelo menos 80% de acerto.",
+      "Concluir todas as lições das unidades da Seção 2.",
+      "Dominar o Passado Simples (Past Simple) com verbos regulares e irregulares.",
+      "Falar sobre planos futuros com \"going to\" e \"will\".",
+      "Fazer comparações usando comparativos e superlativos."
+    ],
+    "grammarTopics": [
+      {
+        "title": "Past Simple (Passado Simples)",
+        "explanation": "Tempo verbal obrigatório do nível A2. Usado para ações concluídas no passado. Verbos regulares recebem -ed; os irregulares têm forma própria. Negativas e perguntas usam did.",
+        "structure": "Afirmativa: sujeito + verbo no passado | Negativa: sujeito + did not + verbo | Pergunta: Did + sujeito + verbo?",
+        "examples": [
+          "I visited London last year.",
+          "She went to the airport.",
+          "Did you book a hotel?"
+        ],
+        "isMandatory": true
+      },
+      {
+        "title": "Present Continuous",
+        "explanation": "Ações acontecendo agora ou planos combinados.",
+        "structure": "sujeito + am/is/are + verbo-ing",
+        "examples": [
+          "I am waiting for the bus.",
+          "We are leaving tomorrow."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Futuro com going to e will",
+        "explanation": "\"Going to\" para planos e previsões com evidência; \"will\" para decisões na hora e promessas.",
+        "structure": "sujeito + am/is/are going to + verbo | sujeito + will + verbo",
+        "examples": [
+          "I am going to travel in July.",
+          "I will help you."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Comparativos e superlativos",
+        "explanation": "Comparar pessoas, lugares e coisas.",
+        "structure": "adjetivo-er than / more + adjetivo than | the adjetivo-est / the most + adjetivo",
+        "examples": [
+          "The train is faster than the bus.",
+          "This is the most expensive hotel."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Verbos modais: can, could, should, must",
+        "explanation": "Expressar habilidade, pedidos, conselhos e obrigação.",
+        "structure": "sujeito + modal + verbo",
+        "examples": [
+          "Can I pay by card?",
+          "You should take an umbrella."
+        ],
+        "isMandatory": false
+      }
+    ]
+  },
+  {
+    "languageCode": "en",
+    "courseName": "Inglês",
+    "title": "Seção 3 - Ganhando Confiança",
+    "description": "Experiências, opiniões e situações do cotidiano com mais autonomia.",
+    "position": 3,
+    "cefrLevel": "B1",
+    "active": true,
+    "goal": "Lidar com a maioria das situações de viagem, descrever experiências, sonhos e ambições e justificar opiniões de forma simples.",
+    "requirements": [
+      "Aprender todas as palavras de nível B1 com pelo menos 80% de acerto.",
+      "Concluir todas as lições das unidades da Seção 3.",
+      "Dominar o Present Perfect e diferenciá-lo do Past Simple.",
+      "Usar condicionais de 1º e 2º tipo.",
+      "Narrar acontecimentos usando Past Continuous e conectores de sequência."
+    ],
+    "grammarTopics": [
+      {
+        "title": "Present Perfect",
+        "explanation": "Tempo verbal obrigatório do nível B1. Liga o passado ao presente: experiências de vida, ações recentes e situações que continuam até agora.",
+        "structure": "sujeito + have/has + particípio passado | com ever, never, already, yet, for, since",
+        "examples": [
+          "I have lived here for five years.",
+          "Have you ever been to Japan?",
+          "She has already finished."
+        ],
+        "isMandatory": true
+      },
+      {
+        "title": "Past Continuous",
+        "explanation": "Ações em andamento em um momento do passado, muitas vezes interrompidas por outra ação.",
+        "structure": "sujeito + was/were + verbo-ing",
+        "examples": [
+          "I was sleeping when you called."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Condicionais (1º e 2º)",
+        "explanation": "1º: situações reais/prováveis no futuro. 2º: situações hipotéticas no presente.",
+        "structure": "If + presente, will + verbo | If + passado, would + verbo",
+        "examples": [
+          "If it rains, I will stay home.",
+          "If I had money, I would travel."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Used to",
+        "explanation": "Hábitos e estados do passado que não acontecem mais.",
+        "structure": "sujeito + used to + verbo",
+        "examples": [
+          "I used to play football."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Orações relativas (who, which, that, where)",
+        "explanation": "Dar informações extras sobre pessoas, coisas e lugares.",
+        "structure": "substantivo + who/which/that/where + oração",
+        "examples": [
+          "The woman who lives next door is a doctor."
+        ],
+        "isMandatory": false
+      }
+    ]
+  },
+  {
+    "languageCode": "en",
+    "courseName": "Inglês",
+    "title": "Seção 4 - Independência",
+    "description": "Temas abstratos, trabalho, notícias e argumentação.",
+    "position": 4,
+    "cefrLevel": "B2",
+    "active": true,
+    "goal": "Compreender ideias principais de textos complexos, interagir com fluência e espontaneidade e produzir textos claros e detalhados.",
+    "requirements": [
+      "Aprender todas as palavras de nível B2 com pelo menos 80% de acerto.",
+      "Concluir todas as lições das unidades da Seção 4.",
+      "Dominar a voz passiva em diferentes tempos verbais.",
+      "Usar o 3º condicional e \"wish\" para falar de arrependimentos.",
+      "Relatar falas de outras pessoas com o discurso indireto."
+    ],
+    "grammarTopics": [
+      {
+        "title": "Voz passiva (Passive Voice)",
+        "explanation": "Estrutura obrigatória do nível B2. Destaca a ação ou quem a recebe, e não quem a pratica.",
+        "structure": "objeto + be (no tempo adequado) + particípio passado (+ by + agente)",
+        "examples": [
+          "The bridge was built in 1990.",
+          "The report is being written.",
+          "English is spoken here."
+        ],
+        "isMandatory": true
+      },
+      {
+        "title": "3º condicional e wish",
+        "explanation": "Situações hipotéticas no passado e arrependimentos.",
+        "structure": "If + had + particípio, would have + particípio | I wish + passado/past perfect",
+        "examples": [
+          "If I had studied, I would have passed.",
+          "I wish I had more time."
+        ],
+        "isMandatory": true
+      },
+      {
+        "title": "Discurso indireto (Reported Speech)",
+        "explanation": "Relatar o que alguém disse, recuando os tempos verbais.",
+        "structure": "He said (that) + oração com tempo recuado",
+        "examples": [
+          "She said she was tired."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Past Perfect",
+        "explanation": "Ação que aconteceu antes de outra no passado.",
+        "structure": "sujeito + had + particípio passado",
+        "examples": [
+          "When I arrived, the train had left."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Modais de dedução",
+        "explanation": "Fazer deduções sobre o presente e o passado.",
+        "structure": "must/might/can't + verbo | must/might/can't have + particípio",
+        "examples": [
+          "He must be at home.",
+          "She might have forgotten."
+        ],
+        "isMandatory": false
+      }
+    ]
+  },
+  {
+    "languageCode": "en",
+    "courseName": "Inglês",
+    "title": "Seção 5 - Fluência Avançada",
+    "description": "Linguagem acadêmica, profissional e nuances de significado.",
+    "position": 5,
+    "cefrLevel": "C1",
+    "active": true,
+    "goal": "Compreender textos longos e exigentes, reconhecer significados implícitos e expressar-se de forma fluente, flexível e eficaz em contextos sociais, acadêmicos e profissionais.",
+    "requirements": [
+      "Aprender todas as palavras de nível C1 com pelo menos 80% de acerto.",
+      "Concluir todas as lições das unidades da Seção 5.",
+      "Dominar a inversão para ênfase e as orações clivadas (cleft sentences).",
+      "Usar condicionais mistos e estruturas hipotéticas avançadas.",
+      "Empregar collocations e expressões idiomáticas com naturalidade."
+    ],
+    "grammarTopics": [
+      {
+        "title": "Inversão para ênfase",
+        "explanation": "Estrutura obrigatória do nível C1. Após expressões negativas ou restritivas no início da frase, inverte-se sujeito e auxiliar.",
+        "structure": "Never/Rarely/Not only/No sooner + auxiliar + sujeito + verbo",
+        "examples": [
+          "Never have I seen such a beautiful place.",
+          "Not only did he lie, but he also stole."
+        ],
+        "isMandatory": true
+      },
+      {
+        "title": "Orações clivadas (Cleft Sentences)",
+        "explanation": "Destacar uma parte da informação.",
+        "structure": "It is/was ... that/who ... | What ... is/was ...",
+        "examples": [
+          "It was John who called.",
+          "What I need is a holiday."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Condicionais mistos",
+        "explanation": "Combinam tempos diferentes na condição e no resultado.",
+        "structure": "If + past perfect, would + verbo | If + passado, would have + particípio",
+        "examples": [
+          "If I had taken the job, I would be rich now."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Particípios e orações reduzidas",
+        "explanation": "Encurtar orações para um estilo mais formal e conciso.",
+        "structure": "Having + particípio, ... | particípio, ...",
+        "examples": [
+          "Having finished the report, she went home."
+        ],
+        "isMandatory": false
+      }
+    ]
+  },
+  {
+    "languageCode": "en",
+    "courseName": "Inglês",
+    "title": "Seção 6 - Domínio",
+    "description": "Proficiência plena: estilo, registro e precisão em qualquer contexto.",
+    "position": 6,
+    "cefrLevel": "C2",
+    "active": true,
+    "goal": "Compreender praticamente tudo o que se ouve ou lê, resumir informações de diferentes fontes e expressar-se de forma espontânea, muito fluente e precisa, diferenciando nuances finas de significado.",
+    "requirements": [
+      "Aprender todas as palavras de nível C2 com pelo menos 80% de acerto.",
+      "Concluir todas as lições das unidades da Seção 6.",
+      "Dominar o subjuntivo e as estruturas formais da língua escrita.",
+      "Adequar o registro (formal, neutro, informal) a cada situação.",
+      "Usar expressões idiomáticas, phrasal verbs e nuances de sinônimos com precisão."
+    ],
+    "grammarTopics": [
+      {
+        "title": "Subjuntivo e estruturas formais",
+        "explanation": "Estrutura obrigatória do nível C2. Usado após verbos e expressões de sugestão, exigência e necessidade, e em construções formais fixas.",
+        "structure": "suggest/insist/demand/It is essential + that + sujeito + verbo na forma base | Were I to ... | Should you ...",
+        "examples": [
+          "I suggest that he be informed.",
+          "It is essential that she arrive on time.",
+          "Were I to accept, I would move abroad."
+        ],
+        "isMandatory": true
+      },
+      {
+        "title": "Nominalização",
+        "explanation": "Transformar verbos e adjetivos em substantivos para um texto mais formal e acadêmico.",
+        "structure": "verbo/adjetivo → substantivo",
+        "examples": [
+          "The government decided → The government's decision."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Elipse e substituição",
+        "explanation": "Omitir ou substituir termos já mencionados para evitar repetição.",
+        "structure": "so, not, do so, one, ones",
+        "examples": [
+          "I hope so.",
+          "She asked me to call, and I did so."
+        ],
+        "isMandatory": false
+      },
+      {
+        "title": "Registro e estilo",
+        "explanation": "Escolher vocabulário e estruturas de acordo com o contexto e o público.",
+        "structure": "formal ↔ neutro ↔ informal",
+        "examples": [
+          "Could you possibly help me? / Can you help me?"
+        ],
+        "isMandatory": false
+      }
+    ]
   }
 ]

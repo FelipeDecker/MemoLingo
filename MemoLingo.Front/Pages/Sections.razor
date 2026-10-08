@@ -20,14 +20,10 @@
 
             <div class="section-card @(isCurrent ? "current" : "done")">
                 <div class="section-card-info">
-                    @if (isCurrent)
-                    {
-                        <span class="section-card-level current">@section.CefrLevel</span>
-                    }
-                    else
-                    {
-                        <span class="section-card-level">@section.CefrLevel • VER DETALHES</span>
-                    }
+                    <span class="section-card-level @(isCurrent ? "current" : null)">
+                        @section.CefrLevel •
+                        <a class="section-card-details" href="@($"/section/{section.Id}/details")">VER DETALHES</a>
+                    </span>
 
                     <h2 class="section-card-title">@section.Title</h2>
 

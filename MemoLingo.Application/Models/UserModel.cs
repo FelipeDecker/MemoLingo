@@ -1,3 +1,5 @@
+using MemoLingo.Domain.Enums;
+
 namespace MemoLingo.Application.Models
 {
     public class UserModel
@@ -8,5 +10,7 @@ namespace MemoLingo.Application.Models
         public DateTime CreatedAt { get; set; }
         public bool Active { get; set; }
         public int NativeLanguageId { get; set; }
+        public SubscriptionPlan Plan { get; set; }
+        public LearningStatsMode LearningStatsMode { get; set; }
     }
 }

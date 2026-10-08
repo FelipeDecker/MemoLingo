@@ -548,7 +548,7 @@ namespace MemoLingo.Infrastructure.Data.Seeding
         {
             var words = await _context.Words
                 .AsNoTracking()
-                .Select(w => new { w.Id, w.LanguageId, w.Text })
+                .Select(w => new { w.Id, w.LanguageId, w.Text, w.CefrLevel })
                 .ToListAsync(cancellationToken);
 
             var sentences = await _context.Sentences
@@ -564,7 +564,7 @@ namespace MemoLingo.Infrastructure.Data.Seeding
 
             var matchers = words
                 .GroupBy(w => w.LanguageId)
-                .ToDictionary(g => g.Key, g => new SentenceWordMatcher(g.Select(w => (w.Id, w.Text))));
+                .ToDictionary(g => g.Key, g => new SentenceWordMatcher(g.Select(w => (w.Id, w.Text, w.CefrLevel))));
 
             var created = 0;
 
@@ -687,9 +687,28 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                     CourseId = courseId,
                     Title = seed.Title,
                     Description = seed.Description,
+                    Goal = seed.Goal,
                     Position = seed.Position,
                     CefrLevel = seed.CefrLevel,
-                    Active = seed.Active
+                    Active = seed.Active,
+                    Requirements = (seed.Requirements ?? new List<string>())
+                        .Select((description, index) => new SectionRequirement
+                        {
+                            Position = index + 1,
+                            Description = description
+                        })
+                        .ToList(),
+                    GrammarTopics = (seed.GrammarTopics ?? new List<GrammarTopicSeed>())
+                        .Select((topic, index) => new GrammarTopic
+                        {
+                            Position = index + 1,
+                            Title = topic.Title,
+                            Explanation = topic.Explanation,
+                            Structure = topic.Structure,
+                            Examples = string.Join("|", topic.Examples ?? new List<string>()),
+                            IsMandatory = topic.IsMandatory
+                        })
+                        .ToList()
                 });
 
                 created++;
@@ -987,7 +1006,9 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                     Email = seed.Email,
                     NativeLanguageId = nativeLanguageId,
                     CreatedAt = DateTime.UtcNow,
-                    Active = seed.Active
+                    Active = seed.Active,
+                    Plan = SubscriptionPlan.Free,
+                    LearningStatsMode = LearningStatsMode.Total
                 });
 
                 created++;

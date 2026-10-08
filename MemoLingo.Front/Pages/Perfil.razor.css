@@ -1,0 +1,112 @@
+﻿.perfil-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+}
+
+.perfil-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+}
+
+.perfil-identidade,
+.preferencia-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.perfil-email,
+.preferencia-texto span {
+    color: #6b6b6b;
+    font-size: 0.9rem;
+}
+
+.preferencia-texto .preferencia-premium {
+    color: #ce82ff;
+    font-weight: 700;
+}
+
+.perfil-plano {
+    flex-shrink: 0;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+.plano-free {
+    background-color: #f7f7f7;
+    color: #6b6b6b;
+}
+
+.plano-premium {
+    background-color: #f5e6ff;
+    color: #a560e8;
+}
+
+.perfil-erro {
+    color: #ea2b2b;
+    font-weight: 700;
+}
+
+.switch {
+    position: relative;
+    flex-shrink: 0;
+    width: 52px;
+    height: 30px;
+}
+
+    .switch input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+        .switch input:disabled {
+            cursor: not-allowed;
+        }
+
+.switch-trilho {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background-color: #e5e5e5;
+    transition: background-color 0.2s;
+}
+
+    .switch-trilho::before {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background-color: #fff;
+        transition: transform 0.2s;
+    }
+
+.switch input:checked + .switch-trilho {
+    background-color: #58cc02;
+}
+
+    .switch input:checked + .switch-trilho::before {
+        transform: translateX(22px);
+    }
+
+.switch input:disabled + .switch-trilho {
+    opacity: 0.5;
+}

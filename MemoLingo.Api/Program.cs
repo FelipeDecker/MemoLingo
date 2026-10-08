@@ -24,6 +24,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IWordPerformanceService, WordPerformanceService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddScoped<INuanceService, NuanceService>();
 builder.Services.AddScoped<ILessonService, LessonService>();

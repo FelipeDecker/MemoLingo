@@ -1,33 +1,34 @@
 using System.Text.RegularExpressions;
+using MemoLingo.Domain.Enums;
 
 namespace MemoLingo.Infrastructure.Data.Seeding
 {
-    // Encontra em uma frase as palavras/expressões cadastradas, priorizando as mais longas
-    // ("good morning" antes de "good"), aceitando plurais/3ª pessoa simples ("mothers", "eats")
-    // e verbos do currículo no infinitivo ("to eat") conjugados na frase.
+    // Encontra em uma frase as palavras/expressões cadastradas, priorizando os trechos mais longos
+    // ("good morning" antes de "good", "have to" antes de "have"), aceitando plurais/3ª pessoa
+    // simples ("mothers", "eats") e verbos do currículo no infinitivo ("to eat") conjugados na frase.
+    // Em trechos de mesmo tamanho, a palavra escrita exatamente igual vence a forma flexionada
+    // ("thanks" é a palavra "thanks", não o verbo "to thank" conjugado). Homógrafos que disputam o
+    // mesmo trecho ("watch" e "to watch") são todos vinculados, desde que sejam do menor nível CEFR
+    // entre eles ("book" A1 vence "to book" A2 em "I read a book").
     public class SentenceWordMatcher
     {
         private const int MinLengthForInflection = 3;
         private const string NounSuffix = "(?:s|es|'s)?";
         private const string VerbSuffix = "(?:s|es|d|ed|ing)?";
 
-        private readonly List<(int WordId, Regex Pattern)> _patterns;
+        private readonly List<(int WordId, string Text, CefrLevel Level, Regex Pattern)> _patterns;
 
-        public SentenceWordMatcher(IEnumerable<(int WordId, string Text)> words)
+        public SentenceWordMatcher(IEnumerable<(int WordId, string Text, CefrLevel Level)> words)
         {
             _patterns = words
                 .Where(w => !string.IsNullOrWhiteSpace(w.Text))
-                .Select(w => (w.WordId, Text: w.Text.Trim()))
-                .OrderByDescending(w => w.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length)
-                .ThenByDescending(w => w.Text.Length)
-                .Select(w => (w.WordId, BuildPattern(w.Text)))
+                .Select(w => (w.WordId, Text: w.Text.Trim(), w.Level))
+                .SelectMany(w => BuildPatterns(w.Text).Select(pattern => (w.WordId, w.Text, w.Level, pattern)))
                 .ToList();
         }
 
         public List<int> Match(string sentence)
         {
-            var found = new List<(int WordId, int Index)>();
-
             if (string.IsNullOrWhiteSpace(sentence))
             {
                 return new List<int>();
@@ -35,19 +36,47 @@ namespace MemoLingo.Infrastructure.Data.Seeding
 
             var text = sentence.Replace('\u2019', '\'');
 
-            foreach (var (wordId, pattern) in _patterns)
-            {
-                var match = pattern.Match(text);
-
-                if (!match.Success)
+            var candidates = _patterns
+                .SelectMany(p => p.Pattern.Matches(text).Select(m => new
                 {
-                    continue;
+                    p.WordId,
+                    p.Level,
+                    m.Index,
+                    m.Length,
+                    IsExact = IsExactForm(m.Value, p.Text)
+                }))
+                .OrderByDescending(c => c.Length)
+                .ThenByDescending(c => c.IsExact)
+                .ThenBy(c => c.Level)
+                .ThenBy(c => c.Index)
+                .ToList();
+
+            var taken = new bool[text.Length];
+            var claimed = new HashSet<(int Index, int Length, bool IsExact, CefrLevel Level)>();
+            var found = new List<(int WordId, int Index)>();
+
+            foreach (var candidate in candidates)
+            {
+                var span = (candidate.Index, candidate.Length, candidate.IsExact, candidate.Level);
+
+                // Cada trecho da frase pertence a uma única palavra/expressão, exceto quando homógrafos
+                // do mesmo nível disputam o mesmo trecho: nesse caso todos são vinculados.
+                if (!claimed.Contains(span))
+                {
+                    if (Enumerable.Range(candidate.Index, candidate.Length).Any(i => taken[i]))
+                    {
+                        continue;
+                    }
+
+                    for (var i = candidate.Index; i < candidate.Index + candidate.Length; i++)
+                    {
+                        taken[i] = true;
+                    }
+
+                    claimed.Add(span);
                 }
 
-                found.Add((wordId, match.Index));
-
-                // Mascara o trecho para que partes de uma expressão não sejam contadas de novo.
-                text = text[..match.Index] + new string(' ', match.Length) + text[(match.Index + match.Length)..];
+                found.Add((candidate.WordId, candidate.Index));
             }
 
             return found
@@ -57,7 +86,16 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                 .ToList();
         }
 
-        private static Regex BuildPattern(string term)
+        private static bool IsExactForm(string matched, string term)
+        {
+            var normalized = Regex.Replace(matched, @"\s+", " ");
+
+            return string.Equals(normalized, term, StringComparison.OrdinalIgnoreCase)
+                || (term.StartsWith("to ", StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(normalized, term[3..], StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static List<Regex> BuildPatterns(string term)
         {
             var tokens = term.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var alternatives = new List<string> { BuildAlternative(tokens, NounSuffix) };
@@ -68,9 +106,13 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                 alternatives.Add(BuildAlternative(tokens[1..], VerbSuffix));
             }
 
-            return new Regex(
-                @"(?<![\p{L}'])(?:" + string.Join("|", alternatives) + @")(?![\p{L}'])",
-                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            // Cada forma vira um padrão separado para que "to go" dentro de "have to go" ainda
+            // encontre o "go" mesmo quando o "to" já pertence a outra expressão.
+            return alternatives
+                .Select(alternative => new Regex(
+                    @"(?<![\p{L}'])(?:" + alternative + @")(?![\p{L}'])",
+                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                .ToList();
         }
 
         private static string BuildAlternative(string[] tokens, string suffix)

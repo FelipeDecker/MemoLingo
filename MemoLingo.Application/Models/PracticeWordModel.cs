@@ -13,9 +13,10 @@ namespace MemoLingo.Application.Models
         public int CorrectCount { get; set; }
         public int WrongCount { get; set; }
         public int StrengthLevel { get; set; }
-        public int RecentAttemptCount { get; set; }
-        public int RecentCorrectCount { get; set; }
-        public int RecentWrongCount { get; set; }
+        public LearningStatsMode StatsMode { get; set; }
+        public int SampleAttemptCount { get; set; }
+        public int SampleCorrectCount { get; set; }
+        public int SampleWrongCount { get; set; }
         public int LearningPercentage { get; set; }
         public DateTime? LastReview { get; set; }
         public DateTime? NextReview { get; set; }

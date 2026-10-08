@@ -1,5 +1,6 @@
 using MemoLingo.Application.Models;
 using MemoLingo.Domain.Entities;
+using MemoLingo.Domain.Enums;
 using MemoLingo.Domain.Repositories;
 
 namespace MemoLingo.Application.Services
@@ -7,10 +8,12 @@ namespace MemoLingo.Application.Services
     public class UserService : IUserService
     {
         private readonly IGenericRepository<User> _repository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(IGenericRepository<User> repository)
+        public UserService(IGenericRepository<User> repository, IUserRepository userRepository)
         {
             _repository = repository;
+            _userRepository = userRepository;
         }
 
         public async Task<IEnumerable<UserModel>> GetAllAsync()
@@ -22,6 +25,12 @@ namespace MemoLingo.Application.Services
         public async Task<UserModel> GetByIdAsync(int id)
         {
             var user = await _repository.GetByIdAsync(id);
+            return user is null ? null : ToModel(user);
+        }
+
+        public async Task<UserModel> GetCurrentAsync(int? userId)
+        {
+            var user = await ResolveUserAsync(userId);
             return user is null ? null : ToModel(user);
         }
 
@@ -43,7 +52,9 @@ namespace MemoLingo.Application.Services
                 Email = user.Email,
                 NativeLanguageId = user.NativeLanguageId,
                 CreatedAt = DateTime.UtcNow,
-                Active = true
+                Active = true,
+                Plan = SubscriptionPlan.Free,
+                LearningStatsMode = LearningStatsMode.Total
             };
 
             await _repository.AddAsync(entity);
@@ -68,6 +79,31 @@ namespace MemoLingo.Application.Services
             return await _repository.SaveChangesAsync();
         }
 
+        public async Task<UserModel> UpdateLearningStatsModeAsync(UpdateLearningStatsModeModel model)
+        {
+            if (!Enum.IsDefined(model.Mode))
+            {
+                throw new ArgumentException("Modo de estatística inválido.", nameof(model));
+            }
+
+            var resolved = await ResolveUserAsync(model.UserId)
+                ?? throw new ArgumentException("Usuário não encontrado.", nameof(model));
+
+            var user = await _repository.GetByIdAsync(resolved.Id);
+
+            if (model.Mode == LearningStatsMode.RecentAttempts && user.Plan != SubscriptionPlan.Premium)
+            {
+                throw new InvalidOperationException("O cálculo pelas últimas tentativas é exclusivo do plano Premium.");
+            }
+
+            user.LearningStatsMode = model.Mode;
+
+            _repository.Update(user);
+            await _repository.SaveChangesAsync();
+
+            return ToModel(user);
+        }
+
         public async Task<bool> RemoveAsync(int id)
         {
             var existing = await _repository.GetByIdAsync(id);
@@ -89,8 +125,17 @@ namespace MemoLingo.Application.Services
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
                 Active = user.Active,
-                NativeLanguageId = user.NativeLanguageId
+                NativeLanguageId = user.NativeLanguageId,
+                Plan = user.Plan,
+                LearningStatsMode = user.LearningStatsMode
             };
+        }
+
+        private async Task<User> ResolveUserAsync(int? userId)
+        {
+            return userId.HasValue
+                ? await _userRepository.GetWithProgressesAsync(userId.Value)
+                : await _userRepository.GetDefaultAsync();
         }
     }
 }

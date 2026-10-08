@@ -1,3 +1,5 @@
+using MemoLingo.Domain.Enums;
+
 namespace MemoLingo.Domain.Entities
 {
     /// <summary>
@@ -12,6 +14,8 @@ namespace MemoLingo.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public bool Active { get; set; }
         public int NativeLanguageId { get; set; }
+        public SubscriptionPlan Plan { get; set; }
+        public LearningStatsMode LearningStatsMode { get; set; }
 
         public Language NativeLanguage { get; set; }
         public ICollection<LanguageProgress> LanguageProgresses { get; set; }

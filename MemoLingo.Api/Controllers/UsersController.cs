@@ -35,6 +35,38 @@ namespace MemoLingo.Api.Controllers
             return Ok(user);
         }
 
+        [HttpGet("me")]
+        [ProducesResponseType(typeof(UserModel), 200)]
+        [ProducesResponseType(typeof(ErrorResponseModel), 400)]
+        public async Task<IActionResult> GetCurrent([FromQuery] int? userId)
+        {
+            var user = await _userService.GetCurrentAsync(userId);
+            if (user == null) return BadRequest(new ErrorResponseModel { Errors = "Usuário não encontrado" });
+            return Ok(user);
+        }
+
+        [HttpPut("me/learning-stats-mode")]
+        [ProducesResponseType(typeof(UserModel), 200)]
+        [ProducesResponseType(typeof(ErrorResponseModel), 400)]
+        public async Task<IActionResult> UpdateLearningStatsMode([FromBody] UpdateLearningStatsModeModel model)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ErrorResponseModel { Errors = "Modelo inválido" });
+
+            try
+            {
+                var user = await _userService.UpdateLearningStatsModeAsync(model);
+                return Ok(user);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponseModel { Errors = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new ErrorResponseModel { Errors = ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(UserModel), 200)]
         [ProducesResponseType(typeof(ErrorResponseModel), 400)]

@@ -43,6 +43,19 @@ namespace MemoLingo.Api.Controllers
             return Ok(languages);
         }
 
+        [HttpGet("sections/{sectionId:int}/details")]
+        [ProducesResponseType(typeof(SectionDetailsModel), 200)]
+        [ProducesResponseType(typeof(ErrorResponseModel), 404)]
+        [ProducesResponseType(typeof(ErrorResponseModel), 500)]
+        public async Task<IActionResult> GetSectionDetails(int sectionId, [FromQuery] int? userId)
+        {
+            var details = await _courseService.GetSectionDetailsAsync(sectionId, userId);
+
+            if (details is null) return NotFound(new ErrorResponseModel { Errors = "Seção não encontrada" });
+
+            return Ok(details);
+        }
+
         [HttpPost("enroll")]
         [ProducesResponseType(typeof(UserCourseModel), 200)]
         [ProducesResponseType(typeof(ErrorResponseModel), 400)]

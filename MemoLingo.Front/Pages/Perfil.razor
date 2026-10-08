@@ -1,7 +1,63 @@
-@page "/perfil"
+﻿@page "/perfil"
 
 <PageTitle>Perfil</PageTitle>
 
-<h1>Perfil</h1>
+<div class="perfil-container">
+    <h1>Perfil</h1>
 
-<p>Aqui você poderá visualizar e editar as informações do seu perfil.</p>
+    @if (user == null && errorMessage == null)
+    {
+        <p class="carregando"><em>Carregando seu perfil...</em></p>
+    }
+    else if (user == null)
+    {
+        <p class="perfil-erro">@errorMessage</p>
+    }
+    else
+    {
+        <div class="perfil-card">
+            <div class="perfil-identidade">
+                <strong>@user.Name</strong>
+                <span class="perfil-email">@user.Email</span>
+            </div>
+            <span class="perfil-plano @(IsPremium ? "plano-premium" : "plano-free")">
+                @(IsPremium ? "Premium" : "Gratuito")
+            </span>
+        </div>
+
+        <div class="perfil-card perfil-preferencia">
+            <div class="preferencia-texto">
+                <strong>Percentual de aprendizado</strong>
+                <span>
+                    @if (UsesRecentAttempts)
+                    {
+                        <text>Calculado com base nas suas últimas @RecentAttemptsWindow tentativas de cada palavra.</text>
+                    }
+                    else
+                    {
+                        <text>Calculado com base no total de acertos e erros de cada palavra.</text>
+                    }
+                </span>
+                @if (!IsPremium)
+                {
+                    <span class="preferencia-premium">Disponível no plano Premium.</span>
+                }
+            </div>
+
+            <label class="switch" title="@(IsPremium ? "Usar apenas as últimas tentativas" : "Disponível no plano Premium")">
+                <input type="checkbox"
+                       role="switch"
+                       aria-label="Calcular pelas últimas tentativas"
+                       checked="@UsesRecentAttempts"
+                       disabled="@(!IsPremium || saving)"
+                       @onchange="OnLearningStatsModeChanged" />
+                <span class="switch-trilho"></span>
+            </label>
+        </div>
+
+        @if (errorMessage != null)
+        {
+            <p class="perfil-erro">@errorMessage</p>
+        }
+    }
+</div>

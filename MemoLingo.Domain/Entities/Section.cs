@@ -12,11 +12,14 @@ namespace MemoLingo.Domain.Entities
         public int CourseId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Goal { get; set; }
         public int Position { get; set; }
         public CefrLevel CefrLevel { get; set; }
         public bool Active { get; set; }
 
         public Course Course { get; set; }
         public ICollection<Unit> Units { get; set; }
+        public ICollection<SectionRequirement> Requirements { get; set; }
+        public ICollection<GrammarTopic> GrammarTopics { get; set; }
     }
 }

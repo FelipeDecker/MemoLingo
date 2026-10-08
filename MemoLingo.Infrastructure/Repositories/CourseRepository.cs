@@ -84,5 +84,17 @@ namespace MemoLingo.Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
+
+        public async Task<Section> GetSectionDetailsAsync(int sectionId)
+        {
+            return await _context.Sections
+                .AsNoTracking()
+                .Include(s => s.Course)
+                .Include(s => s.Units.Where(u => u.Active))
+                .Include(s => s.Requirements.OrderBy(r => r.Position))
+                .Include(s => s.GrammarTopics.OrderBy(g => g.Position))
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(s => s.Id == sectionId && s.Active);
+        }
     }
 }

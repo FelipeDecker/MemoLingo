@@ -82,6 +82,15 @@
     color: #1899d6;
 }
 
+.section-card-details {
+    color: inherit;
+    text-decoration: none;
+}
+
+.section-card-details:hover {
+    text-decoration: underline;
+}
+
 .section-card-title {
     margin: 0;
     font-size: 1.6rem;

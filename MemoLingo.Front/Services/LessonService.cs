@@ -81,6 +81,18 @@ namespace MemoLingo.Front.Services
                 ?? sections.FirstOrDefault();
         }
 
+        public async Task<SectionDetailsModel> GetSectionDetailsAsync(int sectionId)
+        {
+            try
+            {
+                return await _coursesClient.GetSectionDetailsAsync(sectionId, null);
+            }
+            catch (MemoLingoException ex) when (ex.StatusCode == 404)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Calcula o percentual de conclusão da seção a partir dos nós (bolinhas) das suas unidades.
         /// </summary>
