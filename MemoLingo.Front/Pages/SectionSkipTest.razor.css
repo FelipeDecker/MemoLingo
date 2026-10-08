@@ -1,0 +1,360 @@
+.lesson-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 0;
+}
+
+.lesson-close {
+    border: none;
+    background: none;
+    color: #afafaf;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+    .lesson-close:hover {
+        color: #777;
+    }
+
+.lesson-progress {
+    flex: 1;
+    height: 16px;
+    border-radius: 999px;
+    background-color: #e5e5e5;
+    overflow: hidden;
+}
+
+.lesson-progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background-color: #58cc02;
+    transition: width 0.3s ease-in-out;
+}
+
+.lesson-counter {
+    color: #afafaf;
+    font-weight: 700;
+    min-width: 3rem;
+    text-align: right;
+}
+
+.lesson-body {
+    flex: 1;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 9rem;
+}
+
+.lesson-loading {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.lesson-tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    margin: 0 0.5rem 0.75rem 0;
+}
+
+.lesson-tag-review {
+    color: #1cb0f6;
+    background-color: rgba(28, 176, 246, 0.12);
+}
+
+.lesson-tag-retry {
+    color: #ff4b4b;
+    background-color: rgba(255, 75, 75, 0.12);
+}
+
+.lesson-instruction {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #3c3c3c;
+    margin-bottom: 1.5rem;
+}
+
+.lesson-prompt {
+    display: inline-block;
+    border: 2px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.lesson-prompt-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.lesson-sentence {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+
+.lesson-hint {
+    color: #6b6b6b;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.lacuna {
+    display: inline-block;
+    min-width: 5rem;
+    padding: 0 0.4rem;
+    margin: 0 0.15rem;
+    border-bottom: 3px solid #1cb0f6;
+    color: #1cb0f6;
+    font-weight: 700;
+    text-align: center;
+}
+
+.lacuna-certa {
+    color: #58a700;
+    border-bottom-color: #58cc02;
+}
+
+.lacuna-corrigida {
+    color: #c53030;
+    border-bottom-color: #ff4b4b;
+}
+
+.opcoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.opcao {
+    border: 2px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 0.5rem 0.9rem;
+    font-weight: 700;
+    background-color: #fff;
+    box-shadow: 0 2px 0 #e5e5e5;
+    cursor: pointer;
+}
+
+    .opcao:hover:not(:disabled) {
+        border-color: #1cb0f6;
+    }
+
+    .opcao:disabled {
+        cursor: default;
+        opacity: 0.7;
+    }
+
+.opcao-selecionada {
+    border-color: #1cb0f6;
+    color: #1cb0f6;
+    background-color: rgba(28, 176, 246, 0.08);
+}
+
+.lesson-answer {
+    width: 100%;
+    border: 2px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    font-size: 1.1rem;
+    background-color: #f7f7f7;
+}
+
+    .lesson-answer:focus {
+        outline: none;
+        border-color: #1cb0f6;
+        background-color: #fff;
+    }
+
+.mensagem-erro {
+    color: #c53030;
+    margin-top: 0.75rem;
+}
+
+.lesson-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 2px solid #e5e5e5;
+    background-color: #fff;
+}
+
+.lesson-footer-certo {
+    border-top-color: transparent;
+    background-color: #d7ffb8;
+    color: #58a700;
+}
+
+.lesson-footer-errado {
+    border-top-color: transparent;
+    background-color: #ffdfe0;
+    color: #c53030;
+}
+
+.lesson-footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1.25rem 1.5rem;
+}
+
+.lesson-feedback {
+    min-width: 0;
+}
+
+.lesson-feedback-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+}
+
+.lesson-feedback-answer,
+.lesson-feedback-sentence {
+    margin: 0;
+}
+
+.lesson-feedback-sentence {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.btn-principal,
+.btn-secundario {
+    border: none;
+    border-radius: 14px;
+    padding: 0.8rem 1.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.1s ease-in-out;
+}
+
+.btn-principal {
+    color: #fff;
+    background-color: #58cc02;
+    box-shadow: 0 4px 0 #58a700;
+}
+
+.btn-erro {
+    background-color: #ff4b4b;
+    box-shadow: 0 4px 0 #ea2b2b;
+}
+
+.btn-secundario {
+    color: #1cb0f6;
+    background-color: #fff;
+    border: 2px solid #e5e5e5;
+    box-shadow: 0 4px 0 #e5e5e5;
+}
+
+    .btn-principal:hover:not(:disabled),
+    .btn-secundario:hover:not(:disabled) {
+        transform: translateY(-2px);
+    }
+
+    .btn-principal:disabled {
+        background-color: #e5e5e5;
+        color: #afafaf;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+.lesson-summary {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+    .lesson-summary h2 {
+        font-weight: 800;
+        color: #3c3c3c;
+        margin-bottom: 0.75rem;
+    }
+
+.summary-metrics {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.summary-metric {
+    display: flex;
+    flex-direction: column;
+    min-width: 7rem;
+    border: 2px solid #1cb0f6;
+    border-radius: 16px;
+    padding: 0.9rem 1rem;
+}
+
+.summary-metric-xp {
+    border-color: #ffc800;
+}
+
+.summary-metric-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.summary-metric-label {
+    color: #6b6b6b;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.summary-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+/* Tela de apresentação e status do teste para pular de seção. */
+.test-intro {
+    margin-top: 1rem;
+    color: #4b4b4b;
+}
+
+    .test-intro p {
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+
+.test-intro-topics-title {
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+}
+
+.test-intro-topics {
+    margin-bottom: 2rem;
+    padding-left: 1.25rem;
+}
+
+.test-intro .summary-actions {
+    justify-content: flex-start;
+}
+
+.test-status {
+    display: flex;
+    flex-wrap: wrap;
+}

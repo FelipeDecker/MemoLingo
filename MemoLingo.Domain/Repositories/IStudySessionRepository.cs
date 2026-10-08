@@ -12,6 +12,8 @@ namespace MemoLingo.Domain.Repositories
         Task<StudySession> GetOrCreatePracticeSessionAsync(int userId, int languageId);
         Task<StudySession> GetByIdAsync(int id);
         Task<StudySession> StartLessonSessionAsync(int userId, int languageId, int lessonId);
+        Task<StudySession> StartSectionTestSessionAsync(int userId, int languageId, int sectionId, int exerciseCount);
+        Task AddSkippedLessonSessionsAsync(int userId, int languageId, IEnumerable<int> lessonIds, DateTime completedAt);
         Task<bool> SaveChangesAsync();
     }
 }

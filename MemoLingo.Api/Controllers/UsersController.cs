@@ -67,6 +67,28 @@ namespace MemoLingo.Api.Controllers
             }
         }
 
+        [HttpPut("me/accept-missing-apostrophes")]
+        [ProducesResponseType(typeof(UserModel), 200)]
+        [ProducesResponseType(typeof(ErrorResponseModel), 400)]
+        public async Task<IActionResult> UpdateAcceptMissingApostrophes([FromBody] UpdateAcceptMissingApostrophesModel model)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ErrorResponseModel { Errors = "Modelo inválido" });
+
+            try
+            {
+                var user = await _userService.UpdateAcceptMissingApostrophesAsync(model);
+                return Ok(user);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponseModel { Errors = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new ErrorResponseModel { Errors = ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(UserModel), 200)]
         [ProducesResponseType(typeof(ErrorResponseModel), 400)]

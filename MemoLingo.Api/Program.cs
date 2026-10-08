@@ -28,6 +28,7 @@ builder.Services.AddScoped<IWordPerformanceService, WordPerformanceService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddScoped<INuanceService, NuanceService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<ISectionTestService, SectionTestService>();
 
 var app = builder.Build();
 

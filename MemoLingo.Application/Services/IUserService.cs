@@ -10,6 +10,7 @@ namespace MemoLingo.Application.Services
         Task<UserModel> CreateAsync(UserModel user);
         Task<bool> UpdateAsync(int id, UserModel user);
         Task<UserModel> UpdateLearningStatsModeAsync(UpdateLearningStatsModeModel model);
+        Task<UserModel> UpdateAcceptMissingApostrophesAsync(UpdateAcceptMissingApostrophesModel model);
         Task<bool> RemoveAsync(int id);
     }
 }

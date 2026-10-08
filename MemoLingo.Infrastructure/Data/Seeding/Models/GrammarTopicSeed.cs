@@ -6,6 +6,7 @@
         public string Explanation { get; set; }
         public string Structure { get; set; }
         public List<string> Examples { get; set; }
+        public List<string> Markers { get; set; }
         public bool IsMandatory { get; set; }
     }
 }

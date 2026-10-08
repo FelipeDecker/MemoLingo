@@ -12,5 +12,6 @@ namespace MemoLingo.Application.Models
         public int NativeLanguageId { get; set; }
         public SubscriptionPlan Plan { get; set; }
         public LearningStatsMode LearningStatsMode { get; set; }
+        public bool AcceptMissingApostrophes { get; set; }
     }
 }

@@ -54,7 +54,8 @@ namespace MemoLingo.Application.Services
                 CreatedAt = DateTime.UtcNow,
                 Active = true,
                 Plan = SubscriptionPlan.Free,
-                LearningStatsMode = LearningStatsMode.Total
+                LearningStatsMode = LearningStatsMode.Total,
+                AcceptMissingApostrophes = false
             };
 
             await _repository.AddAsync(entity);
@@ -104,6 +105,26 @@ namespace MemoLingo.Application.Services
             return ToModel(user);
         }
 
+        public async Task<UserModel> UpdateAcceptMissingApostrophesAsync(UpdateAcceptMissingApostrophesModel model)
+        {
+            var resolved = await ResolveUserAsync(model.UserId)
+                ?? throw new ArgumentException("Usuário não encontrado.", nameof(model));
+
+            var user = await _repository.GetByIdAsync(resolved.Id);
+
+            if (model.Enabled && user.Plan != SubscriptionPlan.Premium)
+            {
+                throw new InvalidOperationException("Aceitar contrações sem apóstrofo é exclusivo do plano Premium.");
+            }
+
+            user.AcceptMissingApostrophes = model.Enabled;
+
+            _repository.Update(user);
+            await _repository.SaveChangesAsync();
+
+            return ToModel(user);
+        }
+
         public async Task<bool> RemoveAsync(int id)
         {
             var existing = await _repository.GetByIdAsync(id);
@@ -127,7 +148,8 @@ namespace MemoLingo.Application.Services
                 Active = user.Active,
                 NativeLanguageId = user.NativeLanguageId,
                 Plan = user.Plan,
-                LearningStatsMode = user.LearningStatsMode
+                LearningStatsMode = user.LearningStatsMode,
+                AcceptMissingApostrophes = user.AcceptMissingApostrophes
             };
         }
 

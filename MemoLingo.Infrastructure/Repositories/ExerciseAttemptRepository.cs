@@ -1,4 +1,5 @@
 using MemoLingo.Domain.Entities;
+using MemoLingo.Domain.Enums;
 using MemoLingo.Domain.Projections;
 using MemoLingo.Domain.Repositories;
 using MemoLingo.Infrastructure.Data;
@@ -116,6 +117,15 @@ namespace MemoLingo.Infrastructure.Repositories
                 .GroupBy(ea => ea.SentenceId.Value)
                 .Select(g => new { SentenceId = g.Key, Count = g.Count() })
                 .ToDictionaryAsync(x => x.SentenceId, x => x.Count);
+        }
+
+        public async Task<bool> ExistsInSessionAsync(int studySessionId, int sentenceId, ExerciseType exerciseType)
+        {
+            return await _context.ExerciseAttempts
+                .AsNoTracking()
+                .AnyAsync(ea => ea.StudySessionId == studySessionId
+                    && ea.SentenceId == sentenceId
+                    && ea.ExerciseType == exerciseType);
         }
 
         public async Task AddAsync(ExerciseAttempt attempt)

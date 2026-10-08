@@ -1,6 +1,3 @@
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
 using MemoLingo.Application.Models;
 using MemoLingo.Domain.Entities;
 using MemoLingo.Domain.Enums;
@@ -11,11 +8,6 @@ namespace MemoLingo.Application.Services
     public class LessonService : ILessonService
     {
         private const int ExercisesPerLesson = 15;
-        private const int MaxBlankOptions = 4;
-        private const int MinBlankOptions = 2;
-        private const int MaxAnswerLength = 500;
-        private const char AlternativesSeparator = '|';
-        private const string BlankToken = "{{blank}}";
 
         // Ordem em que os tipos de exercício se alternam entre as frases da lição.
         private static readonly ExerciseType[] ExerciseRotation =
@@ -23,21 +15,6 @@ namespace MemoLingo.Application.Services
             ExerciseType.TranslationToNative,
             ExerciseType.TranslationToTarget,
             ExerciseType.FillInTheBlank
-        };
-
-        // Contrações do inglês expandidas antes da comparação ("I'm" = "I am").
-        private static readonly (Regex Pattern, string Replacement)[] Contractions =
-        {
-            (new Regex(@"\bcan't\b", RegexOptions.Compiled), "cannot"),
-            (new Regex(@"\bcan not\b", RegexOptions.Compiled), "cannot"),
-            (new Regex(@"\bwon't\b", RegexOptions.Compiled), "will not"),
-            (new Regex(@"\b(\w+)n't\b", RegexOptions.Compiled), "$1 not"),
-            (new Regex(@"\bi'm\b", RegexOptions.Compiled), "i am"),
-            (new Regex(@"\b(\w+)'re\b", RegexOptions.Compiled), "$1 are"),
-            (new Regex(@"\b(he|she|it|that|what|where|who|there|name|here)'s\b", RegexOptions.Compiled), "$1 is"),
-            (new Regex(@"\b(\w+)'ll\b", RegexOptions.Compiled), "$1 will"),
-            (new Regex(@"\b(\w+)'ve\b", RegexOptions.Compiled), "$1 have"),
-            (new Regex(@"\b(\w+)'d\b", RegexOptions.Compiled), "$1 would")
         };
 
         private readonly ILessonRepository _lessonRepository;
@@ -153,46 +130,19 @@ namespace MemoLingo.Application.Services
                 throw new ArgumentException("A frase não pertence ao idioma da lição.", nameof(answer));
             }
 
-            int? wordId = null;
-            string correctAnswer;
-            IEnumerable<string> acceptedAnswers;
-
-            switch (answer.ExerciseType)
+            if (answer.ExerciseType is not (ExerciseType.TranslationToNative or ExerciseType.TranslationToTarget or ExerciseType.FillInTheBlank))
             {
-                case ExerciseType.TranslationToNative:
-                    correctAnswer = sentence.Translation;
-                    acceptedAnswers = SplitAlternatives(sentence.AlternativeTranslations).Prepend(sentence.Translation);
-                    break;
-
-                case ExerciseType.TranslationToTarget:
-                    correctAnswer = sentence.Text;
-                    acceptedAnswers = SplitAlternatives(sentence.AlternativeTexts).Prepend(sentence.Text);
-                    break;
-
-                case ExerciseType.FillInTheBlank:
-                    var word = answer.BlankWordId.HasValue
-                        ? await _wordRepository.GetByIdAsync(answer.BlankWordId.Value)
-                        : null;
-
-                    var match = word is null ? null : FindTerm(sentence.Text, word.Text);
-
-                    if (match is null)
-                    {
-                        throw new ArgumentException("A palavra da lacuna não pertence à frase.", nameof(answer));
-                    }
-
-                    wordId = word.Id;
-                    correctAnswer = match.Value;
-                    acceptedAnswers = new[] { match.Value, word.Text };
-                    break;
-
-                default:
-                    throw new ArgumentException("Tipo de exercício não suportado nas lições.", nameof(answer));
+                throw new ArgumentException("Tipo de exercício não suportado nas lições.", nameof(answer));
             }
 
-            var normalizedAnswer = Normalize(answer.Answer);
-            var isCorrect = normalizedAnswer.Length > 0
-                && acceptedAnswers.Select(Normalize).Contains(normalizedAnswer);
+            var word = answer.ExerciseType == ExerciseType.FillInTheBlank && answer.BlankWordId.HasValue
+                ? await _wordRepository.GetByIdAsync(answer.BlankWordId.Value)
+                : null;
+
+            var (correctAnswer, acceptedAnswers) = SentenceExerciseHelper.GetExpectedAnswers(sentence, answer.ExerciseType, word);
+            int? wordId = answer.ExerciseType == ExerciseType.FillInTheBlank ? word.Id : null;
+
+            var isCorrect = SentenceExerciseHelper.IsCorrect(answer.Answer, acceptedAnswers, SentenceExerciseHelper.AcceptsMissingApostrophes(user));
 
             var answeredAt = DateTime.UtcNow;
 
@@ -202,8 +152,8 @@ namespace MemoLingo.Application.Services
                 SentenceId = sentence.Id,
                 WordId = wordId,
                 ExerciseType = answer.ExerciseType,
-                GivenAnswer = Truncate(answer.Answer?.Trim()),
-                ExpectedAnswer = Truncate(correctAnswer),
+                GivenAnswer = SentenceExerciseHelper.Truncate(answer.Answer?.Trim()),
+                ExpectedAnswer = SentenceExerciseHelper.Truncate(correctAnswer),
                 IsCorrect = isCorrect,
                 ResponseTimeMs = answer.ResponseTimeMs,
                 AnsweredAt = answeredAt
@@ -424,7 +374,7 @@ namespace MemoLingo.Application.Services
                 targets.AddRange(reviews);
             }
 
-            return CreateExercises(Shuffle(targets), introduced, lessonWords);
+            return CreateExercises(SentenceExerciseHelper.Shuffle(targets), introduced, lessonWords);
         }
 
         /// <summary>
@@ -498,22 +448,9 @@ namespace MemoLingo.Application.Services
                     continue;
                 }
 
-                var exercise = type switch
-                {
-                    ExerciseType.TranslationToNative => new LessonExerciseModel
-                    {
-                        SentenceId = sentence.Id,
-                        ExerciseType = type,
-                        Prompt = sentence.Text
-                    },
-                    ExerciseType.TranslationToTarget => new LessonExerciseModel
-                    {
-                        SentenceId = sentence.Id,
-                        ExerciseType = type,
-                        Prompt = sentence.Translation
-                    },
-                    _ => CreateFillInTheBlank(sentence, introduced, lessonWords)
-                };
+                var exercise = type == ExerciseType.FillInTheBlank
+                    ? CreateFillInTheBlank(sentence, introduced, lessonWords)
+                    : SentenceExerciseHelper.CreateTranslation(sentence, type);
 
                 if (exercise is null)
                 {
@@ -532,46 +469,7 @@ namespace MemoLingo.Application.Services
             var lessonWordIds = lessonWords.Select(w => w.Id).ToHashSet();
 
             // A lacuna sempre é uma palavra já apresentada; as da lição atual têm prioridade.
-            var target = introduced
-                .Select(w => new { Word = w, Match = FindTerm(sentence.Text, w.Text) })
-                .Where(c => c.Match is not null)
-                .OrderByDescending(c => lessonWordIds.Contains(c.Word.Id))
-                .ThenBy(_ => Random.Shared.Next())
-                .FirstOrDefault();
-
-            if (target is null)
-            {
-                return null;
-            }
-
-            var distractors = introduced
-                .Where(w => w.Id != target.Word.Id
-                    && !string.Equals(w.Text, target.Word.Text, StringComparison.OrdinalIgnoreCase)
-                    && FindTerm(sentence.Text, w.Text) is null)
-                .OrderByDescending(w => w.PartOfSpeech == target.Word.PartOfSpeech)
-                .ThenBy(_ => Random.Shared.Next())
-                .Select(w => w.Text)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .Take(MaxBlankOptions - 1)
-                .ToList();
-
-            if (distractors.Count + 1 < MinBlankOptions)
-            {
-                return null;
-            }
-
-            var options = Shuffle(distractors.Append(target.Word.Text).ToList());
-            var match = target.Match;
-
-            return new LessonExerciseModel
-            {
-                SentenceId = sentence.Id,
-                ExerciseType = ExerciseType.FillInTheBlank,
-                Prompt = sentence.Text[..match.Index] + BlankToken + sentence.Text[(match.Index + match.Length)..],
-                Hint = sentence.Translation,
-                BlankWordId = target.Word.Id,
-                Options = options
-            };
+            return SentenceExerciseHelper.CreateFillInTheBlank(sentence, introduced, w => lessonWordIds.Contains(w.Id) ? 1 : 0);
         }
 
         private static (int Section, int Unit, int Node, int Lesson) GetKey(LessonWord lessonWord)
@@ -579,83 +477,6 @@ namespace MemoLingo.Application.Services
             var node = lessonWord.Lesson.PathNode;
 
             return (node.Unit.Section.Position, node.Unit.Position, node.Position, lessonWord.Lesson.Position);
-        }
-
-        /// <summary>
-        /// Procura a palavra/expressão como termo inteiro na frase (ex.: "man" não casa com "woman").
-        /// </summary>
-        private static Match FindTerm(string text, string term)
-        {
-            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(term))
-            {
-                return null;
-            }
-
-            var pattern = @"(?<![\p{L}'])" + Regex.Escape(term.Trim()).Replace(@"\ ", @"\s+") + @"(?![\p{L}'])";
-            var match = Regex.Match(text, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-
-            return match.Success ? match : null;
-        }
-
-        private static IEnumerable<string> SplitAlternatives(string alternatives)
-        {
-            return string.IsNullOrWhiteSpace(alternatives)
-                ? Enumerable.Empty<string>()
-                : alternatives.Split(AlternativesSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        }
-
-        /// <summary>
-        /// Normaliza a resposta para uma comparação tolerante: ignora maiúsculas, acentos,
-        /// pontuação e espaços extras, e expande as contrações do inglês.
-        /// </summary>
-        private static string Normalize(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return string.Empty;
-            }
-
-            var text = value
-                .Replace('\u2019', '\'')
-                .Replace('\u2018', '\'')
-                .ToLowerInvariant();
-
-            foreach (var (pattern, replacement) in Contractions)
-            {
-                text = pattern.Replace(text, replacement);
-            }
-
-            var builder = new StringBuilder(text.Length);
-
-            foreach (var character in text.Normalize(NormalizationForm.FormD))
-            {
-                var category = CharUnicodeInfo.GetUnicodeCategory(character);
-
-                if (category == UnicodeCategory.NonSpacingMark)
-                {
-                    continue;
-                }
-
-                builder.Append(char.IsLetterOrDigit(character) ? character : ' ');
-            }
-
-            return Regex.Replace(builder.ToString(), @"\s+", " ").Trim();
-        }
-
-        private static string Truncate(string value)
-        {
-            return value is { Length: > MaxAnswerLength } ? value[..MaxAnswerLength] : value;
-        }
-
-        private static List<T> Shuffle<T>(List<T> items)
-        {
-            for (var i = items.Count - 1; i > 0; i--)
-            {
-                var j = Random.Shared.Next(i + 1);
-                (items[i], items[j]) = (items[j], items[i]);
-            }
-
-            return items;
         }
 
         private async Task<User> ResolveUserAsync(int? userId)

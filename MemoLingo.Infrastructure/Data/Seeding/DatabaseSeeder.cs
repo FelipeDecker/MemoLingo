@@ -706,6 +706,7 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                             Explanation = topic.Explanation,
                             Structure = topic.Structure,
                             Examples = string.Join("|", topic.Examples ?? new List<string>()),
+                            Markers = string.Join("\n", topic.Markers ?? new List<string>()),
                             IsMandatory = topic.IsMandatory
                         })
                         .ToList()
@@ -1008,7 +1009,8 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                     CreatedAt = DateTime.UtcNow,
                     Active = seed.Active,
                     Plan = SubscriptionPlan.Free,
-                    LearningStatsMode = LearningStatsMode.Total
+                    LearningStatsMode = LearningStatsMode.Total,
+                    AcceptMissingApostrophes = false
                 });
 
                 created++;

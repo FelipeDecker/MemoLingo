@@ -55,6 +55,36 @@
             </label>
         </div>
 
+        <div class="perfil-card perfil-preferencia">
+            <div class="preferencia-texto">
+                <strong>Aceitar contrações sem apóstrofo</strong>
+                <span>
+                    @if (AcceptsMissingApostrophes)
+                    {
+                        <text>Respostas como "dont" e "im" são aceitas como "don't" e "I'm".</text>
+                    }
+                    else
+                    {
+                        <text>Contrações precisam do apóstrofo ("don't") ou da forma completa ("do not").</text>
+                    }
+                </span>
+                @if (!IsPremium)
+                {
+                    <span class="preferencia-premium">Disponível no plano Premium.</span>
+                }
+            </div>
+
+            <label class="switch" title="@(IsPremium ? "Aceitar contrações sem apóstrofo" : "Disponível no plano Premium")">
+                <input type="checkbox"
+                       role="switch"
+                       aria-label="Aceitar contrações sem apóstrofo"
+                       checked="@AcceptsMissingApostrophes"
+                       disabled="@(!IsPremium || saving)"
+                       @onchange="OnAcceptMissingApostrophesChanged" />
+                <span class="switch-trilho"></span>
+            </label>
+        </div>
+
         @if (errorMessage != null)
         {
             <p class="perfil-erro">@errorMessage</p>

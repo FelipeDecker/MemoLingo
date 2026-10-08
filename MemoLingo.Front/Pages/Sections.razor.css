@@ -189,6 +189,26 @@
     cursor: not-allowed;
 }
 
+/* Botão "PULAR PARA CÁ?" da seção seguinte à atual: abre o teste para pular de seção. */
+.section-card-skip {
+    flex-shrink: 0;
+    background-color: #fff;
+    color: #1cb0f6;
+    border: 2px solid #1cb0f6;
+    border-bottom-width: 4px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.section-card-skip:hover {
+    background-color: #ddf4ff;
+}
+
 /* Botão principal "CONTINUAR" da seção atual. */
 .section-card-continue {
     width: 100%;
@@ -221,7 +241,8 @@
         gap: 1rem;
     }
 
-    .section-card-review {
+    .section-card-review,
+    .section-card-skip {
         width: 100%;
     }
 }

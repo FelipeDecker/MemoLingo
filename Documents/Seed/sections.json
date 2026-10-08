@@ -26,6 +26,12 @@
           "We do not like coffee.",
           "Does he speak English?"
         ],
+        "markers": [
+          "^\\s*(I|you|we|they)\\s+(?!(am|are|was|were|do|did|will|can|have|had|would|could|should|must)\\b)(?-i:[a-z]+)\\b",
+          "\\b(he|she|it)\\s+(?!is\\b|was\\b|does\\b)(?-i:[a-z]+s)\\b",
+          "\\b(do|does)\\s+not\\b|\\b(don't|doesn't)\\b",
+          "\\b(do|does)\\s+(I|you|he|she|it|we|they|your|my|his|her|our|their|the)\\b[^.!]*\\?"
+        ],
         "isMandatory": true
       },
       {
@@ -36,6 +42,11 @@
           "I am Anna.",
           "She is my sister.",
           "Are you tired?"
+        ],
+        "markers": [
+          "\\b(I am|I'm|you are|you're|we are|we're|they are|they're|he is|he's|she is|she's|it is|it's)\\b",
+          "\\b(am|is|are)\\s+not\\b|\\b(isn't|aren't)\\b|\\bI'm not\\b",
+          "^\\s*(?:(?:what|where|who|when|how|why|which)(?:\\s+\\w+)?\\s+)?(am|is|are)\\b[^.!]*\\?"
         ],
         "isMandatory": true
       },
@@ -48,6 +59,10 @@
           "This is my house.",
           "Her name is Maria."
         ],
+        "markers": [
+          "\\b(me|him|us|them)\\b",
+          "\\b(my|your|his|her|our|their)\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -57,6 +72,9 @@
         "examples": [
           "There is a sofa in the living room.",
           "There are two cats in the garden."
+        ],
+        "markers": [
+          "\\bthere\\s+(is|are|isn't|aren't)\\b|\\bthere's\\b|\\b(is|are)\\s+there\\b"
         ],
         "isMandatory": false
       },
@@ -68,6 +86,10 @@
           "I eat an egg and an apple.",
           "The children play outside."
         ],
+        "markers": [
+          "\\ban\\s+\\w+",
+          "\\b(children|men|women|people|feet|teeth|mice)\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -77,6 +99,10 @@
         "examples": [
           "Close the door, please.",
           "Do not be late."
+        ],
+        "markers": [
+          "^\\s*(please,?\\s+)?(do not|don't)\\s+\\w+",
+          "^\\s*(please,?\\s+)?(close|open|come|go|sit|stand|look|listen|wait|take|give|help|stop|turn|put|let's|let|call|bring|eat|drink|read|write|speak)\\b"
         ],
         "isMandatory": false
       }
@@ -108,6 +134,12 @@
           "She went to the airport.",
           "Did you book a hotel?"
         ],
+        "markers": [
+          "\\b(went|had|saw|ate|bought|took|made|came|got|left|met|said|told|found|gave|knew|thought|flew|slept|wrote|drove|spent|began|brought|paid|\\w+ed)\\b",
+          "\\bdid\\s+not\\b|\\bdidn't\\b|\\b(was|were)\\s+not\\b|\\b(wasn't|weren't)\\b",
+          "\\bdid\\s+(I|you|he|she|it|we|they|your|my|his|her|our|their|the)\\b[^.!]*\\?",
+          "\\b(was|were)\\b"
+        ],
         "isMandatory": true
       },
       {
@@ -117,6 +149,9 @@
         "examples": [
           "I am waiting for the bus.",
           "We are leaving tomorrow."
+        ],
+        "markers": [
+          "(\\b(am|is|are)|'m|'re|'s)\\s+(not\\s+)?\\w+ing\\b"
         ],
         "isMandatory": false
       },
@@ -128,6 +163,10 @@
           "I am going to travel in July.",
           "I will help you."
         ],
+        "markers": [
+          "\\bgoing\\s+to\\b",
+          "(\\bwill|\\bwon't|'ll)\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -138,6 +177,10 @@
           "The train is faster than the bus.",
           "This is the most expensive hotel."
         ],
+        "markers": [
+          "\\b\\w+er\\s+than\\b|\\bmore\\s+\\w+\\s+than\\b",
+          "\\bthe\\s+(most|least)\\s+\\w+|\\bthe\\s+\\w+est\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -147,6 +190,9 @@
         "examples": [
           "Can I pay by card?",
           "You should take an umbrella."
+        ],
+        "markers": [
+          "\\b(can|could|should|must|can't|couldn't|shouldn't|mustn't)\\b"
         ],
         "isMandatory": false
       }
@@ -178,6 +224,11 @@
           "Have you ever been to Japan?",
           "She has already finished."
         ],
+        "markers": [
+          "(\\b(have|has)|'ve)\\s+(not\\s+|never\\s+|already\\s+|just\\s+|ever\\s+)?(been|\\w+ed|done|gone|seen|eaten|had|made|taken|written|known|met|found|given|bought|lost|spoken|heard|read|left|felt|forgotten|flown|driven|won|begun|broken|chosen|sold|told|paid|sent|shown|kept|built|thought|understood|caught|grown|drawn|stolen|put|set)\\b",
+          "\\b(haven't|hasn't)\\b",
+          "^\\s*(?:\\w+\\s+)?(have|has)\\s+(I|you|he|she|it|we|they)\\s+(ever\\s+)?\\w+[^.!]*\\?"
+        ],
         "isMandatory": true
       },
       {
@@ -186,6 +237,9 @@
         "structure": "sujeito + was/were + verbo-ing",
         "examples": [
           "I was sleeping when you called."
+        ],
+        "markers": [
+          "\\b(was|were|wasn't|weren't)\\s+(not\\s+)?\\w+ing\\b"
         ],
         "isMandatory": false
       },
@@ -197,6 +251,10 @@
           "If it rains, I will stay home.",
           "If I had money, I would travel."
         ],
+        "markers": [
+          "\\bif\\b[^.?!]*\\b(will|won't)\\b|\\b(will|won't)\\b[^.?!]*\\bif\\b",
+          "\\bif\\b[^.?!]*\\b(would|wouldn't)\\b|\\b(would|wouldn't)\\b[^.?!]*\\bif\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -206,6 +264,9 @@
         "examples": [
           "I used to play football."
         ],
+        "markers": [
+          "\\bused\\s+to\\b|\\buse\\s+to\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -214,6 +275,10 @@
         "structure": "substantivo + who/which/that/where + oração",
         "examples": [
           "The woman who lives next door is a doctor."
+        ],
+        "markers": [
+          "\\w,?\\s+(who|which|whose)\\s+\\w+",
+          "\\w\\s+(where|that)\\s+(I|you|he|she|it|we|they)\\b"
         ],
         "isMandatory": false
       }
@@ -245,6 +310,10 @@
           "The report is being written.",
           "English is spoken here."
         ],
+        "markers": [
+          "\\b(is|are|am)\\s+(not\\s+)?(being\\s+)?(been|\\w+ed|done|gone|seen|eaten|had|made|taken|written|known|met|found|given|bought|lost|spoken|heard|read|left|felt|forgotten|flown|driven|won|begun|broken|chosen|sold|told|paid|sent|shown|kept|built|thought|understood|caught|grown|drawn|stolen|put|set)\\b",
+          "\\b(was|were|been|be)\\s+(not\\s+)?(been|\\w+ed|done|gone|seen|eaten|had|made|taken|written|known|met|found|given|bought|lost|spoken|heard|read|left|felt|forgotten|flown|driven|won|begun|broken|chosen|sold|told|paid|sent|shown|kept|built|thought|understood|caught|grown|drawn|stolen|put|set)\\b"
+        ],
         "isMandatory": true
       },
       {
@@ -255,6 +324,10 @@
           "If I had studied, I would have passed.",
           "I wish I had more time."
         ],
+        "markers": [
+          "\\bif\\b[^.?!]*\\bhad\\b[^.?!]*\\b(would|could|might)(n't)?\\s+have\\b|\\b(would|could|might)(n't)?\\s+have\\b[^.?!]*\\bif\\b[^.?!]*\\bhad\\b",
+          "\\b(wish|wishes|wished)\\b|\\bif only\\b"
+        ],
         "isMandatory": true
       },
       {
@@ -263,6 +336,10 @@
         "structure": "He said (that) + oração com tempo recuado",
         "examples": [
           "She said she was tired."
+        ],
+        "markers": [
+          "\\b(said|told|asked|explained|claimed|replied|admitted|promised)\\s+(\\w+\\s+)?(that|if|whether|to)\\b",
+          "\\b(said|told \\w+|asked \\w+|explained)\\s+(I|you|he|she|it|we|they)\\s+(was|were|had|would|could|did|didn't|wasn't|weren't)\\b"
         ],
         "isMandatory": false
       },
@@ -273,6 +350,9 @@
         "examples": [
           "When I arrived, the train had left."
         ],
+        "markers": [
+          "(\\bhad|'d)\\s+(not\\s+|already\\s+|just\\s+|never\\s+)?(been|\\w+ed|done|gone|seen|eaten|had|made|taken|written|known|met|found|given|bought|lost|spoken|heard|read|left|felt|forgotten|flown|driven|won|begun|broken|chosen|sold|told|paid|sent|shown|kept|built|thought|understood|caught|grown|drawn|stolen|put|set)\\b|\\bhadn't\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -282,6 +362,10 @@
         "examples": [
           "He must be at home.",
           "She might have forgotten."
+        ],
+        "markers": [
+          "\\b(must|might|may|could|can't|couldn't)\\s+(not\\s+)?have\\s+\\w+",
+          "\\b(must|might|can't)\\s+be\\b"
         ],
         "isMandatory": false
       }
@@ -312,6 +396,10 @@
           "Never have I seen such a beautiful place.",
           "Not only did he lie, but he also stole."
         ],
+        "markers": [
+          "^\\s*(never|rarely|seldom|hardly|scarcely|barely|little|nowhere|under no circumstances|on no account|at no time)\\b[^.?!]*?\\b(have|has|had|do|does|did|is|are|was|were|will|would|can|could|should|must|might)\\b",
+          "^\\s*(no sooner|not only|not until|only (when|after|then|by|if|once|later|now))\\b"
+        ],
         "isMandatory": true
       },
       {
@@ -322,6 +410,10 @@
           "It was John who called.",
           "What I need is a holiday."
         ],
+        "markers": [
+          "^\\s*it\\s+(is|was)\\s+[^.?!]+\\s+(that|who)\\b",
+          "^\\s*what\\s+(I|you|he|she|we|they)\\s+\\w+[^.?!]*\\s+(is|was)\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -331,6 +423,10 @@
         "examples": [
           "If I had taken the job, I would be rich now."
         ],
+        "markers": [
+          "\\bif\\b[^.?!]*\\bhad\\b[^.?!]*\\bwould\\s+(?!have\\b)\\w+",
+          "\\bif\\b[^.?!]*\\bwould\\s+have\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -339,6 +435,10 @@
         "structure": "Having + particípio, ... | particípio, ...",
         "examples": [
           "Having finished the report, she went home."
+        ],
+        "markers": [
+          "^\\s*having\\s+\\w+",
+          "^\\s*\\w+(ed|en|ing)\\b[^,]*,"
         ],
         "isMandatory": false
       }
@@ -370,6 +470,10 @@
           "It is essential that she arrive on time.",
           "Were I to accept, I would move abroad."
         ],
+        "markers": [
+          "\\b(suggest|suggested|insist|insisted|demand|demanded|recommend|recommended|require|required|request|requested|propose|proposed|essential|vital|imperative|crucial|important)\\s+that\\b",
+          "^\\s*(were|should|had)\\s+(I|he|she|it|we|you|they|anyone)\\b[^?]*$"
+        ],
         "isMandatory": true
       },
       {
@@ -378,6 +482,9 @@
         "structure": "verbo/adjetivo → substantivo",
         "examples": [
           "The government decided → The government's decision."
+        ],
+        "markers": [
+          "\\b\\w+(tion|sion|ment|ness|ity|ance|ence)\\b"
         ],
         "isMandatory": false
       },
@@ -389,6 +496,9 @@
           "I hope so.",
           "She asked me to call, and I did so."
         ],
+        "markers": [
+          "\\b(do|did|does)\\s+so\\b|\\b(think|hope|afraid|suppose|believe)\\s+(so|not)\\b|\\b(one|ones)\\b"
+        ],
         "isMandatory": false
       },
       {
@@ -397,6 +507,10 @@
         "structure": "formal ↔ neutro ↔ informal",
         "examples": [
           "Could you possibly help me? / Can you help me?"
+        ],
+        "markers": [
+          "\\b(nevertheless|furthermore|moreover|hence|thus|whereby|notwithstanding|therefore|consequently)\\b",
+          "\\b(possibly|kindly|would you mind|I was wondering)\\b"
         ],
         "isMandatory": false
       }

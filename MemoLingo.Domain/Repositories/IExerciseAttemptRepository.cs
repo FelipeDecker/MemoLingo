@@ -1,4 +1,5 @@
 using MemoLingo.Domain.Entities;
+using MemoLingo.Domain.Enums;
 using MemoLingo.Domain.Projections;
 
 namespace MemoLingo.Domain.Repositories
@@ -14,6 +15,7 @@ namespace MemoLingo.Domain.Repositories
         Task<IEnumerable<NuanceAttemptSample>> GetNuanceAttemptsAsync(int userId, int languageId);
         Task<IEnumerable<NuanceAttemptSample>> GetRecentNuanceByGroupAsync(int userId, int synonymGroupId, int sampleSize);
         Task<Dictionary<int, int>> GetSentenceAttemptCountsAsync(int userId, int languageId);
+        Task<bool> ExistsInSessionAsync(int studySessionId, int sentenceId, ExerciseType exerciseType);
         Task AddAsync(ExerciseAttempt attempt);
         Task<bool> SaveChangesAsync();
     }

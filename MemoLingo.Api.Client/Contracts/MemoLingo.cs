@@ -157,6 +157,32 @@ namespace MemoLingo.Api.Client.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial interface ISectionTestsClient
+    {
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<SectionTestSessionModel> StartAsync(int sectionId, int? userId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<SectionTestSessionModel> StartAsync(int sectionId, int? userId, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LessonAnswerResultModel> AnswerAsync(LessonAnswerModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LessonAnswerResultModel> AnswerAsync(LessonAnswerModel model, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<SectionTestResultModel> CompleteAsync(int studySessionId, int? userId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<SectionTestResultModel> CompleteAsync(int studySessionId, int? userId, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IUsersClient
     {
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
@@ -207,6 +233,13 @@ namespace MemoLingo.Api.Client.Contracts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<UserModel> UpdateLearningStatsModeAsync(UpdateLearningStatsModeModel model, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UserModel> UpdateAcceptMissingApostrophesAsync(UpdateAcceptMissingApostrophesModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UserModel> UpdateAcceptMissingApostrophesAsync(UpdateAcceptMissingApostrophesModel model, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -1010,6 +1043,84 @@ namespace MemoLingo.Api.Client.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SectionTestSessionModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("studySessionId")]
+        public int StudySessionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sectionId")]
+        public int SectionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sectionTitle")]
+        public string SectionTitle { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sourceSectionId")]
+        public int SourceSectionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sourceSectionTitle")]
+        public string SourceSectionTitle { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("totalExercises")]
+        public int TotalExercises { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("requiredCorrect")]
+        public int RequiredCorrect { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("maxWrong")]
+        public int MaxWrong { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("passPercentage")]
+        public int PassPercentage { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("grammarTopics")]
+        public System.Collections.Generic.ICollection<string> GrammarTopics { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exercises")]
+        public System.Collections.Generic.ICollection<LessonExerciseModel> Exercises { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SectionTestResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("studySessionId")]
+        public int StudySessionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sectionId")]
+        public int SectionId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sectionTitle")]
+        public string SectionTitle { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("passed")]
+        public bool Passed { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctCount")]
+        public int CorrectCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("wrongCount")]
+        public int WrongCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("totalExercises")]
+        public int TotalExercises { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("requiredCorrect")]
+        public int RequiredCorrect { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("accuracyPercentage")]
+        public int AccuracyPercentage { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("skippedLessons")]
+        public int SkippedLessons { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class UserModel
     {
 
@@ -1037,6 +1148,9 @@ namespace MemoLingo.Api.Client.Contracts
         [System.Text.Json.Serialization.JsonPropertyName("learningStatsMode")]
         public LearningStatsMode LearningStatsMode { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("acceptMissingApostrophes")]
+        public bool AcceptMissingApostrophes { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1058,6 +1172,18 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("mode")]
         public LearningStatsMode Mode { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UpdateAcceptMissingApostrophesModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public int? UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("enabled")]
+        public bool Enabled { get; set; }
 
     }
 

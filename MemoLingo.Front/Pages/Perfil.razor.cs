@@ -20,6 +20,8 @@ namespace MemoLingo.Front.Pages
 
         private bool UsesRecentAttempts => IsPremium && user.LearningStatsMode == LearningStatsMode.RecentAttempts;
 
+        private bool AcceptsMissingApostrophes => IsPremium && user.AcceptMissingApostrophes;
+
         protected override async Task OnInitializedAsync()
         {
             try
@@ -49,6 +51,30 @@ namespace MemoLingo.Front.Pages
             try
             {
                 user = await UserProfileService.UpdateLearningStatsModeAsync(mode);
+            }
+            catch (InvalidOperationException ex)
+            {
+                errorMessage = ex.Message;
+            }
+            finally
+            {
+                saving = false;
+            }
+        }
+
+        private async Task OnAcceptMissingApostrophesChanged(ChangeEventArgs args)
+        {
+            if (!IsPremium || saving)
+            {
+                return;
+            }
+
+            saving = true;
+            errorMessage = null;
+
+            try
+            {
+                user = await UserProfileService.UpdateAcceptMissingApostrophesAsync(args.Value is true);
             }
             catch (InvalidOperationException ex)
             {

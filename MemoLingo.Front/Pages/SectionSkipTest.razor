@@ -1,0 +1,195 @@
+@page "/section/{SectionId:int}/skip-test"
+@layout LessonLayout
+
+<PageTitle>Teste para pular de seção</PageTitle>
+
+<div class="lesson-page">
+    <header class="lesson-header">
+        <button type="button" class="lesson-close" title="Sair do teste" @onclick="Exit">✕</button>
+        <div class="lesson-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="@ProgressPercentage">
+            <div class="lesson-progress-bar" style="width:@(ProgressPercentage)%"></div>
+        </div>
+        @if (session is not null && started && result is null)
+        {
+            <span class="lesson-counter">@AnsweredCount/@TotalExercises</span>
+        }
+    </header>
+
+    <section class="lesson-body">
+        @if (loading)
+        {
+            <p class="lesson-loading"><em>Preparando o teste...</em></p>
+        }
+        else if (!string.IsNullOrEmpty(loadError))
+        {
+            <div class="lesson-summary">
+                <h2>Não foi possível iniciar o teste</h2>
+                <p>@loadError</p>
+                <button class="btn-principal" @onclick="Exit">Voltar para as seções</button>
+            </div>
+        }
+        else if (result is not null)
+        {
+            <div class="lesson-summary">
+                @if (result.Passed)
+                {
+                    <h2>Você passou! 🎉</h2>
+                    <p>
+                        <span>@(string.IsNullOrWhiteSpace(result.SectionTitle) ? "A próxima seção" : result.SectionTitle) foi liberada.</span>
+                    </p>
+                }
+                else
+                {
+                    <h2>Não foi dessa vez</h2>
+                    <p>
+                        <span>Era preciso acertar pelo menos @result.RequiredCorrect de @result.TotalExercises questões (@(session.PassPercentage)%).</span>
+                        <span>Continue estudando a @session.SourceSectionTitle e tente novamente.</span>
+                    </p>
+                }
+
+                <div class="summary-metrics">
+                    <div class="summary-metric">
+                        <span class="summary-metric-value">@result.CorrectCount</span>
+                        <span class="summary-metric-label">Acertos</span>
+                    </div>
+                    <div class="summary-metric">
+                        <span class="summary-metric-value">@result.WrongCount</span>
+                        <span class="summary-metric-label">Erros</span>
+                    </div>
+                    <div class="summary-metric">
+                        <span class="summary-metric-value">@result.AccuracyPercentage%</span>
+                        <span class="summary-metric-label">Precisão</span>
+                    </div>
+                </div>
+
+                <div class="summary-actions">
+                    @if (result.Passed)
+                    {
+                        <button class="btn-principal" @onclick="OpenUnlockedSection">Ir para a seção</button>
+                    }
+                    else
+                    {
+                        <button class="btn-secundario" @onclick="Exit">Voltar</button>
+                        <button class="btn-principal" @onclick="StartTestAsync">Tentar novamente</button>
+                    }
+                </div>
+            </div>
+        }
+        else if (!started)
+        {
+            <div class="test-intro">
+                <span class="lesson-tag lesson-tag-review">@session.CefrLevel</span>
+                <h2 class="lesson-instruction">Pular para @session.SectionTitle?</h2>
+                <p>
+                    Responda <strong>@session.TotalExercises questões</strong> com as frases mais difíceis da
+                    <strong>@session.SourceSectionTitle</strong> e acerte pelo menos
+                    <strong>@session.RequiredCorrect (@(session.PassPercentage)%)</strong> para liberar a próxima seção.
+                </p>
+                <p>Você pode errar no máximo <strong>@session.MaxWrong</strong> @(session.MaxWrong == 1 ? "questão" : "questões"). As questões erradas não voltam.</p>
+
+                @if (session.GrammarTopics?.Count > 0)
+                {
+                    <p class="test-intro-topics-title">Gramática obrigatória avaliada:</p>
+                    <ul class="test-intro-topics">
+                        @foreach (var topic in session.GrammarTopics)
+                        {
+                            <li>@topic</li>
+                        }
+                    </ul>
+                }
+
+                <div class="summary-actions">
+                    <button class="btn-secundario" @onclick="Exit">Agora não</button>
+                    <button class="btn-principal" @onclick="Begin">Começar</button>
+                </div>
+            </div>
+        }
+        else if (Current is not null)
+        {
+            <div class="test-status">
+                <span class="lesson-tag lesson-tag-review">Teste da seção</span>
+                <span class="lesson-tag @(wrongCount > 0 ? "lesson-tag-retry" : "lesson-tag-review")">Erros: @wrongCount/@session.MaxWrong</span>
+            </div>
+
+            <h2 class="lesson-instruction">@GetInstruction(Current.ExerciseType)</h2>
+
+            @if (Current.ExerciseType == ExerciseType.FillInTheBlank)
+            {
+                var parts = SplitSentence(Current.Prompt);
+
+                <p class="lesson-sentence" lang="en">
+                    @parts.Before<span class="lacuna @BlankCss">@BlankText</span>@parts.After
+                </p>
+
+                @if (!string.IsNullOrWhiteSpace(Current.Hint))
+                {
+                    <p class="lesson-hint">@Current.Hint</p>
+                }
+
+                <div class="opcoes" role="group" aria-label="Opções">
+                    @foreach (var option in Current.Options)
+                    {
+                        <button type="button"
+                                class="opcao @(string.Equals(answer, option, StringComparison.OrdinalIgnoreCase) ? "opcao-selecionada" : string.Empty)"
+                                disabled="@(answerResult is not null || submitting)"
+                                @onclick="() => SelectOption(option)">
+                            @option
+                        </button>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="lesson-prompt">
+                    <span class="lesson-prompt-text" lang="@(Current.ExerciseType == ExerciseType.TranslationToNative ? "en" : "pt")">@Current.Prompt</span>
+                </div>
+            }
+
+            <input @ref="answerInput"
+                   class="lesson-answer"
+                   type="text"
+                   placeholder="@GetPlaceholder(Current.ExerciseType)"
+                   autocomplete="off"
+                   autocapitalize="off"
+                   spellcheck="false"
+                   value="@answer"
+                   disabled="@(answerResult is not null || submitting)"
+                   @oninput="OnAnswerInput"
+                   @onkeydown="OnAnswerKeyDown" />
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <p class="mensagem-erro">@errorMessage</p>
+            }
+        }
+    </section>
+
+    @if (!loading && string.IsNullOrEmpty(loadError) && result is null && started && Current is not null)
+    {
+        <footer class="lesson-footer @FooterCss">
+            <div class="lesson-footer-content">
+                @if (answerResult is null)
+                {
+                    <div class="lesson-feedback"></div>
+                    <button class="btn-principal" disabled="@(!CanSubmit)" @onclick="SubmitAsync">Verificar</button>
+                }
+                else
+                {
+                    <div class="lesson-feedback">
+                        <h3 class="lesson-feedback-title">@(answerResult.IsCorrect ? "Muito bem! 🎉" : "Resposta incorreta")</h3>
+                        @if (!answerResult.IsCorrect)
+                        {
+                            <p class="lesson-feedback-answer">Resposta correta: <strong>@answerResult.CorrectAnswer</strong></p>
+                        }
+                        <p class="lesson-feedback-sentence">
+                            <span lang="en">@answerResult.SentenceText</span> — <span>@answerResult.SentenceTranslation</span>
+                        </p>
+                    </div>
+                    <button @ref="continueButton" class="btn-principal @(answerResult.IsCorrect ? string.Empty : "btn-erro")" disabled="@completing" @onclick="ContinueAsync">
+                        @(completing ? "Salvando..." : "Continuar")
+                    </button>
+                }
+            </div>
+        </footer>
+    }
+</div>

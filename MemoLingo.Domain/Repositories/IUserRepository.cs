@@ -14,5 +14,6 @@ namespace MemoLingo.Domain.Repositories
         Task AddProgressAsync(LanguageProgress progress);
         Task SetActiveCourseAsync(int userId, int languageId);
         Task AddLessonRewardAsync(int userId, int languageId, int xp, bool isFirstCompletion);
+        Task ApplySectionSkipAsync(int userId, int languageId, int level, int skippedLessons);
     }
 }

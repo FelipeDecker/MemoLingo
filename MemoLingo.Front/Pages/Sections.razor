@@ -55,7 +55,16 @@
                     }
                 </div>
 
-                @if (!isCurrent)
+                @if (CanSkipTo(section))
+                {
+                    <button type="button"
+                            class="section-card-skip"
+                            title="Faça um teste com as frases mais difíceis da seção atual para liberar esta seção"
+                            @onclick="() => SkipTo(section)">
+                        PULAR PARA CÁ?
+                    </button>
+                }
+                else if (!isCurrent)
                 {
                     <button type="button"
                             class="section-card-review"

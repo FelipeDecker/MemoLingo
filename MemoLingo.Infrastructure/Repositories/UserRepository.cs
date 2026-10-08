@@ -90,5 +90,21 @@ namespace MemoLingo.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task ApplySectionSkipAsync(int userId, int languageId, int level, int skippedLessons)
+        {
+            var progress = await _context.LanguageProgresses
+                .FirstOrDefaultAsync(lp => lp.UserId == userId && lp.LanguageId == languageId);
+
+            if (progress is null)
+            {
+                return;
+            }
+
+            progress.Level = Math.Max(progress.Level, level);
+            progress.TotalCompletedLessons += skippedLessons;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

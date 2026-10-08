@@ -158,6 +158,7 @@ namespace MemoLingo.Infrastructure.Data
                 entity.Property(g => g.Explanation).HasMaxLength(2000);
                 entity.Property(g => g.Structure).HasMaxLength(500);
                 entity.Property(g => g.Examples).HasMaxLength(2000);
+                entity.Property(g => g.Markers).HasMaxLength(2000);
 
                 entity.HasOne(g => g.Section)
                     .WithMany(s => s.GrammarTopics)
@@ -269,6 +270,11 @@ namespace MemoLingo.Infrastructure.Data
                     .WithMany(l => l.StudySessions)
                     .HasForeignKey(ss => ss.LessonId)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(ss => ss.Section)
+                    .WithMany()
+                    .HasForeignKey(ss => ss.SectionId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasIndex(ss => new { ss.UserId, ss.StartedAt });
             });

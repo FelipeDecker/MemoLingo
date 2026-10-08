@@ -6,5 +6,6 @@ namespace MemoLingo.Front.Services
     {
         Task<UserModel> GetCurrentAsync();
         Task<UserModel> UpdateLearningStatsModeAsync(LearningStatsMode mode);
+        Task<UserModel> UpdateAcceptMissingApostrophesAsync(bool enabled);
     }
 }

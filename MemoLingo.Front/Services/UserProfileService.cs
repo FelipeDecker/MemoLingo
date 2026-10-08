@@ -22,6 +22,11 @@ namespace MemoLingo.Front.Services
             return ExecuteAsync(() => _usersClient.UpdateLearningStatsModeAsync(new UpdateLearningStatsModeModel { Mode = mode }));
         }
 
+        public Task<UserModel> UpdateAcceptMissingApostrophesAsync(bool enabled)
+        {
+            return ExecuteAsync(() => _usersClient.UpdateAcceptMissingApostrophesAsync(new UpdateAcceptMissingApostrophesModel { Enabled = enabled }));
+        }
+
         // Converte os erros de validação da API em uma mensagem simples para a tela.
         private static async Task<T> ExecuteAsync<T>(Func<Task<T>> action)
         {
