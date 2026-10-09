@@ -3,6 +3,7 @@ using System;
 using MemoLingo.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MemoLingo.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261009092456_AddPrepositionExercises")]
+    partial class AddPrepositionExercises
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,9 +143,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.Property<int?>("PrepositionExerciseId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RelativePronounExerciseId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ResponseTimeMs")
                         .HasColumnType("integer");
 
@@ -166,8 +166,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.HasIndex("NuanceExerciseId", "AnsweredAt");
 
                     b.HasIndex("PrepositionExerciseId", "AnsweredAt");
-
-                    b.HasIndex("RelativePronounExerciseId", "AnsweredAt");
 
                     b.HasIndex("WordId", "AnsweredAt");
 
@@ -471,61 +469,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.HasIndex("LanguageId", "ExerciseType");
 
                     b.ToTable("PrepositionExercises");
-                });
-
-            modelBuilder.Entity("MemoLingo.Domain.Entities.RelativePronounExercise", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AlternativeSentences")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<string>("Answers")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int>("CefrLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ExerciseType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Explanation")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Sentence")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("ShownPronouns")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("Translation")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<int>("Usage")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId", "ExerciseType");
-
-                    b.ToTable("RelativePronounExercises");
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.Section", b =>
@@ -1082,11 +1025,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                         .HasForeignKey("PrepositionExerciseId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("MemoLingo.Domain.Entities.RelativePronounExercise", "RelativePronounExercise")
-                        .WithMany()
-                        .HasForeignKey("RelativePronounExerciseId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("MemoLingo.Domain.Entities.Sentence", "Sentence")
                         .WithMany()
                         .HasForeignKey("SentenceId")
@@ -1108,8 +1046,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                     b.Navigation("NuanceExercise");
 
                     b.Navigation("PrepositionExercise");
-
-                    b.Navigation("RelativePronounExercise");
 
                     b.Navigation("Sentence");
 
@@ -1209,17 +1145,6 @@ namespace MemoLingo.Infrastructure.Data.Migrations
                 });
 
             modelBuilder.Entity("MemoLingo.Domain.Entities.PrepositionExercise", b =>
-                {
-                    b.HasOne("MemoLingo.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("MemoLingo.Domain.Entities.RelativePronounExercise", b =>
                 {
                     b.HasOne("MemoLingo.Domain.Entities.Language", "Language")
                         .WithMany()

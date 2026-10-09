@@ -135,7 +135,7 @@
           "Did you book a hotel?"
         ],
         "markers": [
-          "\\b(went|had|saw|ate|bought|took|made|came|got|left|met|said|told|found|gave|knew|thought|flew|slept|wrote|drove|spent|began|brought|paid|\\w+ed)\\b",
+          "\\b(went|had|saw|ate|bought|took|made|came|got|left|met|said|told|found|gave|knew|thought|flew|slept|wrote|drove|spent|began|brought|paid|(?!(?:need|bed|red|speed|feed|seed|shed|hundred|tired|bored|interested|excited|married|worried|surprised|scared|closed|crowded|divorced|connected|included|pleased|based)\\b)\\w{2,}ed)\\b",
           "\\bdid\\s+not\\b|\\bdidn't\\b|\\b(was|were)\\s+not\\b|\\b(wasn't|weren't)\\b",
           "\\bdid\\s+(I|you|he|she|it|we|they|your|my|his|her|our|their|the)\\b[^.!]*\\?",
           "\\b(was|were)\\b"

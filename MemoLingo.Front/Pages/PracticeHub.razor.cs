@@ -52,5 +52,31 @@ namespace MemoLingo.Front.Pages
                 OpenPhrasalVerbs();
             }
         }
+
+        private void OpenPrepositions()
+        {
+            Navigation.NavigateTo("/pratica/preposicoes");
+        }
+
+        private void HandlePrepositionsKeyDown(KeyboardEventArgs args)
+        {
+            if (args.Key == "Enter" || args.Key == " ")
+            {
+                OpenPrepositions();
+            }
+        }
+
+        private void OpenRelativePronouns()
+        {
+            Navigation.NavigateTo("/pratica/pronomes-relativos");
+        }
+
+        private void HandleRelativePronounsKeyDown(KeyboardEventArgs args)
+        {
+            if (args.Key == "Enter" || args.Key == " ")
+            {
+                OpenRelativePronouns();
+            }
+        }
     }
 }

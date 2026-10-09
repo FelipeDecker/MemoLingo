@@ -19,6 +19,8 @@ builder.Services.AddScoped<IUsersClient>(sp => new UsersClient(api, sp.GetRequir
 builder.Services.AddScoped<ICoursesClient>(sp => new CoursesClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<IPracticeClient>(sp => new PracticeClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<INuanceClient>(sp => new NuanceClient(api, sp.GetRequiredService<HttpClient>()));
+builder.Services.AddScoped<IPrepositionsClient>(sp => new PrepositionsClient(api, sp.GetRequiredService<HttpClient>()));
+builder.Services.AddScoped<IRelativePronounsClient>(sp => new RelativePronounsClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<ILessonsClient>(sp => new LessonsClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<ISectionTestsClient>(sp => new SectionTestsClient(api, sp.GetRequiredService<HttpClient>()));
 builder.Services.AddScoped<ILessonService, LessonService>();
@@ -26,6 +28,8 @@ builder.Services.AddScoped<ILessonActivityService, LessonActivityService>();
 builder.Services.AddScoped<ISectionTestActivityService, SectionTestActivityService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddScoped<INuanceService, NuanceService>();
+builder.Services.AddScoped<IPrepositionService, PrepositionService>();
+builder.Services.AddScoped<IRelativePronounService, RelativePronounService>();
 builder.Services.AddScoped<IUserCourseService, UserCourseService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 

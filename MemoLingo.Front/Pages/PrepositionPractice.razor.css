@@ -1,0 +1,476 @@
+.prep-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+}
+
+.prep-topo {
+    margin-bottom: 1.25rem;
+}
+
+.prep-titulo {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.modos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.modo {
+    border: 2px solid #e5e5e5;
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #4b4b4b;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+    .modo:hover:not(:disabled) {
+        border-color: #1cb0f6;
+    }
+
+    .modo:disabled {
+        cursor: default;
+        opacity: 0.7;
+    }
+
+.modo-ativo {
+    border-color: #1cb0f6;
+    color: #1cb0f6;
+    background-color: rgba(28, 176, 246, 0.08);
+}
+
+.dicas {
+    border: 2px solid #e5e5e5;
+    border-radius: 14px;
+    padding: 0.6rem 1rem;
+}
+
+    .dicas summary {
+        font-weight: 700;
+        color: #1cb0f6;
+        cursor: pointer;
+    }
+
+.dicas-grade {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+}
+
+.dica {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
+.dica-prep {
+    flex: 0 0 2.6rem;
+    text-align: center;
+    color: #fff;
+    background-color: #1cb0f6;
+    border-radius: 8px;
+    padding: 0.1rem 0;
+}
+
+.carregando {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.sessao-progresso {
+    text-align: center;
+    color: #6b6b6b;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.prep-cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.etiqueta-tipo,
+.etiqueta-uso,
+.etiqueta-nivel,
+.etiqueta-prioridade {
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+}
+
+.etiqueta-tipo {
+    color: #1cb0f6;
+    background-color: rgba(28, 176, 246, 0.12);
+}
+
+.etiqueta-uso {
+    color: #a560e8;
+    background-color: rgba(165, 96, 232, 0.12);
+}
+
+.etiqueta-nivel {
+    color: #6b6b6b;
+    background-color: #f2f2f2;
+}
+
+.etiqueta-prioridade {
+    color: #ff4b4b;
+    background-color: rgba(255, 75, 75, 0.12);
+}
+
+.prep-card {
+    border: 2px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.prep-instrucao {
+    color: #6b6b6b;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.prep-frase {
+    font-size: 1.25rem;
+    line-height: 2.1;
+    margin-bottom: 0.75rem;
+}
+
+.prep-prompt {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.prep-dica {
+    font-family: monospace;
+    color: #6b6b6b;
+    margin-bottom: 0.75rem;
+}
+
+.lacuna-input {
+    width: 3.6rem;
+    margin: 0 0.15rem;
+    padding: 0 0.3rem;
+    border: none;
+    border-bottom: 3px solid #afafaf;
+    background-color: transparent;
+    color: #1cb0f6;
+    font-weight: 700;
+    text-align: center;
+}
+
+    .lacuna-input:focus,
+    .lacuna-ativa {
+        outline: none;
+        border-bottom-color: #1cb0f6;
+        background-color: rgba(28, 176, 246, 0.08);
+    }
+
+.lacuna-resultado {
+    display: inline-block;
+    padding: 0 0.3rem;
+    margin: 0 0.15rem;
+    border-bottom: 3px solid #e5e5e5;
+    font-weight: 700;
+}
+
+.lacuna-certa {
+    color: #58a700;
+    border-bottom-color: #58cc02;
+}
+
+.lacuna-errada {
+    color: #c53030;
+    border-bottom-color: #ff4b4b;
+}
+
+    .lacuna-errada s {
+        margin-right: 0.3rem;
+        opacity: 0.8;
+    }
+
+.lacuna-correcao {
+    color: #58a700;
+}
+
+.prep-clicavel {
+    display: inline-block;
+    margin: 0 0.15rem;
+    padding: 0 0.45rem;
+    border: 2px dashed #afafaf;
+    border-radius: 8px;
+    background-color: #fff;
+    font-weight: 700;
+    line-height: 1.6;
+    cursor: pointer;
+}
+
+    .prep-clicavel:hover:not(:disabled) {
+        border-color: #1cb0f6;
+    }
+
+.prep-selecionada {
+    border-style: solid;
+    border-color: #1cb0f6;
+    color: #1cb0f6;
+    background-color: rgba(28, 176, 246, 0.08);
+}
+
+.prep-aviso {
+    color: #6b6b6b;
+    font-size: 0.85rem;
+    margin-top: -0.5rem;
+}
+
+.prep-traducao {
+    color: #6b6b6b;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.prep-destaque {
+    color: #1cb0f6;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.btn-link {
+    display: block;
+    border: none;
+    background: none;
+    padding: 0;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #1cb0f6;
+    cursor: pointer;
+}
+
+.opcoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.opcao {
+    min-width: 3.5rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 0.5rem 0.9rem;
+    font-weight: 700;
+    background-color: #fff;
+    box-shadow: 0 2px 0 #e5e5e5;
+    cursor: pointer;
+}
+
+    .opcao:hover:not(:disabled) {
+        border-color: #1cb0f6;
+    }
+
+    .opcao:disabled {
+        cursor: default;
+        opacity: 0.5;
+    }
+
+.opcao-selecionada {
+    border-color: #1cb0f6;
+    color: #1cb0f6;
+    background-color: rgba(28, 176, 246, 0.08);
+}
+
+.resposta-texto {
+    width: 100%;
+    border: 2px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    resize: vertical;
+    margin-bottom: 1rem;
+}
+
+    .resposta-texto:focus {
+        outline: none;
+        border-color: #1cb0f6;
+    }
+
+.resposta-enviada {
+    margin-bottom: 1rem;
+}
+
+.resposta-rotulo {
+    display: block;
+    color: #6b6b6b;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.acoes-card {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.mensagem-erro {
+    color: #c53030;
+    margin-top: 0.75rem;
+}
+
+.btn-principal,
+.btn-secundario {
+    border: none;
+    border-radius: 14px;
+    padding: 0.8rem 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+}
+
+.btn-principal {
+    color: #fff;
+    background-color: #58cc02;
+    box-shadow: 0 4px 0 #58a700;
+}
+
+.btn-secundario {
+    color: #1cb0f6;
+    background-color: #fff;
+    border: 2px solid #e5e5e5;
+    box-shadow: 0 4px 0 #e5e5e5;
+}
+
+    .btn-principal:hover:not(:disabled),
+    .btn-secundario:hover:not(:disabled) {
+        transform: translateY(-2px);
+    }
+
+    .btn-principal:disabled {
+        background-color: #e5e5e5;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+.resultado {
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+}
+
+.resultado-certo {
+    background-color: rgba(88, 204, 2, 0.12);
+    border: 2px solid #58cc02;
+}
+
+.resultado-errado {
+    background-color: rgba(255, 75, 75, 0.1);
+    border: 2px solid #ff4b4b;
+}
+
+.resultado-titulo {
+    margin-bottom: 0.5rem;
+}
+
+.resultado-dica {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.resultado-frase {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.resultado-explicacao {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.resumo-sessao {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.resumo-metricas {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0 2rem;
+}
+
+.resumo-metrica {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    max-width: 180px;
+    border: 2px solid #e5e5e5;
+    border-radius: 14px;
+    padding: 0.9rem 0.5rem;
+}
+
+.resumo-metrica-valor {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #58cc02;
+}
+
+.resumo-metrica-rotulo {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b6b6b;
+}
+
+.revisao {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.revisao-titulo {
+    font-size: 1.05rem;
+}
+
+.revisao-item {
+    border: 2px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+}
+
+.revisao-frase {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.revisao-explicacao {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: #4b4b4b;
+}
+
+.resumo-acoes {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}

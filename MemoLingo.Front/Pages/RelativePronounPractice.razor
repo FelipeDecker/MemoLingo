@@ -1,0 +1,347 @@
+@page "/pratica/pronomes-relativos"
+
+<PageTitle>Pronomes Relativos</PageTitle>
+
+<div class="prep-container">
+    <header class="prep-topo">
+        <h1 class="prep-titulo">Pronomes Relativos</h1>
+
+        <div class="modos" role="group" aria-label="Tipo de exercício">
+            @foreach (var mode in Modes)
+            {
+                <button class="modo @(selectedType == mode.Type ? "modo-ativo" : string.Empty)"
+                        disabled="@loading"
+                        @onclick="() => ChangeModeAsync(mode.Type)">
+                    @mode.Label
+                </button>
+            }
+        </div>
+
+        <details class="dicas">
+            <summary>Dicas rápidas</summary>
+            <div class="dicas-grade">
+                <div class="dica">
+                    <strong class="dica-prep">WHO</strong>
+                    <span><b>Pessoas.</b> The man <i>who</i> called you. Como objeto, a forma formal é <b>WHOM</b> (the woman <i>whom</i> I met), obrigatória logo após preposição (to <i>whom</i>).</span>
+                </div>
+                <div class="dica">
+                    <strong class="dica-prep">WHICH</strong>
+                    <span><b>Coisas e animais.</b> The sword <i>which</i> was given to the prince. Depois de vírgula, também retoma a frase inteira (He passed, <i>which</i> surprised everyone).</span>
+                </div>
+                <div class="dica">
+                    <strong class="dica-prep">THAT</strong>
+                    <span><b>Pessoas ou coisas</b>, só em orações que definem (sem vírgulas). Preferido após everything, nothing e superlativos. Nunca depois de vírgula ou de preposição.</span>
+                </div>
+                <div class="dica">
+                    <strong class="dica-prep">WHOSE</strong>
+                    <span><b>Posse (cujo/cuja).</b> Sempre seguido de substantivo: a friend <i>whose</i> father is a chef. Não confunda com <i>who's</i> (= who is).</span>
+                </div>
+                <div class="dica">
+                    <strong class="dica-prep">WHERE · WHEN · WHY</strong>
+                    <span><b>Lugar, tempo e motivo.</b> The city <i>where</i> I was born, the day <i>when</i> we met, the reason <i>why</i> I called.</span>
+                </div>
+                <div class="dica">
+                    <strong class="dica-prep">WHAT</strong>
+                    <span><b>"O que" / "aquilo que", sem antecedente.</b> <i>What</i> I need is rest. Nunca use "everything what": o certo é everything <i>that</i>.</span>
+                </div>
+            </div>
+        </details>
+    </header>
+
+    @if (loading)
+    {
+        <p class="carregando"><em>Preparando seus exercícios...</em></p>
+    }
+    else if (queue.Count == 0)
+    {
+        <div class="resumo-sessao">
+            <h2>Nada para praticar ainda</h2>
+            <p>Ainda não há exercícios de pronomes relativos cadastrados para o seu curso.</p>
+            <button class="btn-principal" @onclick="GoBackToHub">Voltar para praticar</button>
+        </div>
+    }
+    else if (sessionCompleted)
+    {
+        <div class="resumo-sessao">
+            <h2>Sessão concluída! 📍</h2>
+            <p>Você acertou @sessionCorrectCount de @queue.Count exercícios.</p>
+
+            <div class="resumo-metricas">
+                <div class="resumo-metrica">
+                    <span class="resumo-metrica-valor">@AccuracyPercentage%</span>
+                    <span class="resumo-metrica-rotulo">Acertos</span>
+                </div>
+                <div class="resumo-metrica">
+                    <span class="resumo-metrica-valor">@missed.Count</span>
+                    <span class="resumo-metrica-rotulo">Para revisar</span>
+                </div>
+            </div>
+
+            @if (missed.Count > 0)
+            {
+                <section class="revisao">
+                    <h3 class="revisao-titulo">Frases para revisar</h3>
+                    @foreach (var item in missed)
+                    {
+                        <div class="revisao-item">
+                            <p class="revisao-frase" lang="en">
+                                @foreach (var segment in BuildSegments(item.Sentence, item.CorrectAnswers.ToList()))
+                                {
+                                    if (segment.IsPronoun)
+                                    {
+                                        <strong class="prep-destaque">@segment.Text</strong>
+                                    }
+                                    else
+                                    {
+                                        <text>@segment.Text</text>
+                                    }
+                                }
+                            </p>
+                            <p class="revisao-explicacao">@item.Explanation</p>
+                        </div>
+                    }
+                </section>
+            }
+
+            <div class="resumo-acoes">
+                <button class="btn-secundario" @onclick="StartSessionAsync">Praticar de novo</button>
+                <button class="btn-principal" @onclick="GoBackToHub">Concluir</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        var current = queue[currentIndex];
+        var parts = SplitSentence(current.Sentence);
+
+        <div class="sessao-progresso">Exercício @(currentIndex + 1) de @queue.Count</div>
+
+        <div class="prep-cabecalho">
+            <span class="etiqueta-tipo">@TypeLabel(current.ExerciseType)</span>
+            <span class="etiqueta-uso">@UsageLabel(current.Usage)</span>
+            <span class="etiqueta-nivel">@current.CefrLevel</span>
+            @if (current.IsPriorityReview)
+            {
+                <span class="etiqueta-prioridade" title="Você errou este exercício na última tentativa">Revisão prioritária</span>
+            }
+        </div>
+
+        <div class="prep-card">
+            @switch (current.ExerciseType)
+            {
+                case RelativePronounExerciseType.FillInTheBlanks:
+                    <p class="prep-instrucao">Complete as lacunas com o pronome relativo correto:</p>
+
+                    <p class="prep-frase" lang="en">
+                        @for (var i = 0; i < parts.Count; i++)
+                        {
+                            var index = i - 1;
+                            if (i > 0)
+                            {
+                                if (result is null)
+                                {
+                                    <input class="lacuna-input @(activeBlank == index ? "lacuna-ativa" : string.Empty)"
+                                           @ref="blankRefs[index]"
+                                           type="text"
+                                           maxlength="10"
+                                           aria-label="@($"Lacuna {index + 1}")"
+                                           autocomplete="off"
+                                           autocapitalize="off"
+                                           spellcheck="false"
+                                           value="@blanks[index]"
+                                           disabled="@submitting"
+                                           @onfocus="() => activeBlank = index"
+                                           @oninput="args => OnBlankInput(index, args)"
+                                           @onkeydown="OnAnswerKeyDown" />
+                                }
+                                else
+                                {
+                                    var blank = BlankResult(index);
+                                    if (blank is null || blank.IsCorrect)
+                                    {
+                                        <span class="lacuna-resultado lacuna-certa">@DisplayWord(parts, index, blank?.SubmittedAnswer ?? string.Empty)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="lacuna-resultado lacuna-errada">
+                                            @if (!string.IsNullOrWhiteSpace(blank.SubmittedAnswer))
+                                            {
+                                                <s>@blank.SubmittedAnswer</s>
+                                            }
+                                            <span class="lacuna-correcao">@DisplayWord(parts, index, blank.CorrectAnswer)</span>
+                                        </span>
+                                    }
+                                }
+                            }
+                            <text>@parts[i]</text>
+                        }
+                    </p>
+
+                    @if (result is null)
+                    {
+                        <div class="opcoes" role="group" aria-label="Pronomes relativos">
+                            @foreach (var pronoun in Pronouns)
+                            {
+                                <button class="opcao" disabled="@submitting" @onclick="() => ChooseForActiveBlankAsync(pronoun)">@pronoun</button>
+                            }
+                        </div>
+                    }
+                    break;
+
+                case RelativePronounExerciseType.WriteSentence:
+                    <p class="prep-instrucao">Escreva a frase em inglês usando o pronome relativo correto:</p>
+                    <p class="prep-prompt">@current.Translation</p>
+
+                    @if (result is null)
+                    {
+                        @if (showHint)
+                        {
+                            <p class="prep-dica" lang="en">@MaskedSentence(parts)</p>
+                        }
+                        else
+                        {
+                            <button class="btn-link" @onclick="() => showHint = true">Mostrar dica</button>
+                        }
+
+                        <textarea class="resposta-texto"
+                                  @ref="sentenceInput"
+                                  rows="2"
+                                  placeholder="Digite a frase em inglês"
+                                  autocomplete="off"
+                                  autocapitalize="sentences"
+                                  spellcheck="false"
+                                  disabled="@submitting"
+                                  value="@sentenceAnswer"
+                                  @oninput="OnSentenceInput"
+                                  @onkeydown="OnAnswerKeyDown"></textarea>
+                    }
+                    else
+                    {
+                        <p class="resposta-enviada">
+                            <span class="resposta-rotulo">Você escreveu:</span>
+                            <span lang="en">@result.SubmittedSentence</span>
+                        </p>
+                    }
+                    break;
+
+                case RelativePronounExerciseType.FindTheMistake:
+                    <p class="prep-instrucao">Um dos pronomes relativos está errado. Toque nele e escolha o correto:</p>
+
+                    <p class="prep-frase" lang="en">
+                        @for (var i = 0; i < parts.Count; i++)
+                        {
+                            var index = i - 1;
+                            if (i > 0)
+                            {
+                                var shown = index < current.ShownPronouns.Count ? current.ShownPronouns.ElementAt(index) : string.Empty;
+
+                                if (result is null)
+                                {
+                                    <button class="prep-clicavel @(mistakeIndex == index ? "prep-selecionada" : string.Empty)"
+                                            disabled="@submitting"
+                                            @onclick="() => SelectMistake(index)">
+                                        @(mistakeIndex == index && !string.IsNullOrEmpty(correction) ? DisplayWord(parts, index, correction) : DisplayWord(parts, index, shown))
+                                    </button>
+                                }
+                                else if (index == result.MistakeIndex)
+                                {
+                                    <span class="lacuna-resultado @(result.IsCorrect ? "lacuna-certa" : "lacuna-errada")">
+                                        <s>@DisplayWord(parts, index, shown)</s>
+                                        <span class="lacuna-correcao">@DisplayWord(parts, index, result.CorrectAnswers.ElementAt(index))</span>
+                                    </span>
+                                }
+                                else if (index == result.SubmittedMistakeIndex)
+                                {
+                                    <span class="lacuna-resultado lacuna-errada" title="Este pronome já estava correto">@DisplayWord(parts, index, shown)</span>
+                                }
+                                else
+                                {
+                                    <span class="lacuna-resultado">@DisplayWord(parts, index, shown)</span>
+                                }
+                            }
+                            <text>@parts[i]</text>
+                        }
+                    </p>
+
+                    @if (result is null)
+                    {
+                        <div class="opcoes" role="group" aria-label="Pronome correto">
+                            @foreach (var pronoun in Pronouns)
+                            {
+                                var shownAtSelection = mistakeIndex is null ? null : current.ShownPronouns.ElementAtOrDefault(mistakeIndex.Value);
+                                <button class="opcao @(correction == pronoun ? "opcao-selecionada" : string.Empty)"
+                                        disabled="@(submitting || mistakeIndex is null || string.Equals(shownAtSelection, pronoun, StringComparison.OrdinalIgnoreCase))"
+                                        @onclick="() => correction = pronoun">
+                                    @pronoun
+                                </button>
+                            }
+                        </div>
+
+                        @if (mistakeIndex is null)
+                        {
+                            <p class="prep-aviso">Primeiro, toque no pronome que você acha que está errado.</p>
+                        }
+                    }
+                    break;
+            }
+
+            @if (current.ExerciseType != RelativePronounExerciseType.WriteSentence)
+            {
+                @if (showTranslation || result is not null)
+                {
+                    <p class="prep-traducao">@current.Translation</p>
+                }
+                else
+                {
+                    <button class="btn-link" @onclick="() => showTranslation = true">Mostrar tradução</button>
+                }
+            }
+
+            @if (result is null)
+            {
+                <div class="acoes-card">
+                    <button class="btn-principal" disabled="@(!CanSubmit)" @onclick="SubmitAsync">Verificar</button>
+                </div>
+
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <p class="mensagem-erro">@errorMessage</p>
+                }
+            }
+        </div>
+
+        @if (result is not null)
+        {
+            <div class="resultado @(result.IsCorrect ? "resultado-certo" : "resultado-errado")">
+                <h3 class="resultado-titulo">@ResultTitle</h3>
+
+                @if (!result.IsCorrect && current.ExerciseType == RelativePronounExerciseType.WriteSentence)
+                {
+                    <p class="resultado-dica">
+                        @(result.PronounsCorrect
+                            ? "Os pronomes relativos estavam certos! A diferença está em outra parte da frase."
+                            : "Confira os pronomes destacados na resposta correta.")
+                    </p>
+                }
+
+                <p class="resultado-frase" lang="en">
+                    @foreach (var segment in BuildSegments(result.Sentence, result.CorrectAnswers.ToList()))
+                    {
+                        if (segment.IsPronoun)
+                        {
+                            <strong class="prep-destaque">@segment.Text</strong>
+                        }
+                        else
+                        {
+                            <text>@segment.Text</text>
+                        }
+                    }
+                </p>
+
+                <p class="resultado-explicacao">@result.Explanation</p>
+            </div>
+
+            <button class="btn-principal" @ref="continueButton" @onclick="Next">Continuar</button>
+        }
+    }
+</div>

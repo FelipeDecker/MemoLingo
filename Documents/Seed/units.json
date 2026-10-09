@@ -22,5 +22,8 @@
 
   { "languageCode": "en", "courseName": "Inglês", "sectionTitle": "Seção 2 - Na Estrada", "title": "No Aeroporto", "topic": "Embarque, voos e bagagem", "position": 1, "active": true },
   { "languageCode": "en", "courseName": "Inglês", "sectionTitle": "Seção 2 - Na Estrada", "title": "No Hotel", "topic": "Check-in, quarto e chave", "position": 2, "active": true },
-  { "languageCode": "en", "courseName": "Inglês", "sectionTitle": "Seção 2 - Na Estrada", "title": "Pela Cidade", "topic": "Transporte, direções e dinheiro", "position": 3, "active": true }
+  { "languageCode": "en", "courseName": "Inglês", "sectionTitle": "Seção 2 - Na Estrada", "title": "Pela Cidade", "topic": "Transporte, direções e dinheiro", "position": 3, "active": true },
+
+  { "languageCode": "en", "courseName": "Inglês", "sectionTitle": "Seção 3 - Ganhando Confiança", "title": "Experiências de Vida", "topic": "Experiências, conquistas e lembranças", "position": 1, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "sectionTitle": "Seção 3 - Ganhando Confiança", "title": "Trabalho e Carreira", "topic": "Emprego, contratos e responsabilidades", "position": 2, "active": true }
 ]

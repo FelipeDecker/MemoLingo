@@ -259,5 +259,18 @@
   { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Pela Cidade", "nodePosition": 3, "position": 1, "xpReward": 35, "active": true },
   { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Pela Cidade", "nodePosition": 4, "position": 1, "xpReward": 30, "active": true },
   { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Pela Cidade", "nodePosition": 5, "position": 1, "xpReward": 30, "active": true },
-  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Pela Cidade", "nodePosition": 6, "position": 1, "xpReward": 50, "active": true }
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Pela Cidade", "nodePosition": 6, "position": 1, "xpReward": 50, "active": true },
+
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Experiências de Vida", "nodePosition": 1, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Experiências de Vida", "nodePosition": 2, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Experiências de Vida", "nodePosition": 3, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Experiências de Vida", "nodePosition": 4, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Experiências de Vida", "nodePosition": 5, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Experiências de Vida", "nodePosition": 6, "position": 1, "xpReward": 60, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Trabalho e Carreira", "nodePosition": 1, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Trabalho e Carreira", "nodePosition": 2, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Trabalho e Carreira", "nodePosition": 3, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Trabalho e Carreira", "nodePosition": 4, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Trabalho e Carreira", "nodePosition": 5, "position": 1, "xpReward": 40, "active": true },
+  { "languageCode": "en", "courseName": "Inglês", "unitTitle": "Trabalho e Carreira", "nodePosition": 6, "position": 1, "xpReward": 60, "active": true }
 ]

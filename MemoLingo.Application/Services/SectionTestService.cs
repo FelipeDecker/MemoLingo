@@ -18,6 +18,9 @@ namespace MemoLingo.Application.Services
         // Peso mínimo (ver GetWordWeight) para uma palavra poder ser escondida na lacuna.
         private const double ContentWordWeight = 0.5;
 
+        // Quantidade de palavras de fora da frase oferecidas como possíveis opções erradas da lacuna.
+        private const int DistractorPoolSize = 60;
+
         private static readonly TimeSpan MarkerTimeout = TimeSpan.FromMilliseconds(200);
         private static readonly Regex TokenPattern = new(@"[\p{L}']+", RegexOptions.Compiled);
 
@@ -330,10 +333,26 @@ namespace MemoLingo.Application.Services
                 .Select(g => g.First())
                 .ToList();
 
+            var allWords = (await _wordRepository.GetByLanguageAsync(languageId)).ToDictionary(w => w.Id);
+
+            // Palavras da seção: as ensinadas nas lições da seção e todas as palavras do nível CEFR
+            // da seção (mesmo as que ainda não estão em nenhuma lição), exceto as que o currículo só
+            // apresenta em seções posteriores.
             var sectionWordIds = curriculum
                 .Where(lw => lw.Lesson.PathNode.Unit.SectionId == source.Id)
                 .Select(lw => lw.WordId)
                 .ToHashSet();
+
+            sectionWordIds.UnionWith(allWords.Values
+                .Where(w => w.CefrLevel == source.CefrLevel
+                    && (!introducedIn.TryGetValue(w.Id, out var position) || position <= source.Position))
+                .Select(w => w.Id));
+
+            vocabulary = vocabulary
+                .Concat(sectionWordIds.Where(allWords.ContainsKey).Select(id => allWords[id]))
+                .GroupBy(w => w.Id)
+                .Select(g => g.First())
+                .ToList();
 
             var topics = (source.GrammarTopics ?? new List<GrammarTopic>())
                 .OrderByDescending(g => g.IsMandatory)
@@ -342,7 +361,9 @@ namespace MemoLingo.Application.Services
                 .Where(t => t.Markers.Count > 0)
                 .ToList();
 
-            // Frases do nível da seção e dos níveis anteriores (que ainda contenham palavras da seção).
+            // Frases do nível da seção e dos níveis anteriores (que contenham palavras da seção: das
+            // lições da seção ou do nível CEFR dela). Frases com palavras que o currículo só ensina em
+            // seções posteriores ficam de fora.
             var sentences = new List<Sentence>();
 
             foreach (var level in Enum.GetValues<CefrLevel>().Where(l => l <= source.CefrLevel))
@@ -353,17 +374,17 @@ namespace MemoLingo.Application.Services
             var candidates = sentences
                 .Select(s =>
                 {
-                    var wordIds = (s.SentenceWords ?? new List<SentenceWord>())
+                    var sentenceWordIds = (s.SentenceWords ?? new List<SentenceWord>())
                         .Select(sw => sw.WordId)
-                        .Where(introducedIn.ContainsKey)
                         .Distinct()
                         .ToList();
 
                     return new Candidate
                     {
                         Sentence = s,
-                        WordIds = wordIds,
-                        SectionWordIds = wordIds.Where(sectionWordIds.Contains).ToList(),
+                        WordIds = sentenceWordIds.Where(introducedIn.ContainsKey).ToList(),
+                        SectionWordIds = sentenceWordIds.Where(sectionWordIds.Contains).ToList(),
+                        AllWordIds = sentenceWordIds,
                         TokenCount = TokenPattern.Matches(s.Text ?? string.Empty).Count,
                         Tiebreaker = Random.Shared.NextDouble()
                     };
@@ -379,12 +400,10 @@ namespace MemoLingo.Application.Services
 
             // Importância da palavra: em quantas frases da seção ela aparece, com peso menor para
             // palavras gramaticais (artigos, pronomes...), que aparecem em quase todas as frases.
-            var wordsById = vocabulary.ToDictionary(w => w.Id);
-
             var weightedFrequency = candidates
                 .SelectMany(c => c.SectionWordIds)
                 .GroupBy(id => id)
-                .ToDictionary(g => g.Key, g => g.Count() * GetWordWeight(wordsById.GetValueOrDefault(g.Key)));
+                .ToDictionary(g => g.Key, g => g.Count() * GetWordWeight(allWords.GetValueOrDefault(g.Key)));
 
             var maxFrequency = Math.Max(weightedFrequency.Values.Max(), 1e-6);
             var importance = weightedFrequency.ToDictionary(kv => kv.Key, kv => kv.Value / maxFrequency);
@@ -398,7 +417,7 @@ namespace MemoLingo.Application.Services
                 var matchedTopics = candidate.MatchedMarkers.Count(kv => kv.Value.Count > 0);
 
                 candidate.Difficulty = candidate.TokenCount
-                    + 1.5 * candidate.WordIds.Count
+                    + 1.5 * candidate.WordIds.Union(candidate.SectionWordIds).Count()
                     + 2.0 * matchedTopics;
 
                 candidate.Importance = candidate.SectionWordIds.Sum(id => importance[id]);
@@ -491,7 +510,7 @@ namespace MemoLingo.Application.Services
             }
 
             var contentVocabulary = vocabulary.Where(w => GetWordWeight(w) >= ContentWordWeight).ToList();
-            var exercises = CreateExercises(selected, contentVocabulary, importance);
+            var exercises = CreateExercises(selected, contentVocabulary, allWords, importance);
 
             return (exercises, coveredTopics);
         }
@@ -501,9 +520,11 @@ namespace MemoLingo.Application.Services
         private static List<LessonExerciseModel> CreateExercises(
             List<(Candidate Candidate, bool IsGrammar)> selected,
             List<Word> vocabulary,
+            Dictionary<int, Word> allWords,
             Dictionary<int, double> importance)
         {
             var exercises = new List<LessonExerciseModel>();
+            var contentWordIds = vocabulary.Select(w => w.Id).ToHashSet();
             var usedTypes = selected.ToDictionary(s => s.Candidate.Sentence.Id, _ => new HashSet<ExerciseType>());
             var round = 0;
 
@@ -515,7 +536,19 @@ namespace MemoLingo.Application.Services
                 {
                     var (candidate, isGrammar) = selected[i];
                     var rotation = isGrammar ? GrammarRotation : VocabularyRotation;
-                    var exercise = CreateExercise(candidate.Sentence, rotation, (i + round) % rotation.Length, usedTypes[candidate.Sentence.Id], vocabulary, importance);
+
+                    // O vocabulário da lacuna fica restrito às palavras da frase mais uma amostra das
+                    // demais (para as opções erradas), evitando procurar centenas de palavras em cada frase.
+                    var sentenceVocabulary = candidate.AllWordIds
+                        .Where(contentWordIds.Contains)
+                        .Select(id => allWords[id])
+                        .Concat(vocabulary
+                            .Where(w => !candidate.AllWordIds.Contains(w.Id))
+                            .OrderBy(_ => Random.Shared.Next())
+                            .Take(DistractorPoolSize))
+                        .ToList();
+
+                    var exercise = CreateExercise(candidate.Sentence, rotation, (i + round) % rotation.Length, usedTypes[candidate.Sentence.Id], sentenceVocabulary, importance);
 
                     if (exercise is null)
                     {
@@ -710,6 +743,7 @@ namespace MemoLingo.Application.Services
             public Sentence Sentence { get; init; }
             public List<int> WordIds { get; init; }
             public List<int> SectionWordIds { get; init; }
+            public List<int> AllWordIds { get; init; }
             public int TokenCount { get; init; }
             public double Tiebreaker { get; init; }
             public Dictionary<int, List<int>> MatchedMarkers { get; set; }

@@ -14,6 +14,8 @@ namespace MemoLingo.Domain.Repositories
         Task<IEnumerable<WordAttemptSample>> GetRecentByWordAsync(int userId, int wordId, int sampleSize);
         Task<IEnumerable<NuanceAttemptSample>> GetNuanceAttemptsAsync(int userId, int languageId);
         Task<IEnumerable<NuanceAttemptSample>> GetRecentNuanceByGroupAsync(int userId, int synonymGroupId, int sampleSize);
+        Task<IEnumerable<PrepositionAttemptSample>> GetPrepositionAttemptsAsync(int userId, int languageId);
+        Task<IEnumerable<RelativePronounAttemptSample>> GetRelativePronounAttemptsAsync(int userId, int languageId);
         Task<Dictionary<int, int>> GetSentenceAttemptCountsAsync(int userId, int languageId);
         Task<bool> ExistsInSessionAsync(int studySessionId, int sentenceId, ExerciseType exerciseType);
         Task AddAsync(ExerciseAttempt attempt);

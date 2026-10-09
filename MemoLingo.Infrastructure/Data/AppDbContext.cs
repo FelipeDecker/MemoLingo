@@ -32,6 +32,8 @@ namespace MemoLingo.Infrastructure.Data
         public DbSet<SynonymGroupItem> SynonymGroupItems => Set<SynonymGroupItem>();
         public DbSet<NuanceExercise> NuanceExercises => Set<NuanceExercise>();
         public DbSet<UserNuanceProgress> UserNuanceProgresses => Set<UserNuanceProgress>();
+        public DbSet<PrepositionExercise> PrepositionExercises => Set<PrepositionExercise>();
+        public DbSet<RelativePronounExercise> RelativePronounExercises => Set<RelativePronounExercise>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -309,8 +311,20 @@ namespace MemoLingo.Infrastructure.Data
                     .HasForeignKey(ea => ea.NuanceExerciseId)
                     .OnDelete(DeleteBehavior.Restrict);
 
+                entity.HasOne(ea => ea.PrepositionExercise)
+                    .WithMany()
+                    .HasForeignKey(ea => ea.PrepositionExerciseId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(ea => ea.RelativePronounExercise)
+                    .WithMany()
+                    .HasForeignKey(ea => ea.RelativePronounExerciseId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
                 entity.HasIndex(ea => new { ea.WordId, ea.AnsweredAt });
                 entity.HasIndex(ea => new { ea.NuanceExerciseId, ea.AnsweredAt });
+                entity.HasIndex(ea => new { ea.PrepositionExerciseId, ea.AnsweredAt });
+                entity.HasIndex(ea => new { ea.RelativePronounExerciseId, ea.AnsweredAt });
             });
 
             modelBuilder.Entity<WordPerformance>(entity =>
@@ -395,6 +409,40 @@ namespace MemoLingo.Infrastructure.Data
 
                 entity.HasIndex(unp => new { unp.UserId, unp.SynonymGroupId }).IsUnique();
                 entity.HasIndex(unp => new { unp.UserId, unp.NextReview });
+            });
+
+            modelBuilder.Entity<PrepositionExercise>(entity =>
+            {
+                entity.Property(pe => pe.Sentence).IsRequired().HasMaxLength(1000);
+                entity.Property(pe => pe.Translation).IsRequired().HasMaxLength(1000);
+                entity.Property(pe => pe.Answers).IsRequired().HasMaxLength(200);
+                entity.Property(pe => pe.ShownPrepositions).HasMaxLength(200);
+                entity.Property(pe => pe.AlternativeSentences).HasMaxLength(2000);
+                entity.Property(pe => pe.Explanation).IsRequired().HasMaxLength(2000);
+
+                entity.HasOne(pe => pe.Language)
+                    .WithMany()
+                    .HasForeignKey(pe => pe.LanguageId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(pe => new { pe.LanguageId, pe.ExerciseType });
+            });
+
+            modelBuilder.Entity<RelativePronounExercise>(entity =>
+            {
+                entity.Property(re => re.Sentence).IsRequired().HasMaxLength(1000);
+                entity.Property(re => re.Translation).IsRequired().HasMaxLength(1000);
+                entity.Property(re => re.Answers).IsRequired().HasMaxLength(200);
+                entity.Property(re => re.ShownPronouns).HasMaxLength(200);
+                entity.Property(re => re.AlternativeSentences).HasMaxLength(2000);
+                entity.Property(re => re.Explanation).IsRequired().HasMaxLength(2000);
+
+                entity.HasOne(re => re.Language)
+                    .WithMany()
+                    .HasForeignKey(re => re.LanguageId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(re => new { re.LanguageId, re.ExerciseType });
             });
 
             base.OnModelCreating(modelBuilder);

@@ -157,6 +157,44 @@ namespace MemoLingo.Api.Client.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial interface IPrepositionsClient
+    {
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PrepositionExerciseModel>> GetSessionAsync(int? userId, int? take, PrepositionExerciseType? exerciseType);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PrepositionExerciseModel>> GetSessionAsync(int? userId, int? take, PrepositionExerciseType? exerciseType, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<PrepositionAnswerResultModel> SubmitAnswerAsync(PrepositionAnswerModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<PrepositionAnswerResultModel> SubmitAnswerAsync(PrepositionAnswerModel model, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial interface IRelativePronounsClient
+    {
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RelativePronounExerciseModel>> GetSessionAsync(int? userId, int? take, RelativePronounExerciseType? exerciseType);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RelativePronounExerciseModel>> GetSessionAsync(int? userId, int? take, RelativePronounExerciseType? exerciseType, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<RelativePronounAnswerResultModel> SubmitAnswerAsync(RelativePronounAnswerModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="MemoLingoException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<RelativePronounAnswerResultModel> SubmitAnswerAsync(RelativePronounAnswerModel model, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface ISectionTestsClient
     {
         /// <exception cref="MemoLingoException">A server side error occurred.</exception>
@@ -764,6 +802,10 @@ namespace MemoLingo.Api.Client.Contracts
 
         TranslationToTarget = 9,
 
+        PrepositionPractice = 10,
+
+        RelativePronounPractice = 11,
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1039,6 +1081,300 @@ namespace MemoLingo.Api.Client.Contracts
 
         [System.Text.Json.Serialization.JsonPropertyName("wordId")]
         public int WordId { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PrepositionExerciseModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseType")]
+        public PrepositionExerciseType ExerciseType { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("usage")]
+        public PrepositionUsage Usage { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentence")]
+        public string Sentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("translation")]
+        public string Translation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("blankCount")]
+        public int BlankCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isPriorityReview")]
+        public bool IsPriorityReview { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("shownPrepositions")]
+        public System.Collections.Generic.ICollection<string> ShownPrepositions { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum PrepositionExerciseType
+    {
+
+        FillInTheBlanks = 1,
+
+        WriteSentence = 2,
+
+        FindTheMistake = 3,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum PrepositionUsage
+    {
+
+        Time = 1,
+
+        Place = 2,
+
+        Expression = 3,
+
+        Mixed = 4,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PrepositionAnswerResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseId")]
+        public int ExerciseId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCorrect")]
+        public bool IsCorrect { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("prepositionsCorrect")]
+        public bool PrepositionsCorrect { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentence")]
+        public string Sentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctSentence")]
+        public string CorrectSentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedSentence")]
+        public string SubmittedSentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("translation")]
+        public string Translation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("mistakeIndex")]
+        public int? MistakeIndex { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedMistakeIndex")]
+        public int? SubmittedMistakeIndex { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("explanation")]
+        public string Explanation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctAnswers")]
+        public System.Collections.Generic.ICollection<string> CorrectAnswers { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("blanks")]
+        public System.Collections.Generic.ICollection<PrepositionBlankResultModel> Blanks { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PrepositionBlankResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("index")]
+        public int Index { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedAnswer")]
+        public string SubmittedAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctAnswer")]
+        public string CorrectAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCorrect")]
+        public bool IsCorrect { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PrepositionAnswerModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public int UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseId")]
+        public int ExerciseId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedSentence")]
+        public string SubmittedSentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("mistakeIndex")]
+        public int? MistakeIndex { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correction")]
+        public string Correction { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("answers")]
+        public System.Collections.Generic.ICollection<string> Answers { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RelativePronounExerciseModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseType")]
+        public RelativePronounExerciseType ExerciseType { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("usage")]
+        public RelativePronounUsage Usage { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("cefrLevel")]
+        public CefrLevel CefrLevel { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentence")]
+        public string Sentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("translation")]
+        public string Translation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("blankCount")]
+        public int BlankCount { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isPriorityReview")]
+        public bool IsPriorityReview { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("shownPronouns")]
+        public System.Collections.Generic.ICollection<string> ShownPronouns { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum RelativePronounExerciseType
+    {
+
+        FillInTheBlanks = 1,
+
+        WriteSentence = 2,
+
+        FindTheMistake = 3,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum RelativePronounUsage
+    {
+
+        People = 1,
+
+        Things = 2,
+
+        Possession = 3,
+
+        PlaceTimeAndReason = 4,
+
+        NonDefining = 5,
+
+        WhatClause = 6,
+
+        WithPreposition = 7,
+
+        Mixed = 8,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RelativePronounAnswerResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseId")]
+        public int ExerciseId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCorrect")]
+        public bool IsCorrect { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("pronounsCorrect")]
+        public bool PronounsCorrect { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("sentence")]
+        public string Sentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctSentence")]
+        public string CorrectSentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedSentence")]
+        public string SubmittedSentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("translation")]
+        public string Translation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("mistakeIndex")]
+        public int? MistakeIndex { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedMistakeIndex")]
+        public int? SubmittedMistakeIndex { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("explanation")]
+        public string Explanation { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctAnswers")]
+        public System.Collections.Generic.ICollection<string> CorrectAnswers { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("blanks")]
+        public System.Collections.Generic.ICollection<RelativePronounBlankResultModel> Blanks { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RelativePronounBlankResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("index")]
+        public int Index { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedAnswer")]
+        public string SubmittedAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correctAnswer")]
+        public string CorrectAnswer { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCorrect")]
+        public bool IsCorrect { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RelativePronounAnswerModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("userId")]
+        public int UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("exerciseId")]
+        public int ExerciseId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("submittedSentence")]
+        public string SubmittedSentence { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("mistakeIndex")]
+        public int? MistakeIndex { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("correction")]
+        public string Correction { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("answers")]
+        public System.Collections.Generic.ICollection<string> Answers { get; set; }
 
     }
 

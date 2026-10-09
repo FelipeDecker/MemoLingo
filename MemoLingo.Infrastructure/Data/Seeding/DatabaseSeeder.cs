@@ -54,6 +54,8 @@ namespace MemoLingo.Infrastructure.Data.Seeding
             var synonymGroups = await SeedSynonymGroupsAsync(seedPath, languages, cancellationToken);
             await SeedSynonymGroupItemsAsync(seedPath, languages, synonymGroups, words, cancellationToken);
             await SeedNuanceExercisesAsync(seedPath, languages, synonymGroups, words, cancellationToken);
+            await SeedPrepositionExercisesAsync(seedPath, languages, cancellationToken);
+            await SeedRelativePronounExercisesAsync(seedPath, languages, cancellationToken);
             await SeedSentencesAsync(seedPath, languages, cancellationToken);
             await LinkSentenceWordsAsync(cancellationToken);
             var courses = await SeedCoursesAsync(seedPath, languages, cancellationToken);
@@ -437,6 +439,249 @@ namespace MemoLingo.Infrastructure.Data.Seeding
                 await _context.SaveChangesAsync(cancellationToken);
                 _logger.LogInformation("{Count} exercício(s) de nuance inserido(s).", created);
             }
+        }
+
+        /// <summary>
+        /// Garante a coleção de preposições (in, on, at) sem limpar a base: insere os exercícios
+        /// novos e atualiza o conteúdo dos que já existem com a mesma frase.
+        /// </summary>
+        public async Task EnsurePrepositionExercisesAsync(CancellationToken cancellationToken = default)
+        {
+            var seedPath = ResolveSeedPath();
+
+            if (!Directory.Exists(seedPath))
+            {
+                _logger.LogWarning("Diretório de seed não encontrado em {SeedPath}. Exercícios de preposição não foram carregados.", seedPath);
+                return;
+            }
+
+            var languages = await _context.Languages
+                .ToDictionaryAsync(l => l.Code.ToLowerInvariant(), l => l.Id, cancellationToken);
+
+            await SeedPrepositionExercisesAsync(seedPath, languages, cancellationToken);
+        }
+
+        private async Task SeedPrepositionExercisesAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<PrepositionExerciseSeed>(seedPath, "preposition-exercises.json", cancellationToken);
+            if (seeds.Count == 0)
+            {
+                return;
+            }
+
+            var existing = (await _context.PrepositionExercises.ToListAsync(cancellationToken))
+                .GroupBy(e => (e.LanguageId, e.ExerciseType, e.Sentence))
+                .ToDictionary(g => g.Key, g => g.First());
+
+            var created = 0;
+            var updated = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o exercício de preposição {Sentence}.", seed.LanguageCode, seed.Sentence);
+                    continue;
+                }
+
+                var blankCount = CountOccurrences(seed.Sentence, "{{blank}}");
+                var answers = seed.Answers ?? new List<string>();
+                var shown = seed.ShownPrepositions ?? new List<string>();
+
+                if (blankCount == 0 || answers.Count != blankCount
+                    || (seed.ExerciseType == PrepositionExerciseType.FindTheMistake && shown.Count != blankCount))
+                {
+                    _logger.LogWarning("Exercício de preposição inválido (lacunas e respostas não conferem): {Sentence}.", seed.Sentence);
+                    continue;
+                }
+
+                // Lacunas separadas por '|' e alternativas da mesma lacuna separadas por '/'.
+                var answersValue = string.Join('|', answers);
+                var shownValue = seed.ExerciseType == PrepositionExerciseType.FindTheMistake ? string.Join('|', shown) : null;
+                var alternativesValue = seed.AlternativeSentences is { Count: > 0 } ? string.Join('|', seed.AlternativeSentences) : null;
+
+                if (existing.TryGetValue((languageId, seed.ExerciseType, seed.Sentence), out var exercise))
+                {
+                    if (exercise.Usage == seed.Usage
+                        && exercise.CefrLevel == seed.CefrLevel
+                        && exercise.Translation == seed.Translation
+                        && exercise.Answers == answersValue
+                        && exercise.ShownPrepositions == shownValue
+                        && exercise.AlternativeSentences == alternativesValue
+                        && exercise.Explanation == seed.Explanation)
+                    {
+                        continue;
+                    }
+
+                    exercise.Usage = seed.Usage;
+                    exercise.CefrLevel = seed.CefrLevel;
+                    exercise.Translation = seed.Translation;
+                    exercise.Answers = answersValue;
+                    exercise.ShownPrepositions = shownValue;
+                    exercise.AlternativeSentences = alternativesValue;
+                    exercise.Explanation = seed.Explanation;
+                    updated++;
+                    continue;
+                }
+
+                var newExercise = new PrepositionExercise
+                {
+                    LanguageId = languageId,
+                    ExerciseType = seed.ExerciseType,
+                    Usage = seed.Usage,
+                    CefrLevel = seed.CefrLevel,
+                    Sentence = seed.Sentence,
+                    Translation = seed.Translation,
+                    Answers = answersValue,
+                    ShownPrepositions = shownValue,
+                    AlternativeSentences = alternativesValue,
+                    Explanation = seed.Explanation
+                };
+
+                _context.PrepositionExercises.Add(newExercise);
+                existing[(languageId, seed.ExerciseType, seed.Sentence)] = newExercise;
+                created++;
+            }
+
+            if (created > 0 || updated > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Created} exercício(s) de preposição inserido(s) e {Updated} atualizado(s).", created, updated);
+            }
+        }
+
+        /// <summary>
+        /// Garante a coleção de pronomes relativos (who, which, that, whose...) sem limpar a base:
+        /// insere os exercícios novos e atualiza o conteúdo dos que já existem com a mesma frase.
+        /// </summary>
+        public async Task EnsureRelativePronounExercisesAsync(CancellationToken cancellationToken = default)
+        {
+            var seedPath = ResolveSeedPath();
+
+            if (!Directory.Exists(seedPath))
+            {
+                _logger.LogWarning("Diretório de seed não encontrado em {SeedPath}. Exercícios de pronomes relativos não foram carregados.", seedPath);
+                return;
+            }
+
+            var languages = await _context.Languages
+                .ToDictionaryAsync(l => l.Code.ToLowerInvariant(), l => l.Id, cancellationToken);
+
+            await SeedRelativePronounExercisesAsync(seedPath, languages, cancellationToken);
+        }
+
+        private async Task SeedRelativePronounExercisesAsync(
+            string seedPath,
+            Dictionary<string, int> languages,
+            CancellationToken cancellationToken)
+        {
+            var seeds = await ReadAsync<RelativePronounExerciseSeed>(seedPath, "relative-pronoun-exercises.json", cancellationToken);
+            if (seeds.Count == 0)
+            {
+                return;
+            }
+
+            var existing = (await _context.RelativePronounExercises.ToListAsync(cancellationToken))
+                .GroupBy(e => (e.LanguageId, e.ExerciseType, e.Sentence))
+                .ToDictionary(g => g.Key, g => g.First());
+
+            var created = 0;
+            var updated = 0;
+
+            foreach (var seed in seeds)
+            {
+                if (!languages.TryGetValue(seed.LanguageCode.ToLowerInvariant(), out var languageId))
+                {
+                    _logger.LogWarning("Idioma {LanguageCode} não encontrado para o exercício de pronome relativo {Sentence}.", seed.LanguageCode, seed.Sentence);
+                    continue;
+                }
+
+                var blankCount = CountOccurrences(seed.Sentence, "{{blank}}");
+                var answers = seed.Answers ?? new List<string>();
+                var shown = seed.ShownPronouns ?? new List<string>();
+
+                if (blankCount == 0 || answers.Count != blankCount
+                    || (seed.ExerciseType == RelativePronounExerciseType.FindTheMistake && shown.Count != blankCount))
+                {
+                    _logger.LogWarning("Exercício de pronome relativo inválido (lacunas e respostas não conferem): {Sentence}.", seed.Sentence);
+                    continue;
+                }
+
+                // Lacunas separadas por '|' e alternativas da mesma lacuna separadas por '/'.
+                var answersValue = string.Join('|', answers);
+                var shownValue = seed.ExerciseType == RelativePronounExerciseType.FindTheMistake ? string.Join('|', shown) : null;
+                var alternativesValue = seed.AlternativeSentences is { Count: > 0 } ? string.Join('|', seed.AlternativeSentences) : null;
+
+                if (existing.TryGetValue((languageId, seed.ExerciseType, seed.Sentence), out var exercise))
+                {
+                    if (exercise.Usage == seed.Usage
+                        && exercise.CefrLevel == seed.CefrLevel
+                        && exercise.Translation == seed.Translation
+                        && exercise.Answers == answersValue
+                        && exercise.ShownPronouns == shownValue
+                        && exercise.AlternativeSentences == alternativesValue
+                        && exercise.Explanation == seed.Explanation)
+                    {
+                        continue;
+                    }
+
+                    exercise.Usage = seed.Usage;
+                    exercise.CefrLevel = seed.CefrLevel;
+                    exercise.Translation = seed.Translation;
+                    exercise.Answers = answersValue;
+                    exercise.ShownPronouns = shownValue;
+                    exercise.AlternativeSentences = alternativesValue;
+                    exercise.Explanation = seed.Explanation;
+                    updated++;
+                    continue;
+                }
+
+                var newExercise = new RelativePronounExercise
+                {
+                    LanguageId = languageId,
+                    ExerciseType = seed.ExerciseType,
+                    Usage = seed.Usage,
+                    CefrLevel = seed.CefrLevel,
+                    Sentence = seed.Sentence,
+                    Translation = seed.Translation,
+                    Answers = answersValue,
+                    ShownPronouns = shownValue,
+                    AlternativeSentences = alternativesValue,
+                    Explanation = seed.Explanation
+                };
+
+                _context.RelativePronounExercises.Add(newExercise);
+                existing[(languageId, seed.ExerciseType, seed.Sentence)] = newExercise;
+                created++;
+            }
+
+            if (created > 0 || updated > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("{Created} exercício(s) de pronome relativo inserido(s) e {Updated} atualizado(s).", created, updated);
+            }
+        }
+
+        private static int CountOccurrences(string text, string token)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return 0;
+            }
+
+            var count = 0;
+            var index = text.IndexOf(token, StringComparison.Ordinal);
+
+            while (index >= 0)
+            {
+                count++;
+                index = text.IndexOf(token, index + token.Length, StringComparison.Ordinal);
+            }
+
+            return count;
         }
 
         private bool TryResolveGroupWord(

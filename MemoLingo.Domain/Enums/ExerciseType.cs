@@ -13,6 +13,8 @@ namespace MemoLingo.Domain.Enums
         WordOrdering = 6,
         NuanceDiscrimination = 7,
         TranslationToNative = 8,
-        TranslationToTarget = 9
+        TranslationToTarget = 9,
+        PrepositionPractice = 10,
+        RelativePronounPractice = 11
     }
 }

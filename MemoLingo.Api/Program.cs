@@ -27,6 +27,8 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IWordPerformanceService, WordPerformanceService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddScoped<INuanceService, NuanceService>();
+builder.Services.AddScoped<IPrepositionService, PrepositionService>();
+builder.Services.AddScoped<IRelativePronounService, RelativePronounService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<ISectionTestService, SectionTestService>();
 
@@ -48,9 +50,11 @@ if (!app.Environment.IsEnvironment("NSwagGenerator"))
     }
     else
     {
-        // Mesmo sem o seed completo, garante a coleção de verbos frasais caso ainda não exista.
+        // Mesmo sem o seed completo, garante as coleções de verbos frasais, de preposições e de pronomes relativos caso ainda não existam.
         var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
         await seeder.EnsurePhrasalVerbsAsync();
+        await seeder.EnsurePrepositionExercisesAsync();
+        await seeder.EnsureRelativePronounExercisesAsync();
     }
 }
 

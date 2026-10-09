@@ -107,6 +107,38 @@ namespace MemoLingo.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<PrepositionAttemptSample>> GetPrepositionAttemptsAsync(int userId, int languageId)
+        {
+            return await _context.ExerciseAttempts
+                .AsNoTracking()
+                .Where(ea => ea.PrepositionExerciseId != null
+                    && ea.StudySession.UserId == userId
+                    && ea.PrepositionExercise.LanguageId == languageId)
+                .Select(ea => new PrepositionAttemptSample
+                {
+                    PrepositionExerciseId = ea.PrepositionExerciseId.Value,
+                    IsCorrect = ea.IsCorrect,
+                    AnsweredAt = ea.AnsweredAt
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<RelativePronounAttemptSample>> GetRelativePronounAttemptsAsync(int userId, int languageId)
+        {
+            return await _context.ExerciseAttempts
+                .AsNoTracking()
+                .Where(ea => ea.RelativePronounExerciseId != null
+                    && ea.StudySession.UserId == userId
+                    && ea.RelativePronounExercise.LanguageId == languageId)
+                .Select(ea => new RelativePronounAttemptSample
+                {
+                    RelativePronounExerciseId = ea.RelativePronounExerciseId.Value,
+                    IsCorrect = ea.IsCorrect,
+                    AnsweredAt = ea.AnsweredAt
+                })
+                .ToListAsync();
+        }
+
         public async Task<Dictionary<int, int>> GetSentenceAttemptCountsAsync(int userId, int languageId)
         {
             return await _context.ExerciseAttempts
